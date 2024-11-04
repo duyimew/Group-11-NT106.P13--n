@@ -1,0 +1,586 @@
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\appsettings.json
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\chatapp.exe
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\chatapp.deps.json
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\chatapp.runtimeconfig.json
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\chatapp.pdb
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Azure.Identity.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Memory.Data.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.csproj.AssemblyReference.cache
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfoInputs.cache
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfo.cs
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.csproj.CoreCompileInputs.cache
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.chatapp.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.build.chatapp.props
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.chatapp.props
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.chatapp.props
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\scopedcss\bundle\chatapp.styles.css
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.csproj.Up2Date
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\refint\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.pdb
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\chatapp.genruntimeconfig.cache
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\obj\Debug\net8.0\ref\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Humanizer.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.CodeDom.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Composition.AttributedModel.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Composition.Convention.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Composition.Hosting.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Composition.Runtime.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\chatapp\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\appsettings.Development.json
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\appsettings.json
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\chatapp.exe
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\chatapp.deps.json
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\chatapp.runtimeconfig.json
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\chatapp.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\chatapp.pdb
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Azure.Core.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Azure.Identity.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Humanizer.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.CodeDom.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.AttributedModel.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Convention.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Hosting.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Runtime.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Memory.Data.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.AssemblyReference.cache
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.GeneratedMSBuildEditorConfig.editorconfig
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfoInputs.cache
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfo.cs
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.CoreCompileInputs.cache
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cs
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cache
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.build.json
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.development.json
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.chatapp.Microsoft.AspNetCore.StaticWebAssets.props
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.build.chatapp.props
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.chatapp.props
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.chatapp.props
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.pack.json
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\scopedcss\bundle\chatapp.styles.css
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.Up2Date
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\refint\chatapp.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.pdb
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\chatapp.genruntimeconfig.cache
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\obj\Debug\net8.0\ref\chatapp.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\Azure.Storage.Common.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.ClientModel.dll
+C:\70mai\LAP TRINH\10\lLT\lLT\chatappserver\chatapp\bin\Debug\net8.0\System.IO.Hashing.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\appsettings.json
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.exe
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.deps.json
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.runtimeconfig.json
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.pdb
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Core.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Identity.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Storage.Common.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Humanizer.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.ClientModel.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.CodeDom.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.AttributedModel.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Convention.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Hosting.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Runtime.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.IO.Hashing.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Memory.Data.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.AssemblyReference.cache
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfoInputs.cache
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfo.cs
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.CoreCompileInputs.cache
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.chatapp.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.build.chatapp.props
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.chatapp.props
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.chatapp.props
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\scopedcss\bundle\chatapp.styles.css
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.Up2Date
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\refint\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.pdb
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.genruntimeconfig.cache
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\obj\Debug\net8.0\ref\chatapp.dll
+C:\Users\sangd\OneDrive\Documents\gane\New folder\1\chatappserver\chatapp\bin\Debug\net8.0\web.config
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\web.config
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\appsettings.Development.json
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\appsettings.json
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.exe
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.deps.json
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.runtimeconfig.json
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\chatapp.pdb
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Core.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Identity.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Azure.Storage.Common.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Humanizer.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.CodeAnalysis.Workspaces.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Data.SqlClient.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Identity.Client.Extensions.Msal.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.ClientModel.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.CodeDom.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.AttributedModel.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Convention.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Hosting.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.Runtime.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Composition.TypedParts.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.IO.Hashing.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Memory.Data.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Runtime.Caching.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\it\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.AssemblyReference.cache
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.GeneratedMSBuildEditorConfig.editorconfig
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfoInputs.cache
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.AssemblyInfo.cs
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.CoreCompileInputs.cache
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cs
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.MvcApplicationPartsAssemblyInfo.cache
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.build.json
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.development.json
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.chatapp.Microsoft.AspNetCore.StaticWebAssets.props
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.build.chatapp.props
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.chatapp.props
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.chatapp.props
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\staticwebassets.pack.json
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\scopedcss\bundle\chatapp.styles.css
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.csproj.Up2Date
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\refint\chatapp.dll
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.pdb
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\chatapp.genruntimeconfig.cache
+C:\70mai\LAP TRINH\9\1\chatappserver\chatapp\obj\Debug\net8.0\ref\chatapp.dll
