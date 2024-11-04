@@ -1,0 +1,170 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\formuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|solutionrelative:chatclient\\formuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|c:\\70mai\\lap trinh\\9\\1\\exercise3 ltm\\exercise3 ltm\\chatclient\\formuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|solutionrelative:chatclient\\formuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|c:\\70mai\\lap trinh\\9\\1\\exercise3 ltm\\exercise3 ltm\\chatclient\\qluser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|solutionrelative:chatclient\\qluser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|c:\\70mai\\lap trinh\\9\\1\\exercise3 ltm\\exercise3 ltm\\chatclient\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|solutionrelative:chatclient\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|c:\\70mai\\lap trinh\\9\\1\\exercise3 ltm\\exercise3 ltm\\chatclient\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|solutionrelative:chatclient\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B0FA82F-28EE-458D-BEF7-0C84160A9CBC}|chatserver\\chatserver.csproj|c:\\70mai\\lap trinh\\9\\1\\exercise3 ltm\\exercise3 ltm\\chatserver\\classserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B0FA82F-28EE-458D-BEF7-0C84160A9CBC}|chatserver\\chatserver.csproj|solutionrelative:chatserver\\classserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|c:\\70mai\\lap trinh\\9\\1\\exercise3 ltm\\exercise3 ltm\\chatclient\\dtos\\tddangnhapdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|solutionrelative:chatclient\\dtos\\tddangnhapdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|c:\\70mai\\lap trinh\\9\\1\\exercise3 ltm\\exercise3 ltm\\chatclient\\dtos\\inforuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E9F294D-5F95-4136-8DAF-21F934B5E01A}|chatclient\\chatclient.csproj|solutionrelative:chatclient\\dtos\\inforuserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B0FA82F-28EE-458D-BEF7-0C84160A9CBC}|chatserver\\chatserver.csproj|C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B0FA82F-28EE-458D-BEF7-0C84160A9CBC}|chatserver\\chatserver.csproj|solutionrelative:chatserver\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Formuser.cs [Design]",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Formuser.cs",
+              "RelativeDocumentMoniker": "chatclient\\Formuser.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Formuser.cs [Design]",
+              "RelativeToolTip": "chatclient\\Formuser.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T07:56:12.111Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "InforuserDTO.cs",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\DTOs\\InforuserDTO.cs",
+              "RelativeDocumentMoniker": "chatclient\\DTOs\\InforuserDTO.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\DTOs\\InforuserDTO.cs",
+              "RelativeToolTip": "chatclient\\DTOs\\InforuserDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T06:08:17.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TDDangNhapDTO.cs",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\DTOs\\TDDangNhapDTO.cs",
+              "RelativeDocumentMoniker": "chatclient\\DTOs\\TDDangNhapDTO.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\DTOs\\TDDangNhapDTO.cs",
+              "RelativeToolTip": "chatclient\\DTOs\\TDDangNhapDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T06:07:33.44Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "QLUSER.cs",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\QLUSER.cs",
+              "RelativeDocumentMoniker": "chatclient\\QLUSER.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\QLUSER.cs",
+              "RelativeToolTip": "chatclient\\QLUSER.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAABEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T06:04:36.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Dangnhap.cs",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Dangnhap.cs",
+              "RelativeDocumentMoniker": "chatclient\\Dangnhap.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Dangnhap.cs",
+              "RelativeToolTip": "chatclient\\Dangnhap.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAEcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T06:37:05.752Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Formuser.cs",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Formuser.cs",
+              "RelativeDocumentMoniker": "chatclient\\Formuser.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Formuser.cs",
+              "RelativeToolTip": "chatclient\\Formuser.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAAAE4AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T03:08:03.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Dangnhap.cs [Design]",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Dangnhap.cs",
+              "RelativeDocumentMoniker": "chatclient\\Dangnhap.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatclient\\Dangnhap.cs [Design]",
+              "RelativeToolTip": "chatclient\\Dangnhap.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-02T06:37:03.543Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ClassServer.cs",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatserver\\ClassServer.cs",
+              "RelativeDocumentMoniker": "chatserver\\ClassServer.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatserver\\ClassServer.cs",
+              "RelativeToolTip": "chatserver\\ClassServer.cs",
+              "ViewState": "AgIAALAAAAAAAAAAAAAAAMoAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-31T05:13:09.317Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SERVER.cs",
+              "DocumentMoniker": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatserver\\SERVER.cs",
+              "RelativeDocumentMoniker": "chatserver\\SERVER.cs",
+              "ToolTip": "C:\\70mai\\LAP TRINH\\9\\1\\Exercise3 LTM\\Exercise3 LTM\\chatserver\\SERVER.cs",
+              "RelativeToolTip": "chatserver\\SERVER.cs",
+              "ViewState": "AQIAAHMAAAAAAAAAAAAqwIIAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-30T13:13:36.017Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
