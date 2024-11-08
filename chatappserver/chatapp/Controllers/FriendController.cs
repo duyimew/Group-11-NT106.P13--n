@@ -25,7 +25,7 @@ namespace chatapp.Controllers
             string[] result = await _friend.FriendListAsync(userId);
             if (result[0] == "1")
             {
-                return Ok(new { users = result.Skip(1) });
+                return Ok(new { message = result.Skip(1) });
             }
             else
             {
@@ -39,7 +39,7 @@ namespace chatapp.Controllers
             string[] result = await _friend.ListSentRequest(userId);
             if (result[0] == "1")
             {
-                return Ok(new { users = result.Skip(1) });
+                return Ok(new { message = result.Skip(1) });
             }
             else
             {
