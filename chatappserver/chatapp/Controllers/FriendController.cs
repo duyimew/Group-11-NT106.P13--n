@@ -61,5 +61,19 @@ namespace chatapp.Controllers
             }
         }
 
+        [HttpPost("Respond")]
+        public async Task<IActionResult> RespondFriendRequest([FromBody] RespondFriendRequestDTO request)
+        {
+            string[] result = await _friend.RespondFriendRequest(request);
+            if (result[0] == "1")
+            {
+                return Ok(new { message = result[1] });
+            }
+            else
+            {
+                return BadRequest(new { message = result[0] });
+            }
+        }
+
     }
 }

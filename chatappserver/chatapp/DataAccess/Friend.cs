@@ -154,6 +154,77 @@ namespace chatapp.DataAccess
                 return result;
             }
         }
+        public async Task<string[]> RespondFriendRequest(RespondFriendRequestDTO request)
+        {
+            string[] result = new string[2];
+            result[0] = "0";
+
+            if (request.action != "Accept" && request.action != "Decline")
+            {
+                result[0] = "Hành động không hợp lệ";
+                return result;
+            }
+
+            try
+            {
+                using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
+                {
+                    if (connectionDB == null)
+                    {
+                        result[0] = "Kết nối tới database thất bại";
+                        return result;
+                    }
+
+                    string strQuery = "SELECT 1 FROM FriendRequests WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId";
+                    SqlCommand command = new SqlCommand(strQuery, connectionDB);
+                    command.Parameters.AddWithValue("@SenderId", request.senderId);
+                    command.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+                    DataTable dataTable = new DataTable();
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                    if (dataTable.Rows.Count < 1)
+                    {
+                        result[0] = "Không có lời mời kết bạn hợp lệ";
+                        return result;
+                    }
+
+                    if (request.action == "Accept")
+                    {
+                        strQuery = "INSERT INTO Friends (UserId_1, UserId_2) VALUES (@SenderId, @ReceiverId)";
+                        using (SqlCommand insertCmd = new SqlCommand(strQuery, connectionDB))
+                        {
+                            insertCmd.Parameters.AddWithValue("@SenderId", request.senderId);
+                            insertCmd.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+
+                            await insertCmd.ExecuteNonQueryAsync();
+                        }
+                        result[1] = "Đã chấp nhận lời mời kết bạn";
+                    } else
+                    {
+                        result[1] = "Đã từ chối lời mời kết bạn";
+                    }
+
+                    strQuery = "DELETE FROM FriendRequests WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId";
+                    using (SqlCommand insertCmd = new SqlCommand(strQuery, connectionDB))
+                    {
+                        insertCmd.Parameters.AddWithValue("@SenderId", request.senderId);
+                        insertCmd.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+
+                        await insertCmd.ExecuteNonQueryAsync();
+                    }
+
+                    result[0] = "1";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result[0] = $"Error: {ex.Message}";
+                return result;
+            }
+        }
 
 
     }
