@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using chatapp.Data;
 using System.Data;
+using chatapp.DTOs;
 
 namespace chatapp.DataAccess
 {
@@ -92,6 +93,68 @@ namespace chatapp.DataAccess
                 return result;
             }
         }
+        public async Task<string[]> SendFriendRequest(SendFriendRequestDTO request)
+        {
+            string[] result = new string[1];
+            result[0] = "0";
+            try
+            {
+                using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
+                {
+                    if (connectionDB == null)
+                    {
+                        result[0] = "Kết nối tới database thất bại";
+                        return result;
+                    }
+                    string strQuery = "SELECT 1 FROM Friends WHERE (UserId_1 = @SenderId AND UserId_2 = @ReceiverId) OR (UserId_2 = @SenderId AND UserId_1 = @ReceiverId)";
+                    SqlCommand command = new SqlCommand(strQuery, connectionDB);
+                    command.Parameters.AddWithValue("@SenderId", request.senderId);
+                    command.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+                    DataTable dataTable = new DataTable();
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        result[0] = "Cả hai đã là bạn bè!";
+                        return result;
+                    }
+
+                    strQuery = "SELECT 1 FROM FriendRequests WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId";
+                    command = new SqlCommand(strQuery, connectionDB);
+                    command.Parameters.AddWithValue("@SenderId", request.senderId);
+                    command.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+                    dataTable = new DataTable();
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                    if (dataTable.Rows.Count > 0)
+                    {
+                        result[0] = "Đã gửi yêu cầu kết bạn đi rồi!";
+                        return result;
+                    }
+
+                    strQuery = "INSERT INTO FriendRequests (SenderId, ReceiverId) VALUES (@SenderId, @ReceiverId)";
+                    using (SqlCommand insertCmd = new SqlCommand(strQuery, connectionDB))
+                    {
+                        insertCmd.Parameters.AddWithValue("@SenderId", request.senderId);
+                        insertCmd.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+
+                        await insertCmd.ExecuteNonQueryAsync();
+                    }
+                    result[0] = "1";
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result[0] = $"Error: {ex.Message}";
+                return result;
+            }
+        }
+
 
     }
 }

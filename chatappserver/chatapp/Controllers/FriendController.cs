@@ -11,18 +11,18 @@ namespace chatapp.Controllers
     public class FriendController : ControllerBase
     {
         private readonly ChatAppContext _context;
-        private readonly Friend _friendList;
+        private readonly Friend _friend;
 
-        public FriendController(ChatAppContext context, Friend friendList)
+        public FriendController(ChatAppContext context, Friend friend)
         {
             _context = context;
-            _friendList = friendList;
+            _friend= friend;
         }
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> List(int userId)
         {
-            string[] result = await _friendList.FriendListAsync(userId);
+            string[] result = await _friend.FriendListAsync(userId);
             if (result[0] == "1")
             {
                 return Ok(new { users = result.Skip(1) });
@@ -33,10 +33,10 @@ namespace chatapp.Controllers
             }
         }
 
-        [HttpGet("Request")]
+        [HttpGet("Request/{userId}")]
         public async Task<IActionResult> ListSentRequest(int userId)
         {
-            string[] result = await _friendList.FriendListAsync(userId);
+            string[] result = await _friend.ListSentRequest(userId);
             if (result[0] == "1")
             {
                 return Ok(new { users = result.Skip(1) });
@@ -47,6 +47,19 @@ namespace chatapp.Controllers
             }
         }
 
+        [HttpPost("Request")]
+        public async Task<IActionResult> AddFriendRequest([FromBody] SendFriendRequestDTO request)
+        {
+            string[] result = await _friend.SendFriendRequest(request);
+            if (result[0] == "1")
+            {
+                return Ok(new { message = "Gửi kết bạn thành công!" });
+            }
+            else
+            {
+                return BadRequest(new { message = result[0] });
+            }
+        }
 
     }
 }
