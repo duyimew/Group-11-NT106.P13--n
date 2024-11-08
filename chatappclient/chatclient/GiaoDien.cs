@@ -433,5 +433,11 @@ namespace QLUSER
             Formuser formuser = new Formuser(username1, DN, this);
             formuser.Show();
         }
+
+        private void btnFriends_Click(object sender, EventArgs e)
+        {
+            SearchUser searchForm = new SearchUser();
+            searchForm.Show();
+        }
     }
 }

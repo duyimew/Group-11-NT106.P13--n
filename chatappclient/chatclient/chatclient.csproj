@@ -126,6 +126,7 @@
     <Compile Include="DTOs\InforuserDTO.cs" />
     <Compile Include="DTOs\ReceivemessDTO.cs" />
     <Compile Include="DTOs\savefileinfoDTO.cs" />
+    <Compile Include="DTOs\SendFriendRequestDTO.cs" />
     <Compile Include="DTOs\SendMessDTO.cs" />
     <Compile Include="DTOs\TDDangNhapDTO.cs" />
     <Compile Include="DTOs\TokenDTO.cs" />
@@ -150,6 +151,12 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchUser.Designer.cs">
+      <DependentUpon>SearchUser.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Dangky.resx">
       <DependentUpon>Dangky.cs</DependentUpon>
     </EmbeddedResource>
@@ -171,6 +178,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SearchUser.resx">
+      <DependentUpon>SearchUser.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app1.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
