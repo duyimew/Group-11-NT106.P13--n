@@ -16,6 +16,7 @@ builder.Services.AddScoped<Token>();
 builder.Services.AddScoped<Dangky>();
 builder.Services.AddScoped<DangNhap>();
 builder.Services.AddScoped<Inforuser>();
+builder.Services.AddScoped<FindUser>();
 builder.Services.AddScoped<TDDangNhap>();
 builder.Services.AddScoped<AddUser>();
 builder.Services.AddScoped<Channelname>();
