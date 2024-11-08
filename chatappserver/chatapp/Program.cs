@@ -26,6 +26,7 @@ builder.Services.AddScoped<Groupname>();
 builder.Services.AddScoped<ReceiveMess>();
 builder.Services.AddScoped<SendMess>();
 builder.Services.AddScoped<savefileinfo>();
+builder.Services.AddScoped<Friend>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
