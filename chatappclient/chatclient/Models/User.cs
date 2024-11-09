@@ -12,6 +12,7 @@ namespace QLUSER.Models
 
     internal class User
     {
+        
 
         public string HashPassword(string password)
         {

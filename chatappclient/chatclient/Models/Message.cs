@@ -30,20 +30,19 @@ namespace QLUSER.Models
             var content = new StringContent(json, Encoding.Unicode, "application/json");
             HttpClient client = new HttpClient();
             var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Message/SendMessage", content);
-            
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string Message = responseData.message;
-                MessageBox.Show(Message);
+                
             }
             else
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string Message = responseData.message;
-                MessageBox.Show(Message);
+               
             }
         }
         public async Task<string[]> ReceiveMessage(string groupname, string channelname)
