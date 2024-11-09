@@ -2,9 +2,9 @@
 {
     public class SendFriendRequestDTO
     {
-        public int senderId { get; set; }
+        public string sender { get; set; }
 
-        public int receiverId { get; set; }
+        public string receiver { get; set; }
 
     }
 }

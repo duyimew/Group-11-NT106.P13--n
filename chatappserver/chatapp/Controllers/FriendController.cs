@@ -53,7 +53,7 @@ namespace chatapp.Controllers
             string[] result = await _friend.SendFriendRequest(request);
             if (result[0] == "1")
             {
-                return Ok(new { message = "Gửi kết bạn thành công!" });
+                return Ok(new { message = "Gửi kết bạn thành công!".ToString() });
             }
             else
             {

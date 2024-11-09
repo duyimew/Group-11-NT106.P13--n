@@ -106,10 +106,10 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT 1 FROM Friends WHERE (UserId_1 = @SenderId AND UserId_2 = @ReceiverId) OR (UserId_2 = @SenderId AND UserId_1 = @ReceiverId)";
+                    string strQuery = "WITH UserIds AS (SELECT A.UserId SenderId, B.UserId ReceiverId FROM Users A JOIN Users B ON 1=1 WHERE A.Username = @Sender AND B.Username = @Receiver) SELECT 1 FROM Friends, UserIds WHERE (Friends.UserId_1 = UserIds.SenderId AND Friends.UserId_2 = UserIds.ReceiverId) Or (Friends.UserId_2 = UserIds.SenderId AND Friends.UserId_1 = UserIds.ReceiverId)";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@SenderId", request.senderId);
-                    command.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+                    command.Parameters.AddWithValue("@Sender", request.sender);
+                    command.Parameters.AddWithValue("@Receiver", request.receiver);
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -121,10 +121,10 @@ namespace chatapp.DataAccess
                         return result;
                     }
 
-                    strQuery = "SELECT 1 FROM FriendRequests WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId";
+                    strQuery = "WITH UserIds AS (SELECT A.UserId SenderId, B.UserId ReceiverId FROM Users A JOIN Users B ON 1=1 WHERE A.Username = @Sender AND B.Username = @Receiver) SELECT 1 FROM FriendRequests, UserIds WHERE (FriendRequests.SenderId = UserIds.SenderId AND FriendRequests.ReceiverId = UserIds.ReceiverId);";
                     command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@SenderId", request.senderId);
-                    command.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+                    command.Parameters.AddWithValue("@Sender", request.sender);
+                    command.Parameters.AddWithValue("@Receiver", request.receiver);
                     dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -136,11 +136,11 @@ namespace chatapp.DataAccess
                         return result;
                     }
 
-                    strQuery = "INSERT INTO FriendRequests (SenderId, ReceiverId) VALUES (@SenderId, @ReceiverId)";
+                    strQuery = "INSERT INTO FriendRequests (SenderId, ReceiverId) SELECT A.UserId AS SenderId, B.UserId AS ReceiverId FROM Users A JOIN Users B ON 1 = 1 WHERE A.Username = @Sender AND B.Username = @Receiver;";
                     using (SqlCommand insertCmd = new SqlCommand(strQuery, connectionDB))
                     {
-                        insertCmd.Parameters.AddWithValue("@SenderId", request.senderId);
-                        insertCmd.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+                        insertCmd.Parameters.AddWithValue("@Sender", request.sender);
+                        insertCmd.Parameters.AddWithValue("@Receiver", request.receiver);
 
                         await insertCmd.ExecuteNonQueryAsync();
                     }

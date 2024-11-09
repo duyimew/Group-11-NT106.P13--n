@@ -1,6 +1,7 @@
 ﻿using chatapp.DTOs;
 using Newtonsoft.Json;
 using QLUSER.DTOs;
+using QLUSER.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,7 +41,7 @@ namespace QLUSER
                 ForeColor = Color.White,
             };
 
-            username.Click += new EventHandler(async (obj, args) =>
+            username.DoubleClick += new EventHandler(async (obj, args) =>
             {
                 var requestInfo = new SendFriendRequestDTO 
                 {
@@ -55,14 +56,15 @@ namespace QLUSER
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                    var message = responseData.message;
+                    var message = responseData.message.ToString();
                     MessageBox.Show(message);
                 }
                 else
                 {
                     var errorMessage = await response.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
-                    string message = responseData.message;
+                    string message = responseData.message.ToString();
+                    MessageBox.Show(message);
                 }
             });
 

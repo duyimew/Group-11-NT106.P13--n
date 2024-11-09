@@ -436,7 +436,7 @@ namespace QLUSER
 
         private void btnFriends_Click(object sender, EventArgs e)
         {
-            SearchUser searchForm = new SearchUser();
+            SearchUser searchForm = new SearchUser(username1);
             searchForm.Show();
         }
     }
