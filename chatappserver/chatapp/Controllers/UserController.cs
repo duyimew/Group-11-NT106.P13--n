@@ -8,14 +8,16 @@ namespace chatapp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class InforUserController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly ChatAppContext _context;
         private readonly Inforuser _inforuser;
-        public InforUserController(ChatAppContext context, Inforuser inforuser)
+        private readonly FindUser _findUser;
+        public UserController(ChatAppContext context, Inforuser inforuser, FindUser findUser)
         {
             _context = context;
-            _inforuser= inforuser;
+            _inforuser = inforuser;
+            _findUser = findUser;
         }
 
         [HttpPost("InforUser")]
@@ -32,5 +34,21 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = registrationResult[0] });
             }
         }
+
+        [HttpPost("FindUser")]
+        public async Task<IActionResult> FindUser([FromBody] InforuserDTO request)
+        {
+            string[] userName = { "", request.Username };
+            string[] result = await _findUser.FindUserAsync(userName);
+            if (result[0] == "1")
+            {
+                return Ok(new { message = result.Skip(1) });
+            }
+            else
+            {
+                return BadRequest(new { message = result[0] });
+            }
+        }
+
     }
 }

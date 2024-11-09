@@ -50,6 +50,7 @@ namespace QLUSER
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
+            this.btnFriends = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -59,6 +60,7 @@ namespace QLUSER
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.panel1.Controls.Add(this.btnFriends);
             this.panel1.Controls.Add(this.Nhóm);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -74,7 +76,7 @@ namespace QLUSER
             this.Nhóm.ForeColor = System.Drawing.Color.White;
             this.Nhóm.FormattingEnabled = true;
             this.Nhóm.ItemHeight = 21;
-            this.Nhóm.Location = new System.Drawing.Point(35, 110);
+            this.Nhóm.Location = new System.Drawing.Point(35, 102);
             this.Nhóm.Name = "Nhóm";
             this.Nhóm.Size = new System.Drawing.Size(75, 298);
             this.Nhóm.TabIndex = 2;
@@ -85,7 +87,7 @@ namespace QLUSER
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.button1.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(35, 38);
+            this.button1.Location = new System.Drawing.Point(35, 417);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 45);
             this.button1.TabIndex = 1;
@@ -278,6 +280,19 @@ namespace QLUSER
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.bt_thoat_Click);
             // 
+            // btnFriends
+            // 
+            this.btnFriends.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.btnFriends.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.btnFriends.ForeColor = System.Drawing.Color.White;
+            this.btnFriends.Location = new System.Drawing.Point(35, 38);
+            this.btnFriends.Name = "btnFriends";
+            this.btnFriends.Size = new System.Drawing.Size(75, 45);
+            this.btnFriends.TabIndex = 3;
+            this.btnFriends.Text = "Bạn bè";
+            this.btnFriends.UseVisualStyleBackColor = false;
+            this.btnFriends.Click += new System.EventHandler(this.btnFriends_Click);
+            // 
             // GiaoDien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -321,5 +336,6 @@ namespace QLUSER
         private Button chonfile;
         private Button chonanh;
         private Button button4;
+        private Button btnFriends;
     }
 }

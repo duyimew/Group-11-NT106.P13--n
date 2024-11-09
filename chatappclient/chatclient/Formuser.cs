@@ -67,7 +67,7 @@ namespace QLUSER
                 var json = JsonConvert.SerializeObject(InforUser);
                 var content = new StringContent(json, Encoding.Unicode, "application/json");
                 HttpClient client = new HttpClient();
-                var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "InforUser/InforUser", content);
+                var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "User/InforUser", content);
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
