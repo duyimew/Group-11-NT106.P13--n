@@ -50,6 +50,7 @@ namespace QLUSER
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
+            this.btnFriends = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
             this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
             this.panel1.SuspendLayout();
@@ -321,6 +322,18 @@ namespace QLUSER
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.bt_thoat_Click);
             // 
+            // btnFriends
+            // 
+            this.btnFriends.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.btnFriends.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.btnFriends.ForeColor = System.Drawing.Color.White;
+            this.btnFriends.Location = new System.Drawing.Point(35, 38);
+            this.btnFriends.Name = "btnFriends";
+            this.btnFriends.Size = new System.Drawing.Size(75, 45);
+            this.btnFriends.TabIndex = 3;
+            this.btnFriends.Text = "Bạn bè";
+            this.btnFriends.UseVisualStyleBackColor = false;
+            this.btnFriends.Click += new System.EventHandler(this.btnFriends_Click);
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
@@ -387,6 +400,7 @@ namespace QLUSER
         private Button chonfile;
         private Button chonanh;
         private Button button4;
+        private Button btnFriends;
         private Models.CircularPicture cp_ProfilePic;
         private Panel panel5;
     }

@@ -479,6 +479,10 @@ namespace QLUSER
             formuser.Show();
         }
 
+        private void btnFriends_Click(object sender, EventArgs e)
+        {
+            SearchUser searchForm = new SearchUser(username1);
+            searchForm.Show();
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
           
