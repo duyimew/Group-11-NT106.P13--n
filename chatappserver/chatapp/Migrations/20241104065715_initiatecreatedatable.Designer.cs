@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using chatapp.Data;
 
@@ -11,9 +12,11 @@ using chatapp.Data;
 namespace chatserver.Migrations
 {
     [DbContext(typeof(ChatAppContext))]
-    partial class ChatAppContextModelSnapshot : ModelSnapshot
+    [Migration("20241104065715_initiatecreatedatable")]
+    partial class initiatecreatedatable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,9 +167,6 @@ namespace chatserver.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserAva")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")

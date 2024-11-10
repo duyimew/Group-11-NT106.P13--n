@@ -38,14 +38,27 @@ namespace QLUSER
         private HashSet<string> displayedMessages = new HashSet<string>();
         private bool isReceivingMessages = true;
         private List<string> selectedFilePaths = new List<string>();
+        UserAvatar avatar = new UserAvatar();
         public GiaoDien(string username, Dangnhap dn)
         {
             InitializeComponent();
             username1 = username;
             DN = dn;
             _ = ReceiveMessages();
-
+            UserSession.AvatarUpdated += UpdateAvatarDisplay;
         }
+
+        private void UpdateAvatarDisplay()
+        {
+            cp_ProfilePic.ImageLocation = UserSession.AvatarUrl;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            UserSession.AvatarUpdated -= UpdateAvatarDisplay; 
+        }
+
 
         private async void bt_thoat_Click(object sender, EventArgs e)
         {
@@ -100,6 +113,13 @@ namespace QLUSER
                     for (int i = 0; i < groupname.Length; i++)
                         this.Nhóm.Items.Add(groupname[i]);
                 }
+            UserAvatar userAvatar = new UserAvatar();
+            Image avatarImage = await userAvatar.LoadAvatarAsync(username1); 
+
+            if (avatarImage != null)
+            {
+                cp_ProfilePic.Image = avatarImage;
+            }
         }
         
         private async void bt_guitinnhan_Click(object sender, EventArgs e)
@@ -198,15 +218,35 @@ namespace QLUSER
                     }
             }
         }
+
         private async void AddMessageToChat(string username, string messageContent, string[] filename)
         {
             Panel panelMessage = new Panel
             {
-                Width = flowLayoutPanel1.Width - 25,
-                BackColor = Color.FromArgb(47, 49, 54),
+                Width = flowLayoutPanel1.Width+40,
+                BackColor = Color.FromArgb(66, 69, 73),
                 Padding = new Padding(5),
-                AutoSize = true
+                AutoSize = true,
+                Margin = new Padding(10, 0, 0, 0)
+
             };
+
+            CircularPicture pictureBoxAvatar = new CircularPicture
+            {
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Width = 40, // Kích thước ảnh đại diện
+                Height = 40,
+                ImageLocation = UserSession.AvatarUrl,
+                Image = await avatar.LoadAvatarAsync(username1),
+
+                Margin = new Padding(0, 0, 10, 0)
+            };
+
+            UserSession.AvatarUpdated += async () =>
+            {
+                pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(username1); // Cập nhật ảnh
+            };
+            panelMessage.Controls.Add(pictureBoxAvatar);
 
             Label lblUsername = new Label
             {
@@ -214,19 +254,23 @@ namespace QLUSER
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
                 ForeColor = Color.FromArgb(88, 101, 242),
                 AutoSize = true,
-                Top = 5
+                Top = 5,
+                Left = pictureBoxAvatar.Right + 10
             };
+
 
             panelMessage.Controls.Add(lblUsername);
             if (!string.IsNullOrEmpty(messageContent))
             {
                 Label lblMessage = new Label
                 {
-                    Text = $"Message: {messageContent}",
+                    Text = $"{messageContent}",
                     Font = new Font("Segoe UI", 10),
                     ForeColor = Color.White,
                     AutoSize = true,
-                    Top = lblUsername.Bottom + 5
+                    Top = lblUsername.Bottom + 5,
+                    Left = pictureBoxAvatar.Right + 10
+
                 };
                 panelMessage.Controls.Add(lblMessage);
             }
@@ -248,7 +292,8 @@ namespace QLUSER
                             SizeMode = PictureBoxSizeMode.Zoom,
                             Width = 200,
                             Height = 150,
-                            Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5
+                            Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5,
+                            Left = pictureBoxAvatar.Right + 10
                         };
                         using (HttpClient client = new HttpClient())
                         {
@@ -438,6 +483,25 @@ namespace QLUSER
         {
             SearchUser searchForm = new SearchUser(username1);
             searchForm.Show();
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+          
+
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button3.PerformClick();
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

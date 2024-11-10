@@ -19,21 +19,32 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using QLUSER.Models;
 using System.Configuration;
+using System.Threading;
+using System.Net.Http.Headers;
 namespace QLUSER
 {
     public partial class Formuser : Form
     {
         Dangnhap DN;
-        Find find= new Find();
+        Find find = new Find();
         string username1;
         Token token = new Token();
         GiaoDien GD;
-        public Formuser(string username, Dangnhap dN,GiaoDien gd)
+        file file1 = new file();
+        UserAvatar avatar = new UserAvatar();
+        public Formuser(string username, Dangnhap dN, GiaoDien gd)
         {
             InitializeComponent();
             username1 = username;
             DN = dN;
             GD = gd;
+            UserSession.AvatarUpdated += UpdateAvatarDisplay;
+            UpdateAvatarDisplay();
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            UserSession.AvatarUpdated -= UpdateAvatarDisplay;
         }
 
         private async void Formuser_Load(object sender, EventArgs e)
@@ -41,15 +52,28 @@ namespace QLUSER
             try
             {
                 string[] text = await get(username1);
-                tb_username.Text = username1;
-                tb_email.Text = text[0];
-                tb_HienTen.Text = text[1];
-                tb_HIenNgSinh.Text = text[2];
+                lb_uname.Text = username1;
+                lb_mail.Text = text[0];
+                lb_name.Text = text[1];
+                lb_bd.Text = text[2];
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi không lấy được thông tin người dùng: " + ex.Message);
             }
+            UserAvatar userAvatar = new UserAvatar();
+            Image avatarImage = await userAvatar.LoadAvatarAsync(username1);
+
+            if (avatarImage != null)
+            {
+                circularPicture1.Image = avatarImage;
+            }
+
+        }
+        private void UpdateAvatarDisplay()
+        {
+            circularPicture1.ImageLocation = UserSession.AvatarUrl;
         }
 
         private async Task<string[]> get(string username)
@@ -62,7 +86,7 @@ namespace QLUSER
             {
                 var InforUser = new InforuserDTO
                 {
-                    Username=username,
+                    Username = username,
                 };
                 var json = JsonConvert.SerializeObject(InforUser);
                 var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -92,9 +116,9 @@ namespace QLUSER
                 return text;
             }
         }
-    
 
-    private void bt_thoat_Click(object sender, EventArgs e)
+
+        private void bt_thoat_Click(object sender, EventArgs e)
         {
             try
             {
@@ -118,5 +142,60 @@ namespace QLUSER
             GD.Close();
             this.Close();
         }
+
+        private void lb_username_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_ChangeAva_Click(object sender, EventArgs e)
+        {
+            Thread thread = new Thread(async () =>
+            {
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string avatarUrl = await avatar.UploadAvatarAsync(openFileDialog.FileName, lb_uname.Text);
+
+                        if (avatarUrl != null)
+                        {
+                            UserSession.AvatarUrl = avatarUrl;
+                            MessageBox.Show("Avatar uploaded successfully!");
+
+                            // Update PictureBox on UI thread
+                            circularPicture1.Invoke((MethodInvoker)(() =>
+                            {
+                                if (circularPicture1.Image != null)
+                                {
+                                    circularPicture1.Image.Dispose();
+                                }
+                                circularPicture1.Image = Image.FromFile(openFileDialog.FileName);
+                            }));
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to upload avatar.");
+                        }
+                    }
+                }
+            });
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+        }
+
+
+       
+        
+
+
+
+
+
+
+
     }
 }

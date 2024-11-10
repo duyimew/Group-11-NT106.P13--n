@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ChatAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ChatAppDatabase")));
-
 builder.Services.AddScoped<ConnectDB>();
 builder.Services.AddScoped<Token>();
 builder.Services.AddScoped<Dangky>();

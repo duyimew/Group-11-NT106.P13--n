@@ -22,6 +22,7 @@ namespace QLUSER.Models
 {
     internal class file
     {
+        public static Image userAvatarImage;
         public async Task SendFileToServer(string username,string groupname,string channelname,string message, List<string> selectedFilePaths)
         {
             try
@@ -169,5 +170,8 @@ namespace QLUSER.Models
                 }
             }
         }
+        
+
+
     }
 }
