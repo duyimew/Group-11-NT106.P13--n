@@ -483,6 +483,7 @@ namespace QLUSER
         {
             SearchUser searchForm = new SearchUser(username1);
             searchForm.Show();
+        }
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
           
