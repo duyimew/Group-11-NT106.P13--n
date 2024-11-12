@@ -136,7 +136,11 @@ namespace chatapp.DataAccess
                         return result;
                     }
 
-                    strQuery = "INSERT INTO FriendRequests (SenderId, ReceiverId) SELECT A.UserId AS SenderId, B.UserId AS ReceiverId FROM Users A JOIN Users B ON 1 = 1 WHERE A.Username = @Sender AND B.Username = @Receiver;";
+                    strQuery = "INSERT INTO FriendRequests (SenderId, ReceiverId, SentTime) " +
+                    "SELECT A.UserId AS SenderId, B.UserId AS ReceiverId, GETDATE() " +
+                    "FROM Users A JOIN Users B ON 1 = 1 " +
+                    "WHERE A.Username = @Sender AND B.Username = @Receiver;";
+
                     using (SqlCommand insertCmd = new SqlCommand(strQuery, connectionDB))
                     {
                         insertCmd.Parameters.AddWithValue("@Sender", request.sender);
@@ -144,6 +148,7 @@ namespace chatapp.DataAccess
 
                         await insertCmd.ExecuteNonQueryAsync();
                     }
+
                     result[0] = "1";
                     return result;
                 }

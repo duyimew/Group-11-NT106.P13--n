@@ -1,5 +1,6 @@
 ﻿using chatapp.Data;
 using chatapp.DataAccess;
+using chatserver.HUB;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -40,11 +41,27 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next.Invoke();
+    }
+    catch (Exception ex)
+    {
+        // Ghi log lỗi ở đây
+        Console.WriteLine(ex.Message);
+        throw;
+    }
+});
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.MapHub<VideoCallHub>("/videoCallHub");
 app.MapControllers();
-
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 app.Run();

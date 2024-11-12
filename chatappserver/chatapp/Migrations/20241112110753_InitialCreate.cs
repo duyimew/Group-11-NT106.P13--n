@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace chatserver.Migrations
 {
     /// <inheritdoc />
-    public partial class initiatecreatedatable : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +31,7 @@ namespace chatserver.Migrations
                 {
                     UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserAva = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -61,6 +62,56 @@ namespace chatserver.Migrations
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FriendRequests",
+                columns: table => new
+                {
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    ReceiverId = table.Column<int>(type: "int", nullable: false),
+                    SentTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FriendRequests", x => new { x.SenderId, x.ReceiverId });
+                    table.ForeignKey(
+                        name: "FK_FriendRequests_Users_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FriendRequests_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Friends",
+                columns: table => new
+                {
+                    UserId_1 = table.Column<int>(type: "int", nullable: false),
+                    UserId_2 = table.Column<int>(type: "int", nullable: false),
+                    FriendedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Friends", x => new { x.UserId_1, x.UserId_2 });
+                    table.ForeignKey(
+                        name: "FK_Friends_Users_UserId_1",
+                        column: x => x.UserId_1,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Friends_Users_UserId_2",
+                        column: x => x.UserId_2,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -176,6 +227,16 @@ namespace chatserver.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FriendRequests_ReceiverId",
+                table: "FriendRequests",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Friends_UserId_2",
+                table: "Friends",
+                column: "UserId_2");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GroupMembers_UserId",
                 table: "GroupMembers",
                 column: "UserId");
@@ -207,6 +268,12 @@ namespace chatserver.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Attachments");
+
+            migrationBuilder.DropTable(
+                name: "FriendRequests");
+
+            migrationBuilder.DropTable(
+                name: "Friends");
 
             migrationBuilder.DropTable(
                 name: "GroupMembers");

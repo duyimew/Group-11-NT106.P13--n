@@ -32,6 +32,7 @@ namespace QLUSER
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnFriends = new System.Windows.Forms.Button();
             this.Nhóm = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -52,7 +53,7 @@ namespace QLUSER
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
-            this.btnFriends = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -72,6 +73,19 @@ namespace QLUSER
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(93, 474);
             this.panel1.TabIndex = 0;
+            // 
+            // btnFriends
+            // 
+            this.btnFriends.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.btnFriends.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.btnFriends.ForeColor = System.Drawing.Color.White;
+            this.btnFriends.Location = new System.Drawing.Point(10, 38);
+            this.btnFriends.Name = "btnFriends";
+            this.btnFriends.Size = new System.Drawing.Size(75, 45);
+            this.btnFriends.TabIndex = 3;
+            this.btnFriends.Text = "Bạn bè";
+            this.btnFriends.UseVisualStyleBackColor = false;
+            this.btnFriends.Click += new System.EventHandler(this.btnFriends_Click);
             // 
             // Nhóm
             // 
@@ -102,6 +116,7 @@ namespace QLUSER
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
+            this.panel2.Controls.Add(this.button7);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button5);
             this.panel2.Controls.Add(this.label1);
@@ -163,7 +178,7 @@ namespace QLUSER
             this.Tênkênh.ItemHeight = 21;
             this.Tênkênh.Location = new System.Drawing.Point(21, 152);
             this.Tênkênh.Name = "Tênkênh";
-            this.Tênkênh.Size = new System.Drawing.Size(112, 235);
+            this.Tênkênh.Size = new System.Drawing.Size(112, 193);
             this.Tênkênh.TabIndex = 3;
             this.Tênkênh.SelectedIndexChanged += new System.EventHandler(this.lb_Tenkenh_SelectedIndexChanged);
             // 
@@ -326,22 +341,18 @@ namespace QLUSER
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.bt_thoat_Click);
             // 
-            // btnFriends
+            // button7
             // 
-            this.btnFriends.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.btnFriends.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.btnFriends.ForeColor = System.Drawing.Color.White;
-            this.btnFriends.Location = new System.Drawing.Point(10, 38);
-            this.btnFriends.Name = "btnFriend";
-            this.btnFriends.Size = new System.Drawing.Size(75, 45);
-            this.btnFriends.TabIndex = 3;
-            this.btnFriends.Text = "Bạn bè";
-            this.btnFriends.UseVisualStyleBackColor = false;
-            this.btnFriends.Click += new System.EventHandler(this.btnFriends_Click);
-            // 
-            // btnFriend
-            // 
-
+            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.button7.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.button7.ForeColor = System.Drawing.Color.White;
+            this.button7.Location = new System.Drawing.Point(22, 352);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(112, 35);
+            this.button7.TabIndex = 10;
+            this.button7.Text = "Cuộc gọi";
+            this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // GiaoDien
             // 
@@ -391,5 +402,6 @@ namespace QLUSER
         private Button btnFriends;
         private Models.CircularPicture cp_ProfilePic;
         private Panel panel5;
+        private Button button7;
     }
 }

@@ -72,6 +72,42 @@ namespace chatserver.Migrations
                     b.ToTable("Channels");
                 });
 
+            modelBuilder.Entity("chatapp.Models.FriendRequests", b =>
+                {
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SentTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SenderId", "ReceiverId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.ToTable("FriendRequests");
+                });
+
+            modelBuilder.Entity("chatapp.Models.Friends", b =>
+                {
+                    b.Property<int>("UserId_1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId_2")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FriendedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId_1", "UserId_2");
+
+                    b.HasIndex("UserId_2");
+
+                    b.ToTable("Friends");
+                });
+
             modelBuilder.Entity("chatapp.Models.Group", b =>
                 {
                     b.Property<int>("GroupId")
@@ -226,6 +262,44 @@ namespace chatserver.Migrations
                         .IsRequired();
 
                     b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("chatapp.Models.FriendRequests", b =>
+                {
+                    b.HasOne("chatapp.Models.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("chatapp.Models.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("chatapp.Models.Friends", b =>
+                {
+                    b.HasOne("chatapp.Models.User", "User_1")
+                        .WithMany()
+                        .HasForeignKey("UserId_1")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("chatapp.Models.User", "User_2")
+                        .WithMany()
+                        .HasForeignKey("UserId_2")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User_1");
+
+                    b.Navigation("User_2");
                 });
 
             modelBuilder.Entity("chatapp.Models.GroupMember", b =>

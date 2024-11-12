@@ -504,5 +504,11 @@ namespace QLUSER
         {
 
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            VideoCall vc = new VideoCall(username1);
+            vc.Show();
+        }
     }
 }
