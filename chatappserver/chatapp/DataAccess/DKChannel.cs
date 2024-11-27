@@ -43,11 +43,12 @@ namespace chatapp.DataAccess
                         result[0] = "Không tìm thấy tên group";
                         return result;
                     }
-                    string query = "INSERT INTO Channels(ChannelName,GroupId,CreatedAt) VALUES (@channelname,@groupid,@createdat)";
+                    string query = "INSERT INTO Channels(ChannelName,GroupId,CreatedAt,IsChat) VALUES (@channelname,@groupid,@createdat,@ischat)";
                     SqlCommand command1 = new SqlCommand(query, connectionDB);
                     command1.Parameters.AddWithValue("@channelname", userInfo[1]);
                     command1.Parameters.AddWithValue("@groupid", GroupId);
                     command1.Parameters.AddWithValue("@createdat", DateTime.Now);
+                    command1.Parameters.AddWithValue("@ischat", bool.Parse(userInfo[3]));
                     command1.ExecuteNonQuery();
                     result[0] = "1";
                     return result;

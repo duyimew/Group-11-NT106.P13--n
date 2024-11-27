@@ -7,7 +7,7 @@
         public int GroupId { get; set; }
         public Group Group { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
+        public bool IsChat { get; set; }
         public ICollection<Message> Messages { get; set; }
     }
 }

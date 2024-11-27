@@ -12,8 +12,8 @@ using chatapp.Data;
 namespace chatserver.Migrations
 {
     [DbContext(typeof(ChatAppContext))]
-    [Migration("20241112110753_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241127084210_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,9 @@ namespace chatserver.Migrations
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsChat")
+                        .HasColumnType("bit");
 
                     b.HasKey("ChannelId");
 

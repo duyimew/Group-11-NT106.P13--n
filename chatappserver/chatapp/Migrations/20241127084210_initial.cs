@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace chatserver.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,7 +52,8 @@ namespace chatserver.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChannelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsChat = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

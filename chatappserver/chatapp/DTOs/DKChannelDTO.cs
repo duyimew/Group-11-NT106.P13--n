@@ -4,5 +4,6 @@
     {
         public string Groupname { get; set; }
         public string Channelname { get; set; }
+        public bool ischat { get; set; }
     }
 }

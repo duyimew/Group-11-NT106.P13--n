@@ -13,12 +13,13 @@ namespace QLUSER.Models
 {
     internal class Channel
     {
-        public async Task SaveKenhToDatabase(string groupName,string channelname)
+        public async Task SaveKenhToDatabase(string groupName,string channelname,bool ischat)
         {
             var DKChannel = new DKChannelDTO
             {
                 Groupname = groupName,
-                Channelname = channelname
+                Channelname = channelname,
+                ischat=ischat
             };
             var json = JsonConvert.SerializeObject(DKChannel);
             var content = new StringContent(json, Encoding.Unicode, "application/json");

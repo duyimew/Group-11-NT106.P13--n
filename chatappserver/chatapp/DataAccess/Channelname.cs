@@ -24,7 +24,7 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT ch.ChannelName FROM Channels ch,Groups gr WHERE gr.GroupName= @groupname AND ch.GroupId=gr.GroupId";
+                    string strQuery = "SELECT ch.ChannelName,ch.IsChat FROM Channels ch,Groups gr WHERE gr.GroupName= @groupname AND ch.GroupId=gr.GroupId";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
                     command.Parameters.AddWithValue("@groupname", userInfo[1]);
                     DataTable dataTable = new DataTable();
@@ -37,7 +37,7 @@ namespace chatapp.DataAccess
                         result = new string[dataTable.Rows.Count + 1];
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
-                            result[i + 1] = dataTable.Rows[i]["ChannelName"].ToString();
+                            result[i + 1] = dataTable.Rows[i]["ChannelName"].ToString()+"|"+ dataTable.Rows[i]["IsChat"].ToString();
                         }
                         result[0] = "1";
                         return result;

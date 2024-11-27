@@ -36,13 +36,12 @@ namespace QLUSER
             this.Nhóm = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.Tênkênh = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
             this.panel3 = new System.Windows.Forms.Panel();
             this.chonanh = new System.Windows.Forms.Button();
             this.chonfile = new System.Windows.Forms.Button();
@@ -53,13 +52,14 @@ namespace QLUSER
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -116,11 +116,11 @@ namespace QLUSER
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.panel2.Controls.Add(this.button7);
+            this.panel2.Controls.Add(this.label5);
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Controls.Add(this.treeView1);
             this.panel2.Controls.Add(this.button4);
-            this.panel2.Controls.Add(this.button5);
             this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.Tênkênh);
             this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.panel5);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
@@ -128,6 +128,29 @@ namespace QLUSER
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(178, 474);
             this.panel2.TabIndex = 6;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(139, 111);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(13, 13);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "+";
+            this.label4.Visible = false;
+            this.label4.Click += new System.EventHandler(this.label4_Click_1);
+            // 
+            // treeView1
+            // 
+            this.treeView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.treeView1.ForeColor = System.Drawing.Color.White;
+            this.treeView1.Location = new System.Drawing.Point(22, 110);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(131, 277);
+            this.treeView1.TabIndex = 0;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // button4
             // 
@@ -145,19 +168,6 @@ namespace QLUSER
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.button5.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.button5.ForeColor = System.Drawing.Color.White;
-            this.button5.Location = new System.Drawing.Point(22, 93);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(112, 45);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "Tạo kênh";
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.bt_taokenh_Click);
-            // 
             // label1
             // 
             this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
@@ -165,22 +175,9 @@ namespace QLUSER
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(18, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(115, 23);
+            this.label1.Size = new System.Drawing.Size(135, 23);
             this.label1.TabIndex = 4;
             this.label1.Text = "groupname";
-            // 
-            // Tênkênh
-            // 
-            this.Tênkênh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.Tênkênh.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.Tênkênh.ForeColor = System.Drawing.Color.White;
-            this.Tênkênh.FormattingEnabled = true;
-            this.Tênkênh.ItemHeight = 21;
-            this.Tênkênh.Location = new System.Drawing.Point(21, 152);
-            this.Tênkênh.Name = "Tênkênh";
-            this.Tênkênh.Size = new System.Drawing.Size(112, 193);
-            this.Tênkênh.TabIndex = 3;
-            this.Tênkênh.SelectedIndexChanged += new System.EventHandler(this.lb_Tenkenh_SelectedIndexChanged);
             // 
             // button2
             // 
@@ -189,7 +186,7 @@ namespace QLUSER
             this.button2.ForeColor = System.Drawing.Color.White;
             this.button2.Location = new System.Drawing.Point(21, 38);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 45);
+            this.button2.Size = new System.Drawing.Size(132, 45);
             this.button2.TabIndex = 3;
             this.button2.Text = "Mời bạn bè";
             this.button2.UseVisualStyleBackColor = false;
@@ -204,18 +201,6 @@ namespace QLUSER
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(178, 67);
             this.panel5.TabIndex = 9;
-            // 
-            // cp_ProfilePic
-            // 
-            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
-            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
-            this.cp_ProfilePic.Name = "cp_ProfilePic";
-            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
-            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.cp_ProfilePic.TabIndex = 5;
-            this.cp_ProfilePic.TabStop = false;
             // 
             // panel3
             // 
@@ -341,18 +326,30 @@ namespace QLUSER
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.bt_thoat_Click);
             // 
-            // button7
+            // label5
             // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.button7.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(22, 352);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(112, 35);
-            this.button7.TabIndex = 10;
-            this.button7.Text = "Cuộc gọi";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(139, 127);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(13, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "+";
+            this.label5.Visible = false;
+            this.label5.Click += new System.EventHandler(this.label5_Click);
+            // 
+            // cp_ProfilePic
+            // 
+            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
+            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
+            this.cp_ProfilePic.Name = "cp_ProfilePic";
+            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
+            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.cp_ProfilePic.TabIndex = 5;
+            this.cp_ProfilePic.TabStop = false;
             // 
             // GiaoDien
             // 
@@ -369,11 +366,12 @@ namespace QLUSER
             this.Load += new System.EventHandler(this.GiaoDien_Load);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.panel5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -385,7 +383,6 @@ namespace QLUSER
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel2;
         private Label label1;
-        private ListBox Tênkênh;
         private Button button2;
         private Panel panel3;
         private Button button3;
@@ -393,7 +390,6 @@ namespace QLUSER
         private FlowLayoutPanel flowLayoutPanel1;
         private Label label2;
         private Panel panel4;
-        private Button button5;
         private Button button6;
         private Label label3;
         private Button chonfile;
@@ -402,6 +398,8 @@ namespace QLUSER
         private Button btnFriends;
         private Models.CircularPicture cp_ProfilePic;
         private Panel panel5;
-        private Button button7;
+        private TreeView treeView1;
+        private Label label4;
+        private Label label5;
     }
 }

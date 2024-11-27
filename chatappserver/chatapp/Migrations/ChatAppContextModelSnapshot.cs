@@ -65,6 +65,9 @@ namespace chatserver.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsChat")
+                        .HasColumnType("bit");
+
                     b.HasKey("ChannelId");
 
                     b.HasIndex("GroupId");

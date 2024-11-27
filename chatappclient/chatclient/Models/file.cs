@@ -18,12 +18,13 @@ using QLUSER.DTOs;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 using System.Threading;
+using Microsoft.AspNetCore.SignalR.Client;
 namespace QLUSER.Models
 {
     internal class file
     {
         public static Image userAvatarImage;
-        public async Task SendFileToServer(string username,string groupname,string channelname,string message, List<string> selectedFilePaths)
+        public async Task SendFileToServer(HubConnection connection,string username,string groupname,string channelname,string message, List<string> selectedFilePaths)
         {
             try
             {

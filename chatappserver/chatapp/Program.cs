@@ -58,6 +58,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapHub<VideoCallHub>("/videoCallHub");
+app.MapHub<MessageHub>("/messageHub");
 app.MapControllers();
 app.UseRouting();
 app.UseEndpoints(endpoints =>

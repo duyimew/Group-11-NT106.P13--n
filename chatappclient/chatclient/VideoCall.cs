@@ -11,6 +11,10 @@ using System.Linq;
 using NAudio.Wave;
 using System.Configuration;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Threading;
+using System.Diagnostics.Tracing;
+using System.Runtime.InteropServices;
 
 namespace QLUSER
 {
@@ -32,15 +36,20 @@ namespace QLUSER
         private bool isSendingData = false;
         string username1;
         private PictureBox[] pictureBoxes;
-
-        public VideoCall(string username)
+        private System.Threading.Timer captureTimer;
+        private bool isImageDisposed = false;
+        private bool isRecevie = false;
+        private bool isleft = false;
+        private bool isScreenSharing = false;
+        private bool picture = false;
+        private bool isstop = false;
+        private string callId;
+        public VideoCall(string username, string groupname,string channelname)
         {
             InitializeComponent();
             username1 = username;
-
-            Random random = new Random();
-            //username1 = random.ToString();
             pictureBoxes = new PictureBox[10];
+            callId = groupname + "|" + channelname;
         }
 
         private async void VideoCall_Load(object sender, EventArgs e)
@@ -48,29 +57,29 @@ namespace QLUSER
             InitializeSignalR();
             InitializeAudio();
             InitializeCamera();
-            
+
         }
         private void SetPictureBoxLayout(int n)
         {
             // Xóa tất cả các PictureBox hiện tại khỏi form
             foreach (var pictureBox in pictureBoxes)
             {
-                if(pictureBox!=null)
-                pictureBox.Invoke(new Action(() => this.Controls.Remove(pictureBox)));
+                if (pictureBox != null)
+                    pictureBox.Invoke(new Action(() => this.Controls.Remove(pictureBox)));
             }
 
             // Các thông số vị trí và kích thước tương ứng với từng số lượng PictureBox
             var layouts = new (int x, int y, int width, int height)[]
             {
-        (10, 10, 750, 450),  // 1 PictureBox
-        (10, 10, 375, 300),  // 2 PictureBox
-        (10, 10, 375, 225),  // 3 PictureBox
-        (10, 10, 375, 225),  // 4 PictureBox
-        (10, 10, 375, 150),  // 5 PictureBox
-        (10, 10, 375, 150),  // 6 PictureBox
-        (10, 10, 250, 150),  // 7 PictureBox
-        (10, 10, 250, 150),  // 8 PictureBox
-        (10, 10, 250, 150),  // 9 PictureBox
+        (10, 10, 800, 450),  // 1 PictureBox
+        (10, 10, 400, 225),  // 2 PictureBox
+        (10, 10, 400, 225),  // 3 PictureBox
+        (10, 10, 400, 225),  // 4 PictureBox
+        (10, 10, 800/3, 150),  // 5 PictureBox
+        (10, 10, 800/3, 150),  // 6 PictureBox
+        (10, 10, 800/3, 150),  // 7 PictureBox
+        (10, 10, 800/3, 150),  // 8 PictureBox
+        (10, 10, 800/3, 150),  // 9 PictureBox
             };
 
             // Thêm lại n PictureBox mới vào form
@@ -78,7 +87,7 @@ namespace QLUSER
             {
                 PictureBox pictureBox;
                 // Tạo PictureBox mới với vị trí và kích thước từ layouts
-                if (n < 7)
+                if (n < 5)
                 {
                     pictureBox = new PictureBox
                     {
@@ -115,105 +124,120 @@ namespace QLUSER
             waveOut = new WaveOutEvent();
             waveOut.Init(waveProvider);
             waveOut.Play();
-        }
-        private async void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
-        {
 
-            if (isMicOn && connection != null && connection.State == HubConnectionState.Connected)
-            {
-                byte[] audioData = e.Buffer.Take(e.BytesRecorded).ToArray();
-                try
+        }
+        private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
+        {
+         
+        
+                if (isMicOn && connection != null && connection.State == HubConnectionState.Connected)
                 {
-                    isSendingData = true;
-                    await connection.SendAsync("SendAudio", "1", audioData);
+                    byte[] audioData = e.Buffer.Take(e.BytesRecorded).ToArray();
+                    try
+                    {
+                        isSendingData = true;
+                    Task.Run(async () =>
+                    {
+                        if (connection.State == HubConnectionState.Connected)
+                        {
+                        await connection.SendAsync("SendAudio", callId, audioData);
+                        }
+                    });
+                    }
+                    finally
+                    {
+                        isSendingData = false;
+                    }
                 }
-                finally
-                {
-                    isSendingData = false;
-                }
-            }
+
         }
         private void InitializeCamera()
         {
-            videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-            if (videoDevices.Count > 0)
-            {
-                videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
-                videoSource.NewFrame += new NewFrameEventHandler(videoSource_NewFrame);
-            }
-            else
-            {
-                MessageBox.Show("No video sources found.");
-            }
+
+                videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+                if (videoDevices.Count > 0)
+                {
+                    videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
+                    videoSource.NewFrame += new NewFrameEventHandler(videoSource_NewFrame);
+                }
+                else
+                {
+                    MessageBox.Show("No video sources found.");
+                }
+
         }
 
         private void videoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
-            if (frame == null)
-            {
-                Console.WriteLine("Received a null frame.");
-                return;
-            }
-            
-            int originalWidth = frame.Width;
-            int originalHeight = frame.Height;
 
-            // Kích thước khung đích
-            int targetWidth = pictureBoxes[0].Width;
-            int targetHeight = pictureBoxes[0].Height;
-
-            // Tính tỷ lệ khung hình
-            float originalAspectRatio = (float)originalWidth / originalHeight;
-            float targetAspectRatio = (float)targetWidth / targetHeight;
-
-            // Tạo kích thước mới để thu nhỏ ảnh sao cho một chiều vừa khít với khung đích
-            int scaledWidth, scaledHeight;
-            if (originalAspectRatio > targetAspectRatio)
-            {
-                scaledHeight = targetHeight;
-                scaledWidth = (int)(targetHeight * originalAspectRatio);
-            }
-            else
-            {
-                scaledWidth = targetWidth;
-                scaledHeight = (int)(targetWidth / originalAspectRatio);
-            }
-            Bitmap resizedImage = new Bitmap(scaledWidth, scaledHeight);
-            using (Graphics g = Graphics.FromImage(resizedImage))
-            {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.DrawImage(frame, 0, 0, scaledWidth, scaledHeight);
-            }
-
-            // Cắt ảnh để vừa với khung đích
-            int cropX = (scaledWidth - targetWidth) / 2;
-            int cropY = (scaledHeight - targetHeight) / 2;
-            Rectangle cropArea = new Rectangle(cropX, cropY, targetWidth, targetHeight);
-            Bitmap finalImage = resizedImage.Clone(cropArea, resizedImage.PixelFormat);
-            Bitmap resizedFrameclone = (Bitmap)finalImage.Clone();
-            // Hiển thị ảnh đã cắt trong PictureBox
-
-            pictureBoxes[0].Invoke(new Action(() =>
-            {
-                if (pictureBoxes[0].Image != null)
+                Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
+                if (frame == null)
                 {
-                    pictureBoxes[0].Image.Dispose();
+                    Console.WriteLine("Received a null frame.");
+                    return;
                 }
-                pictureBoxes[0].SizeMode = PictureBoxSizeMode.StretchImage;
-                pictureBoxes[0].Image = finalImage;
-            }));
 
-            Task.Run(async () =>
-            {
-                using (var uploadFrame = resizedFrameclone)
+                int originalWidth = frame.Width;
+                int originalHeight = frame.Height;
+
+                // Kích thước khung đích
+                int targetWidth = pictureBoxes[0].Width;
+                int targetHeight = pictureBoxes[0].Height;
+
+                // Tính tỷ lệ khung hình
+                float originalAspectRatio = (float)originalWidth / originalHeight;
+                float targetAspectRatio = (float)targetWidth / targetHeight;
+
+                // Tạo kích thước mới để thu nhỏ ảnh sao cho một chiều vừa khít với khung đích
+                int scaledWidth = targetWidth, scaledHeight = targetHeight;
+                //if (originalAspectRatio > targetAspectRatio)
                 {
-                    byte[] frameData = ConvertFrameToByteArray(uploadFrame);
-                    await connection.SendAsync("SendVideoFrame", "1",frameData, username1);
+                  //  scaledHeight = targetHeight;
+                  //  scaledWidth = (int)(targetHeight * originalAspectRatio);
                 }
-            });
+                //else
+                {
+                //    scaledWidth = targetWidth;
+                  //  scaledHeight = (int)(targetWidth / originalAspectRatio);
+                }
+                Bitmap resizedImage = new Bitmap(scaledWidth, scaledHeight);
+                using (Graphics g = Graphics.FromImage(resizedImage))
+                {
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(frame, 0, 0, scaledWidth, scaledHeight);
+                }
 
-            frame.Dispose();
+                // Cắt ảnh để vừa với khung đích
+                int cropX = (scaledWidth - targetWidth) / 2;
+                int cropY = (scaledHeight - targetHeight) / 2;
+                Rectangle cropArea = new Rectangle(cropX, cropY, targetWidth, targetHeight);
+                Bitmap finalImage = resizedImage.Clone(cropArea, resizedImage.PixelFormat);
+                Bitmap resizedFrameclone = (Bitmap)finalImage.Clone();
+                // Hiển thị ảnh đã cắt trong PictureBox
+
+                pictureBoxes[0].Invoke(new Action(() =>
+                {
+                    if (pictureBoxes[0].Image != null)
+                    {
+                        pictureBoxes[0].Image.Dispose();
+                    }
+                    pictureBoxes[0].SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBoxes[0].Image = (Bitmap)finalImage.Clone();
+                }));
+
+                Task.Run(async () =>
+                {
+                    using (var uploadFrame = resizedFrameclone)
+                    {
+                        if (connection.State == HubConnectionState.Connected)
+                        {
+                            byte[] frameData = ConvertFrameToByteArray(finalImage);
+                            await connection.SendAsync("SendVideoFrame", callId, frameData, username1);
+                        }
+                    }
+                });
+
+                frame.Dispose();
         }
 
         
@@ -226,17 +250,6 @@ namespace QLUSER
                 return ms.ToArray();
             }
         }
-
-        private async void BtnEndCall_Click(object sender, EventArgs e)
-        {
-            lblStatus.Text = "Status: Ending Call...";
-
-            
-            lblStatus.Text = "Status: Call Ended";
-        }
-
-
-
 
 
         private async void InitializeSignalR()
@@ -267,52 +280,146 @@ namespace QLUSER
                 .Build();
 
             await connection.StartAsync();
-            await connection.SendAsync("JoinCall","1", username1);
-            connection.On<string>("UserJoined", (userId) =>
+            await connection.SendAsync("JoinCall",callId, username1);
+
+
+                connection.On<string>("UserJoined", (userId) =>
             {
-                AddUserToListBox(userId);
-            });
-            connection.On<IEnumerable<string>>("ExistingParticipants", (participants) =>
-            {
-                foreach (var userId in participants)
+                isleft = true;
+                isRecevie = true;
+                this.Invoke(new Action(async () =>
                 {
-                    AddUserToListBox(userId);
-                }
+                    if (button4.Text == "Share Screen on")
+                    {
+                        button4_Click(null, EventArgs.Empty);
+                        await AddUserToListBox(userId);
+                        button4_Click(null, EventArgs.Empty);
+                    }
+                    else await AddUserToListBox(userId);
+                }));
+                isRecevie = false;
+                isleft = false;
+            });
+            
+
+                connection.On<IEnumerable<string>>("ExistingParticipants", (participants) =>
+            {
+                isleft = true;
+                isRecevie = true;
+                this.Invoke(new Action(async () =>
+                {
+                    if (button4.Text == "Share Screen on")
+                    {
+                        button4_Click(null, EventArgs.Empty);
+                        foreach (var userId in participants)
+                        {
+                            await AddUserToListBox(userId);
+                        }
+                        button4_Click(null, EventArgs.Empty);
+                    }
+                    else
+                    {
+                        foreach (var userId in participants)
+                        {
+                            await AddUserToListBox(userId);
+                        }
+                    }
+                }));
+                isRecevie = false;
+                isleft = false;
             });
 
             // Xử lý sự kiện khi người dùng rời khỏi cuộc gọi
-            connection.On<string>("UserLeft", (userId) =>
+
+                
+                connection.On<string>("UserLeft", (userId) =>
             {
-                RemoveUserFromListBox(userId);
+                isleft = true;
+                isRecevie = true;
+                this.Invoke(new Action(async () =>
+                {
+                    if (button4.Text == "Share Screen on")
+                    {
+                        button4_Click(null, EventArgs.Empty);
+                        await RemoveUserFromListBox(userId);
+                        button4_Click(null, EventArgs.Empty);
+                    }
+                    else await RemoveUserFromListBox(userId);
+                }));
+
+                isRecevie = false;
+                isleft = false;
+            });
+               
+            // Xử lý sự kiện nhận khung hình video từ người khác
+
+                connection.On<byte[], string>("ReceiveVideoFrame", (frameData, userId) =>
+            {
+
+                if (isleft) return;
+                    isRecevie = true;
+                    using (var ms = new MemoryStream(frameData))
+                    {
+                        Bitmap image = new Bitmap(ms);
+
+                        // Xác định vị trí của userId trong listBox1
+                        int index = listBox1.Items.IndexOf(userId);
+
+                        // Kiểm tra nếu userId tồn tại trong listBox1
+                        if (index >= 0 && index < pictureBoxes.Length)
+                        {
+                            pictureBoxes[index].Invoke(new Action(() =>
+                            {
+                                if (pictureBoxes[index].Image != null)
+                                {
+                                    pictureBoxes[index].Image.Dispose();
+                                }
+                                pictureBoxes[index].SizeMode = PictureBoxSizeMode.StretchImage; 
+                                pictureBoxes[index].Image = image;
+                            }));
+                        }
+                        else
+                        {
+                            // Nếu userId không hợp lệ hoặc vượt quá số lượng PictureBoxes
+                            image.Dispose(); // Giải phóng bộ nhớ
+                        }
+                    }
+                    isRecevie = false;
+                
             });
 
-            // Xử lý sự kiện nhận khung hình video từ người khác
-            connection.On<byte[], string>("ReceiveVideoFrame", (frameData, userId) =>
-            {
-                using (var ms = new MemoryStream(frameData))
-                {
-                    Bitmap image = new Bitmap(ms);
-                    pictureBoxes[1].Invoke(new Action(() =>
-                    {
-                        if (pictureBoxes[1].Image != null)
-                        {
-                            pictureBoxes[1].Image.Dispose();
-                        }
-                        pictureBoxes[0].SizeMode = PictureBoxSizeMode.StretchImage;
-                        pictureBoxes[0].Image = image;
-                    }));
-                }
-            });
 
             // Xử lý sự kiện nhận âm thanh
-            connection.On<byte[]>("ReceiveAudio", (audioData) =>
-            {
-                waveProvider.AddSamples(audioData, 0, audioData.Length);
-            });
+
+                connection.On<byte[]>("ReceiveAudio", (audioData) =>
+                {
+                   
+                        isRecevie = true;
+                        waveProvider.AddSamples(audioData, 0, audioData.Length);
+                        isRecevie = false;
+                    
+                });
+                connection.Closed += async (exception) =>
+                {
+                    while (true)
+                    {
+                        try
+                        {
+                            if(!isstop) 
+                            await ReconnectSignalR();
+                            break;
+                        }
+                        catch (Exception reconnectEx)
+                        {
+                            MessageBox.Show("Reconnect failed: " + reconnectEx.Message);
+                        }
+                    }
+                };
+            
         }
 
         // Hàm tiện ích để thêm người dùng vào ListBox1
-        private void AddUserToListBox(string userId)
+        private async Task AddUserToListBox(string userId)
         {
             if (listBox1.InvokeRequired)
             {
@@ -338,18 +445,22 @@ namespace QLUSER
         }
 
         // Hàm tiện ích để xóa người dùng khỏi ListBox1
-        private void RemoveUserFromListBox(string userId)
+        private async Task RemoveUserFromListBox(string userId)
         {
             if (listBox1.InvokeRequired)
             {
                 listBox1.Invoke(new Action(() =>
                 {
                     listBox1.Items.Remove(userId);
+                    int n = listBox1.Items.Count;
+                    SetPictureBoxLayout(n);
                 }));
             }
             else
             {
                 listBox1.Items.Remove(userId);
+                int n = listBox1.Items.Count;
+                SetPictureBoxLayout(n);
             }
         }
 
@@ -363,6 +474,12 @@ namespace QLUSER
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            if(button4.Text=="Share Screen on")
+            {
+                button4.Text = "Share Screen off";
+                await StopScreenSharing();
+                await Task.Delay(100);
+            }
             if (videoSource != null && videoSource.IsRunning)
             {
                 videoSource.SignalToStop();
@@ -378,19 +495,23 @@ namespace QLUSER
 
         private async void button3_Click(object sender, EventArgs e)
         {
-            // Gửi yêu cầu rời cuộc gọi đến server
             if (connection != null)
             {
                 try
                 {
-                    await connection.SendAsync("LeaveCall", "1",username1);
+                    await connection.SendAsync("LeaveCall", callId, username1);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error sending LeaveCall: " + ex.Message);
+                    MessageBox.Show("Error sending LeaveCall: " + ex.Message);
                 }
             }
-
+            if (button4.Text == "Share Screen on")
+            {
+                button4.Text = "Share Screen off";
+                await StopScreenSharing();
+                await Task.Delay(100);
+            }
             // Dừng và giải phóng video nguồn nếu đang chạy
             if (videoSource != null && videoSource.IsRunning)
             {
@@ -412,12 +533,19 @@ namespace QLUSER
                 await Task.Delay(100);
             }
 
-            // Dừng và giải phóng kết nối SignalR
-            if (connection != null)
+            while (true)
             {
-                await connection.StopAsync();
-                await connection.DisposeAsync();
-                connection = null;
+                if (!isRecevie)
+                {
+                    if (connection != null)
+                    {
+                        isstop = true;
+                        await connection.StopAsync();
+                        await connection.DisposeAsync();
+                        connection = null;
+                    }
+                    break;
+                }
             }
             this.Close();
         }
@@ -436,6 +564,167 @@ namespace QLUSER
                 waveIn.StartRecording();
                 button2.Text = "Mic On";
                 isMicOn = true;
+            }
+        }
+
+        private async void button4_Click(object sender, EventArgs e)
+        {
+                try
+            {
+                // Tạm dừng các chức năng hiện tại (nếu có)
+                if (videoSource != null && videoSource.IsRunning)
+                {
+                    videoSource.SignalToStop();
+                    await Task.Run(() => videoSource.WaitForStop());
+                    button1.Text = "Video off";
+                }
+                if (button4.Text == "Share Screen off")
+                // Đặt tên mới cho trạng thái của nút khi chia sẻ màn hình
+                {
+                    button4.Text = "Share Screen on";
+                    await StartScreenCapture();
+        }
+                else
+                {
+                    // Khi hoàn thành, hiển thị lại trạng thái và cập nhật nút
+                    button4.Text = "Share Screen off";
+                    await StopScreenSharing();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while sharing screen: " + ex.Message);
+            }
+        }
+        private async Task StartScreenCapture()
+        {
+            try
+            {
+                Rectangle bounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+
+                if (captureTimer == null)
+                {
+                    captureTimer = new System.Threading.Timer(new TimerCallback(async _ =>
+                    {
+                        try
+                        {
+                            if (button4.Text != "Share Screen on")
+                                return;
+
+                            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+                            {
+                                using (Graphics g = Graphics.FromImage(bitmap))
+                                {
+                                    g.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size);
+                                }
+                                Bitmap frame = bitmap;
+                                if (frame == null)
+                                {
+                                    Console.WriteLine("Received a null frame.");
+                                    return;
+                                }
+
+                                int originalWidth = frame.Width;
+                                int originalHeight = frame.Height;
+                                int targetWidth = pictureBoxes[0].Width;
+                                int targetHeight = pictureBoxes[0].Height;
+                                float originalAspectRatio = (float)originalWidth / originalHeight;
+                                float targetAspectRatio = (float)targetWidth / targetHeight;
+
+                                int scaledWidth=targetWidth, scaledHeight=targetHeight;
+                                //if (originalAspectRatio > targetAspectRatio)
+                                {
+                                //    scaledHeight = targetHeight;
+                                  //  scaledWidth = (int)(targetHeight * originalAspectRatio);
+                                }
+                               // else
+                                {
+                                    //scaledWidth = targetWidth;
+                                    //scaledHeight = (int)(targetWidth / originalAspectRatio);
+                                }
+                                Bitmap resizedImage = new Bitmap(scaledWidth, scaledHeight);
+                                using (Graphics g = Graphics.FromImage(resizedImage))
+                                {
+                                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                                    g.DrawImage(frame, 0, 0, scaledWidth, scaledHeight);
+                                }
+
+                                int cropX = (scaledWidth - targetWidth) / 2;
+                                int cropY = (scaledHeight - targetHeight) / 2;
+                                Rectangle cropArea = new Rectangle(cropX, cropY, targetWidth, targetHeight);
+                                Bitmap finalImage = resizedImage.Clone(cropArea, resizedImage.PixelFormat);
+                                Bitmap resizedFrameclone = (Bitmap)finalImage.Clone();
+
+                                pictureBoxes[0].Invoke(new Action(() =>
+                                {
+                                    if (pictureBoxes[0].Image != null)
+                                    {
+                                        pictureBoxes[0].Image.Dispose();
+                                    }
+                                    pictureBoxes[0].SizeMode = PictureBoxSizeMode.StretchImage;
+                                    pictureBoxes[0].Image = (Bitmap)finalImage.Clone();
+                                }));
+
+                                Task.Run(async () =>
+                                {
+                                    using (var uploadFrame = resizedFrameclone)
+                                    {
+                                        if (connection.State == HubConnectionState.Connected)
+                                        {
+                                            byte[] frameData = ConvertFrameToByteArray(finalImage);
+                                            await connection.SendAsync("SendVideoFrame", callId, frameData, username1);
+                                        }
+
+                                    }
+                                });
+
+                                frame.Dispose();
+                                
+                            }
+                        }
+                        catch (Exception timerEx)
+                        {
+                            MessageBox.Show("Error in capture timer: " + timerEx.Message);
+                        }
+                    }), null, 0, 100);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while starting screen capture: " + ex.Message);
+            }
+        }
+
+        private async Task ReconnectSignalR()
+        {
+            try
+            {
+                if (connection.State != HubConnectionState.Connected)
+                {
+                    await connection.StartAsync();
+                    await connection.SendAsync("JoinCall", callId, username1);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Reconnection failed: " + ex.Message);
+            }
+        }
+
+
+
+
+        // Hàm dừng chia sẻ màn hình
+        private async Task StopScreenSharing()
+        {
+            try
+            { 
+                captureTimer?.Dispose();
+                captureTimer = null; 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while stopping screen sharing: " + ex.Message);
             }
         }
     }

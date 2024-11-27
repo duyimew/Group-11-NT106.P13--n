@@ -1,4 +1,5 @@
 ﻿using chatapp.DTOs;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using System;
@@ -17,7 +18,7 @@ namespace QLUSER.Models
 {
     internal class Message
     {
-        public async Task SendMessage(string groupName, string channelname,string username,string message)
+        public async Task SendMessage(HubConnection connection,string groupName, string channelname,string username,string message)
         {
             var sendmess = new SendmessDTO
             {
