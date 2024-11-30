@@ -5,6 +5,7 @@ namespace chatapp.Models
     public class Group
     {
         public int GroupId { get; set; }
+        public string? GroupAva { get; set; }
         public string GroupName { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 

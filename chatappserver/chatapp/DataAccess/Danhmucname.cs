@@ -1,18 +1,17 @@
 ﻿using Microsoft.Data.SqlClient;
 using chatapp.Data;
 using System.Data;
-using chatapp.Models;
 
 namespace chatapp.DataAccess
 {
-    public class Channelname
+    public class Danhmucname
     {
         private readonly ConnectDB _connectDB;
-        public Channelname(ConnectDB connectDB)
+        public Danhmucname(ConnectDB connectDB)
         {
             _connectDB = connectDB;
         }
-        public async Task<string[]> ChannelNameAsync(string[] userInfo)
+        public async Task<string[]> DanhmucnameAsync(string[] userInfo)
         {
             string[] result = new string[1];
             result[0] = "0";
@@ -25,11 +24,7 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT ch.ChannelName,ch.IsChat,dm.DanhmucName " +
-                        "FROM Channels ch " +
-                        "JOIN Groups gr ON gr.GroupId= ch.GroupId " +
-                        "LEFT JOIN danhmuc dm on dm.DanhmucId = ch.Danhmucid " +
-                        "WHERE gr.GroupName= @groupname ";
+                    string strQuery = "SELECT dm.DanhmucName FROM Danhmuc dm,Groups gr WHERE gr.GroupName = @groupname AND dm.GroupId=gr.GroupId";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
                     command.Parameters.AddWithValue("@groupname", userInfo[1]);
                     DataTable dataTable = new DataTable();
@@ -42,8 +37,7 @@ namespace chatapp.DataAccess
                         result = new string[dataTable.Rows.Count + 1];
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
-                            string danhmucname = dataTable.Rows[i]["DanhmucName"] == DBNull.Value ? null : dataTable.Rows[i]["DanhmucName"].ToString();
-                            result[i + 1] = dataTable.Rows[i]["ChannelName"].ToString()+"|"+danhmucname+"|"+ dataTable.Rows[i]["IsChat"].ToString();
+                            result[i + 1] = dataTable.Rows[i]["DanhmucName"].ToString();
                         }
                         result[0] = "1";
                         return result;

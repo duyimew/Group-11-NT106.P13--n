@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace chatserver.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +17,7 @@ namespace chatserver.Migrations
                 {
                     GroupId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupAva = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -45,21 +46,20 @@ namespace chatserver.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Channels",
+                name: "Danhmuc",
                 columns: table => new
                 {
-                    ChannelId = table.Column<int>(type: "int", nullable: false)
+                    DanhmucId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ChannelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DanhmucName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsChat = table.Column<bool>(type: "bit", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Channels", x => x.ChannelId);
+                    table.PrimaryKey("PK_Danhmuc", x => x.DanhmucId);
                     table.ForeignKey(
-                        name: "FK_Channels_Groups_GroupId",
+                        name: "FK_Danhmuc_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "GroupId",
@@ -168,6 +168,34 @@ namespace chatserver.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Channels",
+                columns: table => new
+                {
+                    ChannelId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChannelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    DanhmucId = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsChat = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Channels", x => x.ChannelId);
+                    table.ForeignKey(
+                        name: "FK_Channels_Danhmuc_DanhmucId",
+                        column: x => x.DanhmucId,
+                        principalTable: "Danhmuc",
+                        principalColumn: "DanhmucId");
+                    table.ForeignKey(
+                        name: "FK_Channels_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -223,8 +251,18 @@ namespace chatserver.Migrations
                 column: "MessageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Channels_DanhmucId",
+                table: "Channels",
+                column: "DanhmucId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Channels_GroupId",
                 table: "Channels",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Danhmuc_GroupId",
+                table: "Danhmuc",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
@@ -290,6 +328,9 @@ namespace chatserver.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Danhmuc");
 
             migrationBuilder.DropTable(
                 name: "Groups");

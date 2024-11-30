@@ -32,16 +32,17 @@ namespace QLUSER
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnFriends = new System.Windows.Forms.Button();
-            this.Nhóm = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.button4 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
+            this.button4 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.chonanh = new System.Windows.Forms.Button();
             this.chonfile = new System.Windows.Forms.Button();
@@ -52,105 +53,136 @@ namespace QLUSER
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
-            this.panel1.Controls.Add(this.btnFriends);
-            this.panel1.Controls.Add(this.Nhóm);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.flowLayoutPanel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(93, 474);
             this.panel1.TabIndex = 0;
             // 
-            // btnFriends
+            // flowLayoutPanel2
             // 
-            this.btnFriends.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.btnFriends.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.btnFriends.ForeColor = System.Drawing.Color.White;
-            this.btnFriends.Location = new System.Drawing.Point(10, 38);
-            this.btnFriends.Name = "btnFriends";
-            this.btnFriends.Size = new System.Drawing.Size(75, 45);
-            this.btnFriends.TabIndex = 3;
-            this.btnFriends.Text = "Bạn bè";
-            this.btnFriends.UseVisualStyleBackColor = false;
-            this.btnFriends.Click += new System.EventHandler(this.btnFriends_Click);
-            // 
-            // Nhóm
-            // 
-            this.Nhóm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.Nhóm.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.Nhóm.ForeColor = System.Drawing.Color.White;
-            this.Nhóm.FormattingEnabled = true;
-            this.Nhóm.ItemHeight = 21;
-            this.Nhóm.Location = new System.Drawing.Point(10, 110);
-            this.Nhóm.Name = "Nhóm";
-            this.Nhóm.Size = new System.Drawing.Size(75, 277);
-            this.Nhóm.TabIndex = 2;
-            this.Nhóm.SelectedIndexChanged += new System.EventHandler(this.lb_nhom_SelectedIndexChanged);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(10, 411);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 45);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Tạo Nhóm";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.bt_taonhom_Click);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(93, 474);
+            this.flowLayoutPanel2.TabIndex = 7;
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.panel2.Controls.Add(this.label5);
-            this.panel2.Controls.Add(this.label4);
+            this.panel2.Controls.Add(this.panel6);
             this.panel2.Controls.Add(this.treeView1);
-            this.panel2.Controls.Add(this.button4);
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.panel5);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(93, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(178, 474);
+            this.panel2.Size = new System.Drawing.Size(190, 474);
             this.panel2.TabIndex = 6;
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.panel6.Controls.Add(this.label1);
+            this.panel6.Controls.Add(this.button5);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel6.Location = new System.Drawing.Point(0, 0);
+            this.panel6.Margin = new System.Windows.Forms.Padding(2);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(190, 45);
+            this.panel6.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(6, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(147, 23);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "groupname";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(159, 9);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(25, 23);
+            this.button5.TabIndex = 11;
+            this.button5.Text = "v";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(37, 9);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(13, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "+";
+            this.label5.Visible = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(139, 111);
+            this.label4.Location = new System.Drawing.Point(18, 15);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(13, 13);
             this.label4.TabIndex = 0;
             this.label4.Text = "+";
             this.label4.Visible = false;
-            this.label4.Click += new System.EventHandler(this.label4_Click_1);
+
             // 
             // treeView1
             // 
             this.treeView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
             this.treeView1.ForeColor = System.Drawing.Color.White;
-            this.treeView1.Location = new System.Drawing.Point(22, 110);
+            this.treeView1.Location = new System.Drawing.Point(6, 63);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(131, 277);
+            this.treeView1.Size = new System.Drawing.Size(178, 324);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.panel5.Controls.Add(this.cp_ProfilePic);
+            this.panel5.Controls.Add(this.button4);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel5.Location = new System.Drawing.Point(0, 407);
+            this.panel5.Margin = new System.Windows.Forms.Padding(2);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(190, 67);
+            this.panel5.TabIndex = 9;
+            // 
+            // cp_ProfilePic
+            // 
+            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
+            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
+            this.cp_ProfilePic.Name = "cp_ProfilePic";
+            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
+            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.cp_ProfilePic.TabIndex = 5;
+            this.cp_ProfilePic.TabStop = false;
             // 
             // button4
             // 
@@ -161,46 +193,12 @@ namespace QLUSER
             this.button4.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
             this.button4.FlatAppearance.BorderSize = 0;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Location = new System.Drawing.Point(137, 426);
+            this.button4.Location = new System.Drawing.Point(148, 18);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(35, 37);
             this.button4.TabIndex = 5;
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(18, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 23);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "groupname";
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.button2.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(21, 38);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(132, 45);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Mời bạn bè";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.bt_moiuser_Click);
-            // 
-            // panel5
-            // 
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.panel5.Controls.Add(this.cp_ProfilePic);
-            this.panel5.Location = new System.Drawing.Point(0, 406);
-            this.panel5.Margin = new System.Windows.Forms.Padding(2);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(178, 67);
-            this.panel5.TabIndex = 9;
             // 
             // panel3
             // 
@@ -211,9 +209,9 @@ namespace QLUSER
             this.panel3.Controls.Add(this.button3);
             this.panel3.Controls.Add(this.textBox1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(271, 400);
+            this.panel3.Location = new System.Drawing.Point(283, 400);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(829, 74);
+            this.panel3.Size = new System.Drawing.Size(817, 74);
             this.panel3.TabIndex = 8;
             // 
             // chonanh
@@ -278,7 +276,6 @@ namespace QLUSER
             this.textBox1.Size = new System.Drawing.Size(626, 29);
             this.textBox1.TabIndex = 0;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
-            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             // 
             // flowLayoutPanel1
             // 
@@ -286,13 +283,12 @@ namespace QLUSER
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(271, 50);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(283, 50);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(10);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(829, 350);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(817, 350);
             this.flowLayoutPanel1.TabIndex = 7;
             this.flowLayoutPanel1.WrapContents = false;
-            this.flowLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
             // 
             // label2
             // 
@@ -308,11 +304,13 @@ namespace QLUSER
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
             this.panel4.Controls.Add(this.button6);
+            this.panel4.Controls.Add(this.label4);
+            this.panel4.Controls.Add(this.label5);
             this.panel4.Controls.Add(this.label2);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(271, 0);
+            this.panel4.Location = new System.Drawing.Point(283, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(829, 50);
+            this.panel4.Size = new System.Drawing.Size(817, 50);
             this.panel4.TabIndex = 0;
             // 
             // button6
@@ -325,31 +323,6 @@ namespace QLUSER
             this.button6.Text = "Thoát";
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.bt_thoat_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(139, 127);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(13, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "+";
-            this.label5.Visible = false;
-            this.label5.Click += new System.EventHandler(this.label5_Click);
-            // 
-            // cp_ProfilePic
-            // 
-            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
-            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
-            this.cp_ProfilePic.Name = "cp_ProfilePic";
-            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
-            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.cp_ProfilePic.TabIndex = 5;
-            this.cp_ProfilePic.TabStop = false;
             // 
             // GiaoDien
             // 
@@ -366,12 +339,13 @@ namespace QLUSER
             this.Load += new System.EventHandler(this.GiaoDien_Load);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.panel6.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -379,11 +353,8 @@ namespace QLUSER
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ListBox Nhóm;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel2;
         private Label label1;
-        private Button button2;
         private Panel panel3;
         private Button button3;
         private TextBox textBox1;
@@ -395,11 +366,13 @@ namespace QLUSER
         private Button chonfile;
         private Button chonanh;
         private Button button4;
-        private Button btnFriends;
         private Models.CircularPicture cp_ProfilePic;
         private Panel panel5;
         private TreeView treeView1;
         private Label label4;
         private Label label5;
+        private Button button5;
+        private Panel panel6;
+        private FlowLayoutPanel flowLayoutPanel2;
     }
 }

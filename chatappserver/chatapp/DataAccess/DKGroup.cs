@@ -23,6 +23,17 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
+                    string checkgroupnameQuery = "SELECT COUNT(*) FROM Groups WHERE GroupName = @groupname";
+                    using (SqlCommand checkgroupnameCmd = new SqlCommand(checkgroupnameQuery, connectionDB))
+                    {
+                        checkgroupnameCmd.Parameters.AddWithValue("@groupname", userInfo[1]);
+                        int userExists = (int)await checkgroupnameCmd.ExecuteScalarAsync();
+                        if (userExists > 0)
+                        {
+                            result[0] = "Tên máy chủ đã tồn tại";
+                            return result;
+                        }
+                    }
                     string query = "INSERT INTO Groups (GroupName,CreatedAt) VALUES (@GroupName,@CreatedAt)";
                     SqlCommand command = new SqlCommand(query, connectionDB);
                     command.Parameters.AddWithValue("@GroupName", userInfo[1]);

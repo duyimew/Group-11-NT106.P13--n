@@ -25,24 +25,23 @@ namespace QLUSER.Models
             }
         }
 
+        
         private string FindFile(string fileName, string directory)
         {
             try
             {
+                // Kiểm tra file trong thư mục hiện tại
                 foreach (string file in Directory.GetFiles(directory, fileName, SearchOption.TopDirectoryOnly))
                 {
                     return file;
                 }
 
+                // Duyệt qua từng thư mục con
                 foreach (string subDirectory in Directory.GetDirectories(directory))
                 {
                     try
                     {
-                        foreach (string file in Directory.GetFiles(subDirectory, fileName, SearchOption.TopDirectoryOnly))
-                        {
-                            return file;
-                        }
-
+                        // Gọi đệ quy để tìm file trong thư mục con
                         string result = FindFile(fileName, subDirectory);
                         if (!string.IsNullOrEmpty(result))
                         {
@@ -51,25 +50,31 @@ namespace QLUSER.Models
                     }
                     catch (UnauthorizedAccessException)
                     {
+                        // Bỏ qua lỗi truy cập không được phép
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show($"Lỗi khi tìm kiếm file trong thư mục: {subDirectory}");
+                        MessageBox.Show($"Lỗi khi tìm kiếm file trong thư mục: {subDirectory}\n{ex.Message}");
                     }
                 }
             }
             catch (UnauthorizedAccessException)
             {
+                // Bỏ qua lỗi truy cập không được phép
             }
             catch (DirectoryNotFoundException)
             {
+                // Bỏ qua lỗi thư mục không tìm thấy
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tìm kiếm file");
+                MessageBox.Show($"Lỗi khi tìm kiếm file: {ex.Message}");
             }
+
+            // Trả về null nếu không tìm thấy file
             return null;
         }
+
         public string find(string name)
         {
             string fileNameToSearch = name;

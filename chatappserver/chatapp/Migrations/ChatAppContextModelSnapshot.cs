@@ -62,6 +62,9 @@ namespace chatserver.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DanhmucId")
+                        .HasColumnType("int");
+
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
@@ -70,9 +73,36 @@ namespace chatserver.Migrations
 
                     b.HasKey("ChannelId");
 
+                    b.HasIndex("DanhmucId");
+
                     b.HasIndex("GroupId");
 
                     b.ToTable("Channels");
+                });
+
+            modelBuilder.Entity("chatapp.Models.Danhmuc", b =>
+                {
+                    b.Property<int>("DanhmucId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DanhmucId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DanhmucName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DanhmucId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Danhmuc");
                 });
 
             modelBuilder.Entity("chatapp.Models.FriendRequests", b =>
@@ -121,6 +151,9 @@ namespace chatserver.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("GroupAva")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroupName")
                         .IsRequired()
@@ -258,8 +291,25 @@ namespace chatserver.Migrations
 
             modelBuilder.Entity("chatapp.Models.Channel", b =>
                 {
+                    b.HasOne("chatapp.Models.Danhmuc", "Danhmuc")
+                        .WithMany("Channels")
+                        .HasForeignKey("DanhmucId");
+
                     b.HasOne("chatapp.Models.Group", "Group")
                         .WithMany("Channels")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Danhmuc");
+
+                    b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("chatapp.Models.Danhmuc", b =>
+                {
+                    b.HasOne("chatapp.Models.Group", "Group")
+                        .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -365,6 +415,11 @@ namespace chatserver.Migrations
             modelBuilder.Entity("chatapp.Models.Channel", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("chatapp.Models.Danhmuc", b =>
+                {
+                    b.Navigation("Channels");
                 });
 
             modelBuilder.Entity("chatapp.Models.Group", b =>

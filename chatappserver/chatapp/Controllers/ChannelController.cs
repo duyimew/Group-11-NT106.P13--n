@@ -23,7 +23,7 @@ namespace chatapp.Controllers
         [HttpPost("DKChannel")]
         public async Task<IActionResult> DKChannel([FromBody] DKChannelDTO request)
         {
-            string[] userInfo = { "", request.Channelname,request.Groupname,request.ischat.ToString() };
+            string[] userInfo = { "", request.Channelname,request.Groupname,request.ischat.ToString(),request.danhmucname };
             string[] registrationResult = await _dkchannel.DangkyChannelAsync(userInfo);
             if (registrationResult[0] == "1")
             {

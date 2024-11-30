@@ -41,7 +41,7 @@ namespace chatapp.DataAccess
                     }
                     else
                     {
-                        result[0] = "Không tìm thấy username này";
+                        result[0] = "Không tìm thấy groupname này";
                         return result;
                     }
                     string query = "INSERT INTO GroupMembers(GroupId,UserId) VALUES (@groupid,@userid)";

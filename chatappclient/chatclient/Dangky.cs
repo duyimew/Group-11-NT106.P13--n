@@ -28,6 +28,8 @@ namespace QLUSER
     {
         private Dangnhap DN;
         User user = new User();
+        UserAvatar avatar = new UserAvatar();
+        Find find =new Find();
         public Dangky(Dangnhap dn)
         {
             InitializeComponent();
@@ -88,6 +90,8 @@ namespace QLUSER
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                     string message = responseData.message;
+                    string filepath = find.find("user-2517433_1280.png");
+                    await avatar.UploadAvatarAsync(filepath, username);
                     MessageBox.Show(message);
                 }
                 else

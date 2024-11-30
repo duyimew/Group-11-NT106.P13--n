@@ -11,22 +11,19 @@ using System.Windows.Forms;
 
 namespace QLUSER.Models
 {
-    internal class Channel
+    internal class DanhMuc
     {
-        public async Task<bool> SaveKenhToDatabase(string groupName,string channelname,bool ischat,string danhmuc)
+        public async Task<bool> SaveDanhMucToDatabase(string groupName,string danhmucname)
         {
-            if (danhmuc == null) danhmuc = "null";
-            var DKChannel = new DKChannelDTO
+            var DKDanhMuc = new DKDanhMucDTO
             {
                 Groupname = groupName,
-                Channelname = channelname,
-                ischat=ischat,
-                danhmucname = danhmuc
+                DanhMucname = danhmucname,
             };
-            var json = JsonConvert.SerializeObject(DKChannel);
+            var json = JsonConvert.SerializeObject(DKDanhMuc);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
             HttpClient client = new HttpClient();
-            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Channel/DKChannel", content);
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "DanhMuc/DKDanhMuc", content);
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -44,28 +41,28 @@ namespace QLUSER.Models
                 return false;
             }
         }
-        public async Task<string[]> RequestChannelName(string groupname)
+        public async Task<string[]> RequestDanhMucName(string groupname)
         {
-            var channelname = new ChannelnameDTO
+            var DanhMucName = new DanhMucnameDTO
             {
                 Groupname=groupname,
             };
-            var json = JsonConvert.SerializeObject(channelname);
+            var json = JsonConvert.SerializeObject(DanhMucName);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
             HttpClient client = new HttpClient();
-            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Channel/ChannelName", content);
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "DanhMuc/Danhmucname", content);
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                List<string> channelNamesList = new List<string>();
-                foreach (var name in responseData.channelName)
+                List<string> danhmucNamesList = new List<string>();
+                foreach (var name in responseData.danhmucName)
                 {
-                    channelNamesList.Add((string)name);
+                    danhmucNamesList.Add((string)name);
                 }
-                string[] channelNamesArray = channelNamesList.ToArray();
-                if (channelNamesArray[0] == "0") return null;
-                return channelNamesArray;
+                string[] danhmucNamesArray = danhmucNamesList.ToArray();
+                if (danhmucNamesArray[0] == "0") return null;
+                return danhmucNamesArray;
             }
             else
             {

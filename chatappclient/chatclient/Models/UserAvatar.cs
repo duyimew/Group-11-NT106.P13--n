@@ -57,6 +57,47 @@ namespace QLUSER.Models
                 return null;
             }
         }
+        public async Task<string> UploadAvatarGroupAsync(string imagePath, string groupname)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                using (var content = new MultipartFormDataContent())
+                {
+                    using (var fileStream = File.OpenRead(imagePath))
+                    {
+                        var fileContent = new ByteArrayContent(File.ReadAllBytes(imagePath));
+                        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                        content.Add(fileContent, "avatargroup", Path.GetFileName(imagePath));
+
+                        content.Add(new StringContent(groupname), "groupname");
+
+                        string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}File/upload-avatar-group?groupname={groupname}";
+
+                        var response = await client.PostAsync(url, content);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var responseContent = await response.Content.ReadAsStringAsync();
+                            var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                            return responseData.avatarGroupUrl;
+                        }
+                        else
+                        {
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                            MessageBox.Show("Failed to upload avatar: " + errorResponse);
+                            return null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error uploading avatar: " + ex.Message);
+                return null;
+            }
+        }
         public async Task<Image> LoadAvatarAsync(string username)
         {
             try
@@ -77,6 +118,69 @@ namespace QLUSER.Models
                         {
                             return Image.FromStream(imageStream);
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to load avatar: " + response.ReasonPhrase);
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading avatar: " + ex.Message);
+                return null;
+            }
+        }
+        public async Task<Image> LoadAvatarGroupAsync(string groupname)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar-group"}?groupname={Uri.EscapeDataString(groupname)}";
+                    var response = await client.GetAsync(new Uri(fullUrl));
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string avatargroupUrl = responseData.avatarGroupUrl;
+
+                        using (var imageStream = await client.GetStreamAsync(avatargroupUrl))
+                        {
+                            return Image.FromStream(imageStream);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to load avatar: " + response.ReasonPhrase);
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading avatar: " + ex.Message);
+                return null;
+            }
+        }
+        public async Task<string> LoadGroupUrlAsync(string groupname)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar-group"}?groupname={Uri.EscapeDataString(groupname)}";
+                    var response = await client.GetAsync(new Uri(fullUrl));
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string avatargroupUrl = responseData.avatarGroupUrl;
+                        return avatargroupUrl;
+                        
                     }
                     else
                     {

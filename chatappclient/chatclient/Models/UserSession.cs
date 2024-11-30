@@ -9,7 +9,11 @@ namespace QLUSER.Models
     public static class UserSession
     {
         public static event Action AvatarUpdated;
+        public static event Action AvatarGroupUpdated;
+        public static event Action AvatarGroupCreated;
         private static string _avatarUrl;
+        private static string _avatargroupUrl;
+        private static bool _createnew;
 
         public static string AvatarUrl
         {
@@ -20,6 +24,23 @@ namespace QLUSER.Models
                 {
                     _avatarUrl = value;
                     AvatarUpdated?.Invoke(); 
+                }
+            }
+        }
+        public static (string url,bool status) AvatarGroupUrl
+        {
+            get => ( _avatargroupUrl, _createnew );
+            set
+            {
+                if (_avatargroupUrl != value.url)
+                {
+                    _avatargroupUrl = value.url;
+                    _createnew = value.status;
+                    if (_createnew == false)
+                    {
+                        AvatarGroupUpdated?.Invoke();
+                    }
+                    else AvatarGroupCreated?.Invoke();
                 }
             }
         }

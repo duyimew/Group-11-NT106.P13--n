@@ -46,5 +46,10 @@ namespace chatserver.HUB
             string groupid = groupname + "|" + channelname;
             await Clients.Group(groupid).SendAsync("ReceiveMessage", message, username, filenames);
         }
+        public async Task SendAvataUpdate(string url,string groupname,string channelname)
+        {
+            string groupid = groupname + "|" + channelname;
+            await Clients.OthersInGroup(groupid).SendAsync("ReceiveAvataUpdate", url);
+        }
     }
 }

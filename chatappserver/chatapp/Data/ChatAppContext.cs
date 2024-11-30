@@ -16,6 +16,7 @@ namespace chatapp.Data
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Friends> Friends { get; set; }
         public DbSet<FriendRequests> FriendRequests { get; set; }
+        public DbSet<Danhmuc> danhmuc { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -122,6 +122,38 @@ public class FileController : ControllerBase
             return BadRequest($"Error: {ex.Message}");
         }
     }
+    [HttpPost("upload-avatar-group")]
+    public async Task<IActionResult> UploadAvatarGroup(IFormFile avatargroup, string groupname)
+    {
+        try
+        {
+            if (avatargroup == null || avatargroup.Length == 0)
+                return BadRequest("No file uploaded");
+
+            BlobServiceClient blobServiceClient = new BlobServiceClient(_connectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(_containerName); // Sử dụng container dành riêng cho ảnh đại diện
+
+            string blobName = $"{groupname}_avatargroup_{Path.GetExtension(avatargroup.FileName)}";
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+            using (var stream = avatargroup.OpenReadStream())
+            {
+                await blobClient.UploadAsync(stream, true);
+            }
+            string avatargroupUrl = blobClient.Uri.ToString();
+            var group = await _context.Groups.FirstOrDefaultAsync(u => u.GroupName == groupname);
+            if (group != null)
+            {
+                group.GroupAva = avatargroupUrl;
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(new { message = "Avatar uploaded successfully!", AvatarGroupUrl = avatargroupUrl });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
     [HttpGet("get-avatar")]
     public async Task<IActionResult> GetAvatarUrl(string username)
     {
@@ -134,6 +166,17 @@ public class FileController : ControllerBase
 
         return Ok(new { AvatarUrl = user.UserAva });
     }
+    [HttpGet("get-avatar-group")]
+    public async Task<IActionResult> GetAvatarGroupUrl(string groupname)
+    {
+        var group = await _context.Groups.FirstOrDefaultAsync(u => u.GroupName == groupname);
 
+        if (group == null || string.IsNullOrEmpty(group.GroupAva))
+        {
+            return NotFound("Avatar not found");
+        }
+
+        return Ok(new { AvatarGroupUrl = group.GroupAva });
+    }
 
 }

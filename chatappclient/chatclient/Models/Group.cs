@@ -15,7 +15,7 @@ namespace QLUSER.Models
 {
     internal class Group
     {
-        public async Task SaveGroupToDatabase(string groupName)
+        public async Task<bool> SaveGroupToDatabase(string groupName)
         {
             var DKGroup = new DKGroupDTO
             {
@@ -31,6 +31,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
                 MessageBox.Show(message);
+                return true;
             }
             else
             {
@@ -38,9 +39,10 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
                 MessageBox.Show(message);
+                return false;
             }
         }
-        public async Task AddMembersToGroup(string username, string groupname)
+        public async Task<bool> AddMembersToGroup(string username, string groupname)
         {
             var AddUser = new AddUserDTO
             {
@@ -57,6 +59,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message; 
                 MessageBox.Show(message);
+                return true;
             }
             else
             {
@@ -64,6 +67,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
                 MessageBox.Show(message);
+                return false;
             }
         }
         public async Task<string[]> RequestGroupName(string username)
