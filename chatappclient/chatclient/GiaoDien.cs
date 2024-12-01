@@ -58,6 +58,7 @@ namespace QLUSER
         private FlowLayoutPanel panelMenu; // Lưu tham chiếu đến menu
         private bool isMenuVisible = false; // Trạng thái hiển thị menu
         DanhMuc danhmuc = new DanhMuc();
+        private bool isFirstClick = true;
         public GiaoDien(string username, Dangnhap dn)
         {
             InitializeComponent();
@@ -65,6 +66,7 @@ namespace QLUSER
             DN = dn;
             UserSession.AvatarUpdated += UpdateAvatarDisplay;
             UserSession.AvatarGroupCreated += UpdateGroupDislay;
+            tabControl1.SelectedIndex = 1;
         }
 
         private async void UpdateAvatarDisplay()
@@ -92,7 +94,6 @@ namespace QLUSER
             base.OnFormClosing(e);
             UserSession.AvatarUpdated -= UpdateAvatarDisplay; 
         }
-
 
         private async void bt_thoat_Click(object sender, EventArgs e)
         {
@@ -153,25 +154,25 @@ namespace QLUSER
         }
         private async void LoadGroup(string[] groupname)
         {
-            CircularPicture circularfriend = new CircularPicture();
-            try
-            {
-                circularfriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Không thể tải ảnh: {ex.Message}");
-                return;
-            }
-            circularfriend.Size = new Size(50, 50);
-            circularfriend.SizeMode = PictureBoxSizeMode.Zoom;
-            circularfriend.Anchor = AnchorStyles.None;
-            circularfriend.Click += (s, e) =>
-            {
-                SearchUser searchForm = new SearchUser(username1);
-                searchForm.Show();
-            };
-            flowLayoutPanel2.Controls.Add(circularfriend);
+            //CircularPicture circularfriend = new CircularPicture();
+            //try
+            //{
+            //    circularfriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Không thể tải ảnh: {ex.Message}");
+            //    return;
+            //}
+            //circularfriend.Size = new Size(50, 50);
+            //circularfriend.SizeMode = PictureBoxSizeMode.Zoom;
+            //circularfriend.Anchor = AnchorStyles.None;
+            //circularfriend.Click += (s, e) =>
+            //{
+            //    SearchUser searchForm = new SearchUser(username1);
+            //    searchForm.Show();
+            //};
+            //flowLayoutPanel2.Controls.Add(circularfriend);
             if (groupname != null)
             {
                 for (int i = 0; i < groupname.Length; i++)
@@ -198,6 +199,8 @@ namespace QLUSER
                     circulargroup.Anchor = AnchorStyles.None;
                     circulargroup.Click += async (s, e) =>
                     {
+                            tabControl1.SelectedIndex = 0;
+                        ServerOrFriend.SelectedIndex = 1;
                             if (connection != null) await StopSignalR();
                             CloseLabel();
                             treeView1.Nodes.Clear();
@@ -207,6 +210,7 @@ namespace QLUSER
                             label2.Text = "kênh";
                             string selectedGroupName = circulargroup.Name.ToString();
                             label1.Text = selectedGroupName;
+                            label6.Text = selectedGroupName;
                             string[] danhmucs = await danhmuc.RequestDanhMucName(selectedGroupName);
                             if(danhmucs!=null)
                             {
@@ -737,16 +741,14 @@ namespace QLUSER
                 panelMenu.WrapContents = false;
                 panelMenu.AutoScroll = true;
 
-                panel2.Controls.Add(panelMenu);
-                panelMenu.BringToFront();
+                panel11.Controls.Add(panelMenu);
                 AddMenuItem(panelMenu, "Mời Mọi Người");
                 AddMenuItem(panelMenu, "Cài đặt máy chủ");
                 AddMenuItem(panelMenu, "Tạo kênh");
                 AddMenuItem(panelMenu, "Tạo Danh Mục");
                 AddMenuItem(panelMenu, "Chỉnh Sửa Hồ Sơ Máy Chủ");
             }
-            isMenuVisible = !isMenuVisible;
-            panelMenu.Visible = isMenuVisible;
+
         }
 
 
@@ -780,7 +782,10 @@ namespace QLUSER
 
         private void button5_Click_1(object sender, EventArgs e)
         {
-            CreateMenu();
+                ServerOrFriend.SelectedIndex = 2;
+                CreateMenu();   
+            
+
         }
         private void MoiMoiNguoi(string group)
         {
@@ -1345,7 +1350,7 @@ namespace QLUSER
             label.Size = new System.Drawing.Size(13, 13);
             label.Text = "+";
             int videoY = node.Bounds.Location.Y;
-            Point point = label4.Location;
+            //Point point = label4.Location;
             int x = treeView1.Location.X + treeView1.Size.Width - label.Size.Width - 1;
             int y = treeView1.Location.Y + 1 + videoY;
             label.Location = new Point(x, y);
@@ -1354,10 +1359,42 @@ namespace QLUSER
                 TaoKenh(node.Text,node);
 
             };
-            panel2.Controls.Add(label);
+            panel12.Controls.Add(label);
             label.BringToFront();
             node.Tag = label;
             if(panelMenu!=null) panelMenu.BringToFront();
+        }
+
+        private void cp_Menu_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedIndex = 1; // 1 là menu k có chat
+            ServerOrFriend.SelectedIndex = 0; //0 là menu hiện danh sách bạn bè
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ServerOrFriend.SelectedIndex = 1;
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ServerTab_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_Ketban_Click(object sender, EventArgs e)
+        {
+            SearchUser friend = new SearchUser(username1);
+            friend.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
