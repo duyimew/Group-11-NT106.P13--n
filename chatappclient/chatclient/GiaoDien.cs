@@ -276,8 +276,10 @@ namespace QLUSER
             flowLayoutPanel2.Controls.Add(circularadd);
 
             flowLayoutPanel2.FlowDirection = FlowDirection.LeftToRight; 
-            flowLayoutPanel2.WrapContents = true; 
-            flowLayoutPanel2.AutoScroll = true;
+            flowLayoutPanel2.WrapContents = true;
+            //flowLayoutPanel2.AutoScroll = true;
+            flowLayoutPanel2.MouseWheel += FlowLayoutPanel2_MouseWheel;
+
             flowLayoutPanel2.Padding = new Padding((flowLayoutPanel2.ClientSize.Width - 50) / 2, 10, 0, 0); 
         }
 
@@ -1395,6 +1397,18 @@ namespace QLUSER
         private void button2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        void FlowLayoutPanel2_MouseWheel(object sender, MouseEventArgs e)
+        {
+            int delta = e.Delta > 0 ? -50 : 50;
+
+            Point currentScrollPos = flowLayoutPanel2.AutoScrollPosition;
+
+            flowLayoutPanel2.AutoScrollPosition = new Point(
+                Math.Abs(currentScrollPos.X),
+                Math.Abs(currentScrollPos.Y) + delta
+            );
         }
     }
 }
