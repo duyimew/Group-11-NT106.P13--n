@@ -39,6 +39,7 @@ namespace QLUSER
             this.ServerOrFriend = new System.Windows.Forms.TabControl();
             this.FriendsTab = new System.Windows.Forms.TabPage();
             this.ServerTab = new System.Windows.Forms.TabPage();
+            this.panel12 = new System.Windows.Forms.Panel();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.label4 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -66,16 +67,16 @@ namespace QLUSER
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btn_Ketban = new System.Windows.Forms.Button();
             this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
             this.cp_Menu = new QLUSER.Models.CircularPicture();
-            this.panel12 = new System.Windows.Forms.Panel();
-            this.btn_Ketban = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
             this.ServerOrFriend.SuspendLayout();
             this.ServerTab.SuspendLayout();
+            this.panel12.SuspendLayout();
             this.panel6.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.panel10.SuspendLayout();
@@ -89,7 +90,6 @@ namespace QLUSER
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).BeginInit();
-            this.panel12.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -197,6 +197,14 @@ namespace QLUSER
             this.ServerTab.Size = new System.Drawing.Size(261, 518);
             this.ServerTab.TabIndex = 0;
             this.ServerTab.Click += new System.EventHandler(this.ServerTab_Click);
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.treeView1);
+            this.panel12.Location = new System.Drawing.Point(10, 65);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(239, 437);
+            this.panel12.TabIndex = 11;
             // 
             // treeView1
             // 
@@ -523,6 +531,26 @@ namespace QLUSER
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(180, 21);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "Xem lời mời kết bạn";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // btn_Ketban
+            // 
+            this.btn_Ketban.Location = new System.Drawing.Point(16, 21);
+            this.btn_Ketban.Name = "btn_Ketban";
+            this.btn_Ketban.Size = new System.Drawing.Size(75, 23);
+            this.btn_Ketban.TabIndex = 0;
+            this.btn_Ketban.Text = "Kết bạn";
+            this.btn_Ketban.UseVisualStyleBackColor = true;
+            this.btn_Ketban.Click += new System.EventHandler(this.btn_Ketban_Click);
+            // 
             // cp_ProfilePic
             // 
             this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
@@ -538,40 +566,12 @@ namespace QLUSER
             // cp_Menu
             // 
             this.cp_Menu.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
-            this.cp_Menu.Location = new System.Drawing.Point(22, 6);
+            this.cp_Menu.Location = new System.Drawing.Point(31, 6);
             this.cp_Menu.Name = "cp_Menu";
-            this.cp_Menu.Size = new System.Drawing.Size(77, 65);
+            this.cp_Menu.Size = new System.Drawing.Size(68, 65);
             this.cp_Menu.TabIndex = 0;
             this.cp_Menu.TabStop = false;
             this.cp_Menu.Click += new System.EventHandler(this.cp_Menu_Click);
-            // 
-            // panel12
-            // 
-            this.panel12.Controls.Add(this.treeView1);
-            this.panel12.Location = new System.Drawing.Point(10, 65);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(239, 437);
-            this.panel12.TabIndex = 11;
-            // 
-            // btn_Ketban
-            // 
-            this.btn_Ketban.Location = new System.Drawing.Point(16, 21);
-            this.btn_Ketban.Name = "btn_Ketban";
-            this.btn_Ketban.Size = new System.Drawing.Size(75, 23);
-            this.btn_Ketban.TabIndex = 0;
-            this.btn_Ketban.Text = "Kết bạn";
-            this.btn_Ketban.UseVisualStyleBackColor = true;
-            this.btn_Ketban.Click += new System.EventHandler(this.btn_Ketban_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(180, 21);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Xem lời mời kết bạn";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // GiaoDien
             // 
@@ -591,6 +591,7 @@ namespace QLUSER
             this.ServerOrFriend.ResumeLayout(false);
             this.ServerTab.ResumeLayout(false);
             this.ServerTab.PerformLayout();
+            this.panel12.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
@@ -605,7 +606,6 @@ namespace QLUSER
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).EndInit();
-            this.panel12.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
