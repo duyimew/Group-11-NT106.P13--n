@@ -32,11 +32,9 @@ namespace QLUSER
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.cp_Menu = new QLUSER.Models.CircularPicture();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
             this.button4 = new System.Windows.Forms.Button();
             this.ServerOrFriend = new System.Windows.Forms.TabControl();
             this.FriendsTab = new System.Windows.Forms.TabPage();
@@ -71,11 +69,11 @@ namespace QLUSER
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button2 = new System.Windows.Forms.Button();
             this.btn_Ketban = new System.Windows.Forms.Button();
+            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
+            this.cp_Menu = new QLUSER.Models.CircularPicture();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).BeginInit();
             this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
             this.ServerOrFriend.SuspendLayout();
             this.ServerTab.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -90,6 +88,8 @@ namespace QLUSER
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -103,21 +103,12 @@ namespace QLUSER
             this.panel1.Size = new System.Drawing.Size(93, 474);
             this.panel1.TabIndex = 0;
             // 
-            // cp_Menu
-            // 
-            this.cp_Menu.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
-            this.cp_Menu.Location = new System.Drawing.Point(23, 5);
-            this.cp_Menu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.cp_Menu.Name = "cp_Menu";
-            this.cp_Menu.Size = new System.Drawing.Size(51, 53);
-            this.cp_Menu.TabIndex = 0;
-            this.cp_Menu.TabStop = false;
-            this.cp_Menu.Click += new System.EventHandler(this.cp_Menu_Click);
-            // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.flowLayoutPanel2.AutoScroll = true;
+            this.flowLayoutPanel2.AutoScrollMinSize = new System.Drawing.Size(1, 1);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 63);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(93, 410);
@@ -142,22 +133,10 @@ namespace QLUSER
             this.panel5.Controls.Add(this.cp_ProfilePic);
             this.panel5.Controls.Add(this.button4);
             this.panel5.Location = new System.Drawing.Point(0, 409);
-            this.panel5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel5.Margin = new System.Windows.Forms.Padding(2);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(190, 65);
             this.panel5.TabIndex = 9;
-            // 
-            // cp_ProfilePic
-            // 
-            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
-            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.cp_ProfilePic.Name = "cp_ProfilePic";
-            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
-            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.cp_ProfilePic.TabIndex = 5;
-            this.cp_ProfilePic.TabStop = false;
             // 
             // button4
             // 
@@ -186,7 +165,7 @@ namespace QLUSER
             this.ServerOrFriend.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.ServerOrFriend.ItemSize = new System.Drawing.Size(0, 1);
             this.ServerOrFriend.Location = new System.Drawing.Point(-7, -7);
-            this.ServerOrFriend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ServerOrFriend.Margin = new System.Windows.Forms.Padding(2);
             this.ServerOrFriend.Name = "ServerOrFriend";
             this.ServerOrFriend.SelectedIndex = 0;
             this.ServerOrFriend.Size = new System.Drawing.Size(202, 428);
@@ -197,9 +176,9 @@ namespace QLUSER
             // 
             this.FriendsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
             this.FriendsTab.Location = new System.Drawing.Point(4, 5);
-            this.FriendsTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FriendsTab.Margin = new System.Windows.Forms.Padding(2);
             this.FriendsTab.Name = "FriendsTab";
-            this.FriendsTab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FriendsTab.Padding = new System.Windows.Forms.Padding(2);
             this.FriendsTab.Size = new System.Drawing.Size(194, 419);
             this.FriendsTab.TabIndex = 1;
             this.FriendsTab.Text = "tabPage4";
@@ -213,9 +192,9 @@ namespace QLUSER
             this.ServerTab.Controls.Add(this.panel6);
             this.ServerTab.Controls.Add(this.label5);
             this.ServerTab.Location = new System.Drawing.Point(4, 5);
-            this.ServerTab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ServerTab.Margin = new System.Windows.Forms.Padding(2);
             this.ServerTab.Name = "ServerTab";
-            this.ServerTab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ServerTab.Padding = new System.Windows.Forms.Padding(2);
             this.ServerTab.Size = new System.Drawing.Size(194, 419);
             this.ServerTab.TabIndex = 0;
             this.ServerTab.Click += new System.EventHandler(this.ServerTab_Click);
@@ -224,7 +203,7 @@ namespace QLUSER
             // 
             this.panel12.Controls.Add(this.treeView1);
             this.panel12.Location = new System.Drawing.Point(8, 53);
-            this.panel12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel12.Margin = new System.Windows.Forms.Padding(2);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(179, 355);
             this.panel12.TabIndex = 11;
@@ -259,7 +238,7 @@ namespace QLUSER
             this.panel6.Controls.Add(this.button5);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel6.Location = new System.Drawing.Point(2, 2);
-            this.panel6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel6.Margin = new System.Windows.Forms.Padding(2);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(190, 45);
             this.panel6.TabIndex = 10;
@@ -302,9 +281,9 @@ namespace QLUSER
             this.tabPage3.Controls.Add(this.panel11);
             this.tabPage3.Controls.Add(this.panel10);
             this.tabPage3.Location = new System.Drawing.Point(4, 5);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage3.Size = new System.Drawing.Size(194, 419);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
@@ -312,7 +291,7 @@ namespace QLUSER
             // panel11
             // 
             this.panel11.Location = new System.Drawing.Point(6, 51);
-            this.panel11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel11.Margin = new System.Windows.Forms.Padding(2);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(184, 357);
             this.panel11.TabIndex = 12;
@@ -324,7 +303,7 @@ namespace QLUSER
             this.panel10.Controls.Add(this.button1);
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel10.Location = new System.Drawing.Point(2, 2);
-            this.panel10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel10.Margin = new System.Windows.Forms.Padding(2);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(190, 45);
             this.panel10.TabIndex = 11;
@@ -368,7 +347,7 @@ namespace QLUSER
             this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panel8.Controls.Add(this.button3);
             this.panel8.Location = new System.Drawing.Point(711, 37);
-            this.panel8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel8.Margin = new System.Windows.Forms.Padding(2);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(104, 34);
             this.panel8.TabIndex = 5;
@@ -405,7 +384,7 @@ namespace QLUSER
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel9.Controls.Add(this.textBox1);
             this.panel9.Location = new System.Drawing.Point(58, 36);
-            this.panel9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel9.Margin = new System.Windows.Forms.Padding(2);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(616, 32);
             this.panel9.TabIndex = 6;
@@ -455,7 +434,7 @@ namespace QLUSER
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(2, 53);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(10);
             this.flowLayoutPanel1.Size = new System.Drawing.Size(820, 357);
             this.flowLayoutPanel1.TabIndex = 7;
             this.flowLayoutPanel1.WrapContents = false;
@@ -485,7 +464,7 @@ namespace QLUSER
             this.panel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel7.Controls.Add(this.button6);
             this.panel7.Location = new System.Drawing.Point(700, 10);
-            this.panel7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel7.Margin = new System.Windows.Forms.Padding(2);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(107, 30);
             this.panel7.TabIndex = 11;
@@ -511,7 +490,7 @@ namespace QLUSER
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.ItemSize = new System.Drawing.Size(0, 1);
             this.tabControl1.Location = new System.Drawing.Point(278, -11);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(829, 493);
@@ -525,9 +504,9 @@ namespace QLUSER
             this.tabPage1.Controls.Add(this.panel4);
             this.tabPage1.Controls.Add(this.flowLayoutPanel1);
             this.tabPage1.Location = new System.Drawing.Point(4, 5);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage1.Size = new System.Drawing.Size(821, 484);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
@@ -538,9 +517,9 @@ namespace QLUSER
             this.tabPage2.Controls.Add(this.button2);
             this.tabPage2.Controls.Add(this.btn_Ketban);
             this.tabPage2.Location = new System.Drawing.Point(4, 5);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(821, 484);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
@@ -548,7 +527,7 @@ namespace QLUSER
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(135, 17);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(56, 19);
             this.button2.TabIndex = 1;
@@ -559,7 +538,7 @@ namespace QLUSER
             // btn_Ketban
             // 
             this.btn_Ketban.Location = new System.Drawing.Point(12, 17);
-            this.btn_Ketban.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_Ketban.Margin = new System.Windows.Forms.Padding(2);
             this.btn_Ketban.Name = "btn_Ketban";
             this.btn_Ketban.Size = new System.Drawing.Size(56, 19);
             this.btn_Ketban.TabIndex = 0;
@@ -567,12 +546,34 @@ namespace QLUSER
             this.btn_Ketban.UseVisualStyleBackColor = true;
             this.btn_Ketban.Click += new System.EventHandler(this.btn_Ketban_Click);
             // 
+            // cp_ProfilePic
+            // 
+            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
+            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
+            this.cp_ProfilePic.Name = "cp_ProfilePic";
+            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
+            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.cp_ProfilePic.TabIndex = 5;
+            this.cp_ProfilePic.TabStop = false;
+            // 
+            // cp_Menu
+            // 
+            this.cp_Menu.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
+            this.cp_Menu.Location = new System.Drawing.Point(23, 5);
+            this.cp_Menu.Margin = new System.Windows.Forms.Padding(2);
+            this.cp_Menu.Name = "cp_Menu";
+            this.cp_Menu.Size = new System.Drawing.Size(51, 53);
+            this.cp_Menu.TabIndex = 0;
+            this.cp_Menu.TabStop = false;
+            this.cp_Menu.Click += new System.EventHandler(this.cp_Menu_Click);
+            // 
             // GiaoDien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 474);
-            this.Size = new Size(1116, 513);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl1);
@@ -582,10 +583,8 @@ namespace QLUSER
             this.Text = "GiaoDien";
             this.Load += new System.EventHandler(this.GiaoDien_Load);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
             this.ServerOrFriend.ResumeLayout(false);
             this.ServerTab.ResumeLayout(false);
             this.ServerTab.PerformLayout();
@@ -602,6 +601,8 @@ namespace QLUSER
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).EndInit();
             this.ResumeLayout(false);
 
         }

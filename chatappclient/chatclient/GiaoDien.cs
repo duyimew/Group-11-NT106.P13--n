@@ -85,9 +85,10 @@ namespace QLUSER
         {
             flowLayoutPanel2.Controls.Clear();
             flowLayoutPanel2.AutoScrollPosition = new Point(0, 0);
-            flowLayoutPanel2.PerformLayout();
+            flowLayoutPanel2.AutoScroll = true;
             string[] groupname = await group.RequestGroupName(username1);
             LoadGroup(groupname);
+            flowLayoutPanel2.PerformLayout();
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -277,12 +278,18 @@ namespace QLUSER
 
             flowLayoutPanel2.FlowDirection = FlowDirection.LeftToRight; 
             flowLayoutPanel2.WrapContents = true;
-            //flowLayoutPanel2.AutoScroll = true;
+            flowLayoutPanel2.AutoScroll = false;
             flowLayoutPanel2.MouseWheel += FlowLayoutPanel2_MouseWheel;
 
-            flowLayoutPanel2.Padding = new Padding((flowLayoutPanel2.ClientSize.Width - 50) / 2, 10, 0, 0); 
+            flowLayoutPanel2.Padding = new Padding((flowLayoutPanel2.ClientSize.Width - 50) / 2, 0, 0, 10); 
         }
-
+        void FlowLayoutPanel2_MouseWheel(object sender, MouseEventArgs e)
+        {
+            int delta = e.Delta > 0 ? -20 : 20;
+            int currentY = -flowLayoutPanel2.AutoScrollPosition.Y;
+            int newScrollY = currentY + delta;
+            flowLayoutPanel2.AutoScrollPosition = new Point(0, newScrollY);
+        }
 
         private async void bt_guitinnhan_Click(object sender, EventArgs e)
         {
@@ -1403,17 +1410,7 @@ namespace QLUSER
 
         }
 
-        void FlowLayoutPanel2_MouseWheel(object sender, MouseEventArgs e)
-        {
-            int delta = e.Delta > 0 ? -50 : 50;
 
-            Point currentScrollPos = flowLayoutPanel2.AutoScrollPosition;
-
-            flowLayoutPanel2.AutoScrollPosition = new Point(
-                Math.Abs(currentScrollPos.X),
-                Math.Abs(currentScrollPos.Y) + delta
-            );
-        }
 
         bool on = false;
         private async void USERINFOR(string username)
