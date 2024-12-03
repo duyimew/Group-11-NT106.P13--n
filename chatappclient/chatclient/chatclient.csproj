@@ -244,6 +244,7 @@
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.9.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=8.1.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.8.1.2\lib\net472\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
@@ -359,6 +360,7 @@
     <Compile Include="DTOs\DKDanhMucDTO.cs" />
     <Compile Include="DTOs\DKChannelDTO.cs" />
     <Compile Include="DTOs\DKGroupDTO.cs" />
+    <Compile Include="DTOs\FriendRequestDTO.cs" />
     <Compile Include="DTOs\GroupnameDTO.cs" />
     <Compile Include="DTOs\InforuserDTO.cs" />
     <Compile Include="DTOs\ReceivemessDTO.cs" />
@@ -392,6 +394,7 @@
     </Compile>
     <Compile Include="Models\file.cs" />
     <Compile Include="Models\Find.cs" />
+    <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Token.cs" />
