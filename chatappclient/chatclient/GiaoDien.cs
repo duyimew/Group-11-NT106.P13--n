@@ -30,6 +30,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic.ApplicationServices;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 
 
 namespace QLUSER
@@ -1405,10 +1406,113 @@ namespace QLUSER
             friend.Show();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
+            using (HttpClient _httpClient = new HttpClient())
+            {
+                try
+                {
+                    flpFriends.Controls.Clear();
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Request/{username1}";
 
+                    HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                        if (responseData != null && responseData.message != null)
+                        {
+                            foreach (string username in responseData.message)
+                            {
+                                Image avatarImage = await avatar.LoadAvatarAsync(username);
+
+                                Panel userPanel = new Panel
+                                {
+                                    Width = flpFriends.Width,
+                                    Height = 60,
+                                    BorderStyle = BorderStyle.FixedSingle
+                                };
+
+                                PictureBox avatarBox = new PictureBox
+                                {
+                                    Image = avatarImage,
+                                    Width = 50,
+                                    Height = 50,
+                                    SizeMode = PictureBoxSizeMode.Zoom,
+                                    Location = new Point(5, 5)
+                                };
+
+                                Label usernameLabel = new Label
+                                {
+                                    Text = username,
+                                    AutoSize = true,
+                                    Location = new Point(65, 20)
+                                };
+
+                                Button acceptButton = new Button
+                                {
+                                    Text = "Chấp nhận",
+                                    Tag = username,
+                                    Location = new Point(userPanel.Width - 100, 15),
+                                    Width = 90
+                                };
+
+                                acceptButton.Click += async (s, ev) =>
+                                {
+                                    await AcceptFriendRequest(username);
+                                };
+                                userPanel.Controls.Add(avatarBox);
+                                userPanel.Controls.Add(usernameLabel);
+                                userPanel.Controls.Add(acceptButton);
+                                flpFriends.Controls.Add(userPanel);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không có dữ liệu trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Lỗi từ server: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
+
+        private async Task AcceptFriendRequest(string username)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Respond/Accept/{username}";
+                    HttpResponseMessage response = await client.PostAsync(requestUrl, null);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show($"Đã chấp nhận lời mời kết bạn từ {username}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Lỗi từ server khi chấp nhận lời mời: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi chấp nhận lời mời: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
 
 

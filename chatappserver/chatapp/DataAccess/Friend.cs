@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using chatapp.Data;
 using System.Data;
-using chatapp.DTOs;
+using chatserver.DTOs.Friends;
 
 namespace chatapp.DataAccess
 {
@@ -12,7 +12,7 @@ namespace chatapp.DataAccess
         {
             _connectDB = connectDB;
         }
-        public async Task<string[]> FriendListAsync(int userId)
+        public async Task<string[]> FriendListAsync(string username)
         {
             string[] result = new string[1];
             result[0] = "0";
@@ -25,7 +25,34 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT Username FROM Users WHERE UserId IN (SELECT CASE WHEN UserId_1 = @UserId THEN UserId_2 ELSE UserId_1 END AS FriendId FROM Friends WHERE UserId_1 = @UserId OR UserId_2 = @UserId)";
+
+                    // Lấy userId từ username
+                    string userIdQuery = "SELECT UserId FROM Users WHERE Username = @Username";
+                    SqlCommand userIdCommand = new SqlCommand(userIdQuery, connectionDB);
+                    userIdCommand.Parameters.AddWithValue("@Username", username);
+                    object userIdObj = await userIdCommand.ExecuteScalarAsync();
+
+                    if (userIdObj == null)
+                    {
+                        result[0] = "Người dùng không tồn tại";
+                        return result;
+                    }
+
+                    int userId = Convert.ToInt32(userIdObj);
+
+                    // Lấy danh sách bạn bè
+                    string strQuery = @"
+                SELECT Username 
+                FROM Users 
+                WHERE UserId IN 
+                (
+                    SELECT CASE 
+                        WHEN UserId_1 = @UserId THEN UserId_2 
+                        ELSE UserId_1 
+                    END AS FriendId 
+                    FROM Friends 
+                    WHERE UserId_1 = @UserId OR UserId_2 = @UserId
+                )";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
                     command.Parameters.AddWithValue("@UserId", userId);
                     DataTable dataTable = new DataTable();
@@ -33,6 +60,7 @@ namespace chatapp.DataAccess
                     {
                         adapter.Fill(dataTable);
                     }
+
                     if (dataTable.Rows.Count > 0)
                     {
                         result = new string[dataTable.Rows.Count + 1];
@@ -43,7 +71,10 @@ namespace chatapp.DataAccess
                         result[0] = "1";
                         return result;
                     }
-                    else return result;
+                    else
+                    {
+                        return result;
+                    }
                 }
             }
             catch (Exception ex)
@@ -53,10 +84,10 @@ namespace chatapp.DataAccess
             }
         }
 
-        public async Task<string[]> ListSentRequest(int userId)
+        public async Task<string[]> ListSentRequest(string username)
         {
             string[] result = new string[1];
-            result[0] = "0";
+            result[0] = "0"; // Default to failure status
             try
             {
                 using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
@@ -66,7 +97,31 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT Username FROM Users WHERE UserId IN (SELECT ReceiverId FROM FriendRequests WHERE SenderId = @userId)";
+
+                    // Get userId from username
+                    string userIdQuery = "SELECT UserId FROM Users WHERE Username = @Username";
+                    SqlCommand userIdCommand = new SqlCommand(userIdQuery, connectionDB);
+                    userIdCommand.Parameters.AddWithValue("@Username", username);
+                    object userIdObj = await userIdCommand.ExecuteScalarAsync();
+
+                    if (userIdObj == null)
+                    {
+                        result[0] = "Người dùng không tồn tại";
+                        return result;
+                    }
+
+                    int userId = Convert.ToInt32(userIdObj);
+
+                    // Fetch the list of received friend requests (where the user is the receiver)
+                    string strQuery = @"
+                SELECT Username 
+                FROM Users 
+                WHERE UserId IN 
+                (
+                    SELECT SenderId 
+                    FROM FriendRequests 
+                    WHERE ReceiverId = @UserId
+                )";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
                     command.Parameters.AddWithValue("@UserId", userId);
                     DataTable dataTable = new DataTable();
@@ -74,6 +129,7 @@ namespace chatapp.DataAccess
                     {
                         adapter.Fill(dataTable);
                     }
+
                     if (dataTable.Rows.Count > 0)
                     {
                         result = new string[dataTable.Rows.Count + 1];
@@ -81,18 +137,24 @@ namespace chatapp.DataAccess
                         {
                             result[i + 1] = dataTable.Rows[i]["Username"].ToString();
                         }
-                        result[0] = "1";
+                        result[0] = "1"; // Success
                         return result;
                     }
-                    else return result;
+                    else
+                    {
+                        result[0] = "Không có yêu cầu kết bạn nào";
+                        return result; // No friend requests
+                    }
                 }
             }
             catch (Exception ex)
             {
                 result[0] = $"Error: {ex.Message}";
-                return result;
+                return result; // Error handling
             }
         }
+
+
         public async Task<string[]> SendFriendRequest(SendFriendRequestDTO request)
         {
             string[] result = new string[1];
@@ -180,10 +242,40 @@ namespace chatapp.DataAccess
                         return result;
                     }
 
+                    // Lấy senderId và receiverId từ username
+                    string userIdQuery = "SELECT UserId FROM Users WHERE Username = @Username";
+
+                    // Lấy senderId
+                    SqlCommand senderCmd = new SqlCommand(userIdQuery, connectionDB);
+                    senderCmd.Parameters.AddWithValue("@Username", request.senderUsername);
+                    object senderIdObj = await senderCmd.ExecuteScalarAsync();
+
+                    if (senderIdObj == null)
+                    {
+                        result[0] = "Sender không tồn tại";
+                        return result;
+                    }
+
+                    int senderId = Convert.ToInt32(senderIdObj);
+
+                    // Lấy receiverId
+                    SqlCommand receiverCmd = new SqlCommand(userIdQuery, connectionDB);
+                    receiverCmd.Parameters.AddWithValue("@Username", request.receiverUsername);
+                    object receiverIdObj = await receiverCmd.ExecuteScalarAsync();
+
+                    if (receiverIdObj == null)
+                    {
+                        result[0] = "Receiver không tồn tại";
+                        return result;
+                    }
+
+                    int receiverId = Convert.ToInt32(receiverIdObj);
+
+                    // Kiểm tra lời mời kết bạn
                     string strQuery = "SELECT 1 FROM FriendRequests WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@SenderId", request.senderId);
-                    command.Parameters.AddWithValue("@ReceiverId", request.receiverId);
+                    command.Parameters.AddWithValue("@SenderId", senderId);
+                    command.Parameters.AddWithValue("@ReceiverId", receiverId);
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -197,27 +289,28 @@ namespace chatapp.DataAccess
 
                     if (request.action == "Accept")
                     {
+                        // Chấp nhận lời mời
                         strQuery = "INSERT INTO Friends (UserId_1, UserId_2) VALUES (@SenderId, @ReceiverId)";
                         using (SqlCommand insertCmd = new SqlCommand(strQuery, connectionDB))
                         {
-                            insertCmd.Parameters.AddWithValue("@SenderId", request.senderId);
-                            insertCmd.Parameters.AddWithValue("@ReceiverId", request.receiverId);
-
+                            insertCmd.Parameters.AddWithValue("@SenderId", senderId);
+                            insertCmd.Parameters.AddWithValue("@ReceiverId", receiverId);
                             await insertCmd.ExecuteNonQueryAsync();
                         }
                         result[1] = "Đã chấp nhận lời mời kết bạn";
-                    } else
+                    }
+                    else
                     {
                         result[1] = "Đã từ chối lời mời kết bạn";
                     }
 
+                    // Xóa lời mời kết bạn
                     strQuery = "DELETE FROM FriendRequests WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId";
-                    using (SqlCommand insertCmd = new SqlCommand(strQuery, connectionDB))
+                    using (SqlCommand deleteCmd = new SqlCommand(strQuery, connectionDB))
                     {
-                        insertCmd.Parameters.AddWithValue("@SenderId", request.senderId);
-                        insertCmd.Parameters.AddWithValue("@ReceiverId", request.receiverId);
-
-                        await insertCmd.ExecuteNonQueryAsync();
+                        deleteCmd.Parameters.AddWithValue("@SenderId", senderId);
+                        deleteCmd.Parameters.AddWithValue("@ReceiverId", receiverId);
+                        await deleteCmd.ExecuteNonQueryAsync();
                     }
 
                     result[0] = "1";
@@ -231,6 +324,6 @@ namespace chatapp.DataAccess
             }
         }
 
-
     }
+
 }

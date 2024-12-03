@@ -2,8 +2,8 @@
 using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using chatapp.DTOs;
 using chatapp.DataAccess;
+using chatserver.DTOs.Friends;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -19,10 +19,10 @@ namespace chatapp.Controllers
             _friend= friend;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> List(int userId)
+        [HttpGet("{username}")]
+        public async Task<IActionResult> List(string username)
         {
-            string[] result = await _friend.FriendListAsync(userId);
+            string[] result = await _friend.FriendListAsync(username);
             if (result[0] == "1")
             {
                 return Ok(new { message = result.Skip(1) });
@@ -33,10 +33,10 @@ namespace chatapp.Controllers
             }
         }
 
-        [HttpGet("Request/{userId}")]
-        public async Task<IActionResult> ListSentRequest(int userId)
+        [HttpGet("Request/{username}")]
+        public async Task<IActionResult> ListSentRequest(string username)
         {
-            string[] result = await _friend.ListSentRequest(userId);
+            string[] result = await _friend.ListSentRequest(username);
             if (result[0] == "1")
             {
                 return Ok(new { message = result.Skip(1) });

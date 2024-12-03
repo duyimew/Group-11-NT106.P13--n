@@ -1,4 +1,4 @@
-﻿namespace chatapp.DTOs
+﻿namespace chatserver.DTOs.Friends
 {
     public class SendFriendRequestDTO
     {
