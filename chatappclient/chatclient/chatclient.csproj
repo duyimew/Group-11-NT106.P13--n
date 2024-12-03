@@ -379,6 +379,12 @@
     <Compile Include="GiaoDien.Designer.cs">
       <DependentUpon>GiaoDien.cs</DependentUpon>
     </Compile>
+    <Compile Include="GroupUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GroupUser.Designer.cs">
+      <DependentUpon>GroupUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\DanhMuc.cs" />
     <Compile Include="Models\Channel.cs" />
     <Compile Include="Models\CircularPicture.cs">
@@ -422,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GiaoDien.resx">
       <DependentUpon>GiaoDien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GroupUser.resx">
+      <DependentUpon>GroupUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

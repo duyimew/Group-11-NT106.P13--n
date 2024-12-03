@@ -345,7 +345,11 @@ namespace QLUSER
 
                 Margin = new Padding(0, 0, 10, 0)
             };
+            pictureBoxAvatar.Click += (s, e) =>
+            {
 
+                USERINFOR(username);
+            };
             UserSession.AvatarUpdated += async () =>
             {
                 pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(username);
@@ -1409,6 +1413,239 @@ namespace QLUSER
                 Math.Abs(currentScrollPos.X),
                 Math.Abs(currentScrollPos.Y) + delta
             );
+        }
+
+        bool on = false;
+        private async void USERINFOR(string username)
+        {
+            Form form = new Form();
+            form.Text = $"Thông tin người dùng";
+            form.Size = new Size(500, 300);
+            form.StartPosition = FormStartPosition.CenterParent;
+
+            form.Deactivate += (s, e) =>
+            {
+                if(!on)
+                form.Close();
+
+            };
+            CircularPicture userpicture = new CircularPicture();
+            try
+            {
+                userpicture.Image = await avatar.LoadAvatarAsync(username);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Không thể tải ảnh: {ex.Message}");
+                return;
+            }
+            userpicture.SizeMode = PictureBoxSizeMode.Zoom;
+            userpicture.Location = new Point(20, 50);
+            userpicture.Size = new Size(50, 50);
+            userpicture.Anchor = AnchorStyles.None;
+            userpicture.Click += async (s, e) =>
+            {
+                GroupUser user = new GroupUser(username,username1);
+                user.Show();
+            };
+            UserSession.AvatarUpdated += async () =>
+            {
+                userpicture.Image = await avatar.LoadAvatarAsync(username);
+            };
+
+            Label label = new Label();
+            label.Text = $"{username}";
+            label.Font = new Font("Arial", 12, FontStyle.Bold);
+            label.ForeColor = Color.Black;
+            label.AutoSize = true;
+            label.PerformLayout();
+            int labelWidth = TextRenderer.MeasureText(label.Text, label.Font).Width;
+            label.Location = new Point(20, 120);
+            label.TextAlign = ContentAlignment.MiddleCenter;
+
+            string[] groupname = await group.RequestGroupName(username);
+            string[] groupname1 = await group.RequestGroupName(username1);
+            string[] commongroupnames = groupname.Intersect(groupname1).ToArray();
+            string[] commonGroupNames = commongroupnames.Take(3).ToArray();
+            for (int i = 0; i < commonGroupNames.Length; i++)
+            {
+                CircularPicture circulargroup = new CircularPicture();
+                try
+                {
+                    circulargroup.Image = await avatar.LoadAvatarGroupAsync(commonGroupNames[i]);
+                    circulargroup.SizeMode = PictureBoxSizeMode.Zoom;
+                    circulargroup.Name = commonGroupNames[i];
+                    UserSession.AvatarGroupUpdated += async () =>
+                    {
+                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(commonGroupNames[i]);
+                        circulargroup.Name = commonGroupNames[i];
+                    };
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Không thể tải ảnh: {ex.Message}");
+                    return;
+                }
+                circulargroup.Location = new Point(20 + i * 30, 150);
+                circulargroup.Size = new Size(25, 25);
+                circulargroup.Anchor = AnchorStyles.None;
+                circulargroup.Click += async (s, e) =>
+                {
+                    GroupUser user = new GroupUser(username,username1);
+                    user.Show();
+                };
+                form.Controls.Add(circulargroup);
+            }
+
+            Label label1 = new Label();
+            label1.Text = $"{commongroupnames.Length} Máy Chủ Chung";
+            label1.Font = new Font("Arial", 12, FontStyle.Bold);
+            label1.ForeColor = Color.Black;
+            label1.AutoSize = true;
+            label1.PerformLayout();
+            label1.Location = new Point(20 + commonGroupNames.Length * 30, 150);
+            label1.TextAlign = ContentAlignment.MiddleCenter;
+
+            TextBox nhantin = new TextBox();
+            nhantin.Text = "";
+            nhantin.Font = new Font("Arial", 12, FontStyle.Bold);
+            nhantin.ForeColor = Color.Black;
+            nhantin.Size = new Size(440, 30);
+            nhantin.PerformLayout();
+            nhantin.Location = new Point(20, 200);
+
+            Button thongtin = new Button();
+            thongtin.Text = "...";
+            thongtin.AutoSize = AutoSize;
+            thongtin.Location = new Point(460 - thongtin.Width, 20);
+            thongtin.Click += async (s, e) =>
+            {
+                 if(form1==null)TrangChu(username);
+                 else
+                 {
+                    if(form2!=null)
+                    {
+                        form2.Dispose();
+                        form2.Close();
+                        form2 = null;
+                    }
+                    form1.Dispose();
+                    form1.Close();
+                    on = false;
+                    form1 = null;
+                 }
+            };
+
+            Button banbe = new Button();
+            banbe.Text = "banbe";
+            banbe.Location = new Point(460 - thongtin.Width - banbe.Width - 20, 20);
+            banbe.AutoSize = AutoSize;
+            banbe.Click += (s, e) =>
+            {
+                SearchUser user = new SearchUser(username1);
+                user.Show();
+            };
+
+            form.Controls.Add(userpicture);
+            form.Controls.Add(label);
+            if (username!=username1)
+            { 
+                form.Controls.Add(label1);
+                form.Controls.Add(nhantin);
+                form.Controls.Add(thongtin);
+                form.Controls.Add(banbe);
+            }
+            form.Show();
+        }
+        Form form1;
+        private void TrangChu(string username)
+        {
+            on = true;
+            form1 = new Form();
+            form1.Text = $"Trang chủ";
+            form1.Size = new Size(200, 200);
+            form1.StartPosition = FormStartPosition.CenterParent;
+            form1.FormClosed += (s1, e1) =>
+            {
+                if (form2 != null)
+                {
+                    form2.Dispose();
+                    form2.Close();
+                    form2 = null;
+                }
+                on = false;
+                form1 = null;
+
+            };
+            Button button = new Button();
+            button.Text = "Xem ho so day du";
+            button.AutoSize = true;
+            button.Location = new Point(20, 20);
+            button.Click += (s1, e1) =>
+            {
+                GroupUser user = new GroupUser(username,username1);
+                user.Show();
+            };
+            Button moivaomaychu = new Button();
+            moivaomaychu.Text = "moi vao may chu";
+            moivaomaychu.AutoSize = true;
+            moivaomaychu.Location = new Point(20, 60);
+            moivaomaychu.Click += async (s1, e1) =>
+            {
+
+                if (form2 == null) moivaogroup(username);
+                else
+                {
+                    form2.Dispose();
+                    form2.Close();
+                    form2 = null;
+                }
+                
+
+            };
+            
+            form1.Controls.Add(button);
+            form1.Controls.Add(moivaomaychu);
+            form1.Show();
+        }
+        Form form2;
+        private async void moivaogroup(string username)
+        {
+            form2 = new Form();
+            form2.Text = $"moi vao may chu";
+            form2.AutoSize = AutoSize;
+            form2.StartPosition = FormStartPosition.CenterParent;
+
+            // Create a FlowLayoutPanel to hold the buttons
+            FlowLayoutPanel flowLayoutPanel1 = new FlowLayoutPanel();
+            flowLayoutPanel1.Dock = DockStyle.Fill;  // Dock the panel to fill the form
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;  // Arrange buttons vertically
+            flowLayoutPanel1.WrapContents = false;  // Don't wrap buttons to next row
+            flowLayoutPanel1.AutoScroll = true; // Enable scrolling if buttons overflow
+
+            // Add the FlowLayoutPanel to the form
+            form2.Controls.Add(flowLayoutPanel1);
+
+            // Get group names from the server
+            string[] groupname2 = await group.RequestGroupName(username1);
+
+            for (int i = 0; i < groupname2.Length; i++)
+            {
+                // Create a button for each group
+                Button moivaogroup = new Button();
+                moivaogroup.Text = $"{groupname2[i]}";
+                moivaogroup.Name = groupname2[i];
+                moivaogroup.Size = new Size(120, 30);  // Adjust the size of the buttons
+                moivaogroup.Click += async (s2, e2) =>
+                {
+                    await group.AddMembersToGroup(username, moivaogroup.Name);
+                };
+
+                // Add the button to the FlowLayoutPanel
+                flowLayoutPanel1.Controls.Add(moivaogroup);
+            }
+            form2.Show();
+            
         }
     }
 }
