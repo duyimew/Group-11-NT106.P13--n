@@ -71,9 +71,9 @@ namespace QLUSER
             }
 
         }
-        private void UpdateAvatarDisplay()
+        private async void UpdateAvatarDisplay()
         {
-            circularPicture1.ImageLocation = UserSession.AvatarUrl;
+            circularPicture1.Image = await avatar.LoadAvatarAsync(username1);
         }
 
         private async Task<string[]> get(string username)
@@ -130,7 +130,7 @@ namespace QLUSER
             }
         }
 
-        private void bt_dangxuat_Click(object sender, EventArgs e)
+        private async void bt_dangxuat_Click(object sender, EventArgs e)
         {
             string tokenFile = find.find("token.txt");
             if (tokenFile != null && File.Exists(tokenFile))
@@ -138,8 +138,9 @@ namespace QLUSER
                 File.Delete(tokenFile);
             }
             MessageBox.Show("Đăng xuất thành công!");
+            if (GD.connection != null)
+                await GD.StopSignalR();
             DN.Show();
-            GD.Dispose();
             GD.Close();
             this.Close();
         }
@@ -165,8 +166,6 @@ namespace QLUSER
                         {
                             UserSession.AvatarUrl = avatarUrl;
                             MessageBox.Show("Avatar uploaded successfully!");
-
-                            // Update PictureBox on UI thread
                             circularPicture1.Invoke((MethodInvoker)(() =>
                             {
                                 if (circularPicture1.Image != null)
@@ -187,16 +186,6 @@ namespace QLUSER
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
         }
-
-
-       
-        
-
-
-
-
-
-
 
     }
 }

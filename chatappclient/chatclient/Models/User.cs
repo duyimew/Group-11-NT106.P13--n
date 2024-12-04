@@ -1,6 +1,5 @@
 ﻿using QLUSER.DTOs;
 using Newtonsoft.Json;
-using QLUSER.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

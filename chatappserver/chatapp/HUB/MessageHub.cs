@@ -46,7 +46,7 @@ namespace chatserver.HUB
         }
         public async Task SendAvataUpdate(string url, string channelid)
         {
-            await Clients.OthersInGroup(channelid).SendAsync("ReceiveAvataUpdate", url);
+            await Clients.Others.SendAsync("ReceiveAvataUpdate", url);
         }
     }
 }

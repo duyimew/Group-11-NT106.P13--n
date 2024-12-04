@@ -50,7 +50,7 @@ namespace QLUSER
         private bool isReceivingMessages = true;
         private List<string> selectedFilePaths = new List<string>();
         UserAvatar avatar = new UserAvatar();
-        private HubConnection connection = null;
+        public HubConnection connection = null;
         private bool isstop = false;
         private bool isRecevie = false;
         private TreeNode chatNode; // Khai báo biến toàn cục
@@ -70,6 +70,7 @@ namespace QLUSER
             UserSession.AvatarUpdated += UpdateAvatarDisplay;
             UserSession.AvatarGroupCreated += UpdateGroupDislay;
             tabControl1.SelectedIndex = 1;
+            InitializeSignalR();
         }
 
         private async void UpdateAvatarDisplay()
@@ -164,25 +165,6 @@ namespace QLUSER
         }
         private async void LoadGroup(string[] groupname)
         {
-            //CircularPicture circularfriend = new CircularPicture();
-            //try
-            //{
-              //  circularfriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Không thể tải ảnh: {ex.Message}");
-            //    return;
-            //}
-            //circularfriend.Size = new Size(50, 50);
-            //circularfriend.SizeMode = PictureBoxSizeMode.Zoom;
-            //circularfriend.Anchor = AnchorStyles.None;
-            //circularfriend.Click += (s, e) =>
-            {
-            //    SearchUser searchForm = new SearchUser(username1);
-            //    searchForm.Show();
-            };
-            //flowLayoutPanel2.Controls.Add(circularfriend);
             if (groupname != null)
             {
                 for (int i = 0; i < groupname.Length; i++)
@@ -212,7 +194,14 @@ namespace QLUSER
                     {
                         tabControl1.SelectedIndex = 0;
                         ServerOrFriend.SelectedIndex = 1;
-                        if (connection != null) await StopSignalR();
+                        while (true)
+                        {
+                            if (connection != null && connection.State == HubConnectionState.Connected)
+                            {
+                                await connection.SendAsync("LeaveGroup", label2.Name, username1);
+                                break;
+                            }
+                        }
                         CloseLabel();
                         treeView1.Nodes.Clear();
                         flowLayoutPanel1.Controls.Clear();
@@ -380,7 +369,6 @@ namespace QLUSER
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Width = 40,
                 Height = 40,
-                ImageLocation = UserSession.AvatarUrl,
                 Image = await avatar.LoadAvatarAsync(username),
                 Margin = new Padding(0, 0, 10, 0)
             };
@@ -605,7 +593,6 @@ namespace QLUSER
             })
             .Build();
             await connection.StartAsync();
-            await connection.SendAsync("JoinGroup", label2.Name, username1);
             connection.On<string, string, string, string[]>("ReceiveMessage", async (messageid, message, username, filenames) =>
             {
                 try
@@ -658,7 +645,7 @@ namespace QLUSER
                 MessageBox.Show("Reconnection failed: " + ex.Message);
             }
         }
-        private async Task StopSignalR()
+        public async Task StopSignalR()
         {
             if (connection != null)
             {
@@ -696,8 +683,14 @@ namespace QLUSER
             {
                 if (selectedNode.Name.Contains("VanBanChat"))
                 {
-                    if (connection != null)
-                        await StopSignalR();
+                    while (true)
+                    {
+                        if (connection != null && connection.State == HubConnectionState.Connected)
+                        {
+                            await connection.SendAsync("LeaveGroup", label2.Name, username1);
+                            break;
+                        }
+                    }
                     displayedMessages.Clear();
                     flowLayoutPanel1.Controls.Clear();
                     flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
@@ -731,14 +724,27 @@ namespace QLUSER
                             }
                         }
                     }
-                    await InitializeSignalR();
+                    while (true)
+                    {
+                        if (connection != null && connection.State == HubConnectionState.Connected)
+                        {
+                            await connection.SendAsync("JoinGroup", label2.Name, username1);
+                            break;
+                        }
+                    }
                 }
                 else if (selectedNode.Name.Contains("CuocGoiVideo"))
                 {
+                    while (true)
+                    {
+                        if (connection != null && connection.State == HubConnectionState.Connected)
+                        {
+                            await connection.SendAsync("LeaveGroup", label2.Name, username1);
+                            break;
+                        }
+                    }
                     VideoCall vc = new VideoCall(username1, label2.Name);
                     vc.Show();
-                    if (connection != null)
-                        await StopSignalR();
                     displayedMessages.Clear();
                     flowLayoutPanel1.Controls.Clear();
                     flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
@@ -772,7 +778,14 @@ namespace QLUSER
                             }
                         }
                     }
-                    await InitializeSignalR();
+                    while (true)
+                    {
+                        if (connection != null && connection.State == HubConnectionState.Connected)
+                        {
+                            await connection.SendAsync("JoinGroup", label2.Name, username1);
+                            break;
+                        }
+                    }
                 }
             }
         }

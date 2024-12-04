@@ -54,7 +54,7 @@
             this.lb_username.Location = new System.Drawing.Point(140, 358);
             this.lb_username.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lb_username.Name = "lb_username";
-            this.lb_username.Size = new System.Drawing.Size(86, 20);
+            this.lb_username.Size = new System.Drawing.Size(73, 17);
             this.lb_username.TabIndex = 1;
             this.lb_username.Text = "Username";
             this.lb_username.Click += new System.EventHandler(this.lb_username_Click);
@@ -68,7 +68,7 @@
             this.lb_user.Location = new System.Drawing.Point(77, 77);
             this.lb_user.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lb_user.Name = "lb_user";
-            this.lb_user.Size = new System.Drawing.Size(321, 38);
+            this.lb_user.Size = new System.Drawing.Size(267, 31);
             this.lb_user.TabIndex = 2;
             this.lb_user.Text = "Thông tin người dùng";
             // 
@@ -92,7 +92,7 @@
             this.lb_email.Location = new System.Drawing.Point(140, 417);
             this.lb_email.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lb_email.Name = "lb_email";
-            this.lb_email.Size = new System.Drawing.Size(51, 20);
+            this.lb_email.Size = new System.Drawing.Size(42, 17);
             this.lb_email.TabIndex = 1;
             this.lb_email.Text = "Email";
             // 
@@ -104,7 +104,7 @@
             this.lb_Ten.Location = new System.Drawing.Point(140, 477);
             this.lb_Ten.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lb_Ten.Name = "lb_Ten";
-            this.lb_Ten.Size = new System.Drawing.Size(37, 20);
+            this.lb_Ten.Size = new System.Drawing.Size(33, 17);
             this.lb_Ten.TabIndex = 1;
             this.lb_Ten.Text = "Tên";
             // 
@@ -116,7 +116,7 @@
             this.lb_NgSinh.Location = new System.Drawing.Point(140, 530);
             this.lb_NgSinh.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lb_NgSinh.Name = "lb_NgSinh";
-            this.lb_NgSinh.Size = new System.Drawing.Size(83, 20);
+            this.lb_NgSinh.Size = new System.Drawing.Size(71, 17);
             this.lb_NgSinh.TabIndex = 1;
             this.lb_NgSinh.Text = "Ngày sinh";
             // 
@@ -140,7 +140,7 @@
             this.lb_uname.Location = new System.Drawing.Point(142, 378);
             this.lb_uname.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_uname.Name = "lb_uname";
-            this.lb_uname.Size = new System.Drawing.Size(167, 25);
+            this.lb_uname.Size = new System.Drawing.Size(134, 20);
             this.lb_uname.TabIndex = 11;
             this.lb_uname.Text = "<username here>";
             // 
@@ -152,7 +152,7 @@
             this.lb_mail.Location = new System.Drawing.Point(142, 437);
             this.lb_mail.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_mail.Name = "lb_mail";
-            this.lb_mail.Size = new System.Drawing.Size(126, 25);
+            this.lb_mail.Size = new System.Drawing.Size(100, 20);
             this.lb_mail.TabIndex = 12;
             this.lb_mail.Text = "<email here>";
             // 
@@ -164,7 +164,7 @@
             this.lb_name.Location = new System.Drawing.Point(144, 497);
             this.lb_name.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_name.Name = "lb_name";
-            this.lb_name.Size = new System.Drawing.Size(129, 25);
+            this.lb_name.Size = new System.Drawing.Size(103, 20);
             this.lb_name.TabIndex = 13;
             this.lb_name.Text = "<name here>";
             // 
@@ -176,7 +176,7 @@
             this.lb_bd.Location = new System.Drawing.Point(142, 550);
             this.lb_bd.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_bd.Name = "lb_bd";
-            this.lb_bd.Size = new System.Drawing.Size(138, 25);
+            this.lb_bd.Size = new System.Drawing.Size(110, 20);
             this.lb_bd.TabIndex = 14;
             this.lb_bd.Text = "<ngsinh here>";
             // 
@@ -206,6 +206,8 @@
             this.circularPicture1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.circularPicture1.TabIndex = 17;
             this.circularPicture1.TabStop = false;
+            this.circularPicture1.TextColor = System.Drawing.Color.Black;
+            this.circularPicture1.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
             // 
             // btn_ChangeAva
             // 
@@ -222,7 +224,7 @@
             // 
             // Formuser
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(1275, 755);
