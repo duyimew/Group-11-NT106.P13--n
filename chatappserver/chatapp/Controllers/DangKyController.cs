@@ -15,7 +15,7 @@ namespace chatapp.Controllers
         public DangkyController(ChatAppContext context, Dangky dangky)
         {
             _context = context;
-            _dangky = dangky; // Khởi tạo _dangky
+            _dangky = dangky;
         }
 
         [HttpPost("DangKy")]

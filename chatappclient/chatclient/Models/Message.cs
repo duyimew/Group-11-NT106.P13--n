@@ -1,4 +1,4 @@
-﻿using chatapp.DTOs;
+﻿using QLUSER.DTOs;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
@@ -13,19 +13,19 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading.Channels;
 
 namespace QLUSER.Models
 {
     internal class Message
     {
-        public async Task SendMessage(HubConnection connection,string groupName, string channelname,string username,string message)
+        public async Task<(bool issuccess, string messageid)> SendMessage(string ChannelID, string UserID, string message)
         {
             var sendmess = new SendmessDTO
             {
-                Groupname = groupName,
                 Message =message,
-                Channelname = channelname,
-                Username=username,
+                ChannelID = ChannelID,
+                UserID= UserID,
             };
             var json = JsonConvert.SerializeObject(sendmess);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -36,22 +36,22 @@ namespace QLUSER.Models
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string Message = responseData.message;
-                
+                string messageid = responseData.messageid;
+                return (true, messageid);
             }
             else
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string Message = responseData.message;
-               
+                return (false, null);
             }
         }
-        public async Task<string[]> ReceiveMessage(string groupname, string channelname)
+        public async Task<(bool issuccess, string[] messagetext)> ReceiveMessage(string channelid)
         {
             var receivemess = new ReceivemessDTO
             {
-                Groupname = groupname,
-                Channelname = channelname
+                ChannelID = channelid
             };
             var json = JsonConvert.SerializeObject(receivemess);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -67,8 +67,7 @@ namespace QLUSER.Models
                     MessagetextList.Add((string)text);
                 }
                 string[] MessagetextArray = MessagetextList.ToArray();
-                if (MessagetextArray[0] == "0") return null;
-                return MessagetextArray;
+                return (true,MessagetextArray);
             }
             else
             {
@@ -76,7 +75,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string Message = responseData.message;
                 MessageBox.Show(Message);
-                return null;
+                return (false, null);
             }
         }
         

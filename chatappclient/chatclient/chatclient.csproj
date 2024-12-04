@@ -360,10 +360,10 @@
     <Compile Include="DTOs\DKDanhMucDTO.cs" />
     <Compile Include="DTOs\DKChannelDTO.cs" />
     <Compile Include="DTOs\DKGroupDTO.cs" />
-    <Compile Include="DTOs\FriendRequestDTO.cs" />
     <Compile Include="DTOs\GroupnameDTO.cs" />
     <Compile Include="DTOs\InforuserDTO.cs" />
     <Compile Include="DTOs\ReceivemessDTO.cs" />
+    <Compile Include="DTOs\RespondFriendRequestDTO.cs" />
     <Compile Include="DTOs\savefileinfoDTO.cs" />
     <Compile Include="DTOs\SendFriendRequestDTO.cs" />
     <Compile Include="DTOs\SendMessDTO.cs" />
@@ -394,7 +394,6 @@
     </Compile>
     <Compile Include="Models\file.cs" />
     <Compile Include="Models\Find.cs" />
-    <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Token.cs" />

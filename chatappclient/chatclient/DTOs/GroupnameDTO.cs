@@ -1,8 +1,8 @@
-﻿namespace chatapp.DTOs
+﻿namespace QLUSER.DTOs
 {
     public class GroupnameDTO
     {
-        public string Username { get; set; }
+        public string UserID { get; set; }
 
     }
 }

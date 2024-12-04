@@ -1,4 +1,4 @@
-﻿using chatapp.DTOs;
+﻿using QLUSER.DTOs;
 using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using System;
@@ -15,7 +15,7 @@ namespace QLUSER.Models
 {
     internal class Group
     {
-        public async Task<bool> SaveGroupToDatabase(string groupName)
+        public async Task<(bool issuccess, string groupid)> SaveGroupToDatabase(string groupName)
         {
             var DKGroup = new DKGroupDTO
             {
@@ -30,8 +30,9 @@ namespace QLUSER.Models
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
+                string groupid = responseData.groupid;
                 MessageBox.Show(message);
-                return true;
+                return (true,groupid);
             }
             else
             {
@@ -39,15 +40,15 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
                 MessageBox.Show(message);
-                return false;
+                return (false,null);
             }
         }
-        public async Task<bool> AddMembersToGroup(string username, string groupname)
+        public async Task<bool> AddMembersToGroup(string userid, string groupid)
         {
             var AddUser = new AddUserDTO
             {
-                Username= username,
-                Groupname = groupname
+                UserID= userid,
+                GroupID = groupid
             };
             var json = JsonConvert.SerializeObject(AddUser);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -70,11 +71,11 @@ namespace QLUSER.Models
                 return false;
             }
         }
-        public async Task<string[]> RequestGroupName(string username)
+        public async Task<(bool issuccess, string[] groupidname)> RequestGroupName(string userid)
         {
             var Groupname = new GroupnameDTO
             {
-                Username = username,
+                UserID = userid,
             };
             var json = JsonConvert.SerializeObject(Groupname);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -84,14 +85,13 @@ namespace QLUSER.Models
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                List<string> groupNamesList = new List<string>();
-                foreach (var name in responseData.groupname)
+                List<string> groupidNamesList = new List<string>();
+                foreach (var name in responseData.groupidname)
                 {
-                    groupNamesList.Add((string)name);
+                    groupidNamesList.Add((string)name);
                 }
-                string[] groupNamesArray = groupNamesList.ToArray();
-                if (groupNamesArray[0] == "0") return null;
-                return groupNamesArray;
+                string[] groupidNamesArray = groupidNamesList.ToArray();
+                return (true,groupidNamesArray);
             }
             else
             {
@@ -99,7 +99,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
                 MessageBox.Show(message);
-                return null;
+                return (false,null);
             }
         }
     }

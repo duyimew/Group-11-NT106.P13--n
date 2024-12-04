@@ -29,7 +29,7 @@ namespace chatapp.Controllers
             string[] registrationResult = await _dkgroup.DangkyGroupAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                return Ok(new { message = "Đăng ký group thành công" });
+                return Ok(new { message = "Đăng ký group thành công", groupid = registrationResult[1] });
             }
             else
             {
@@ -39,7 +39,7 @@ namespace chatapp.Controllers
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] AddUserDTO request)
         {
-            string[] userInfo = { "", request.Username,request.Groupname };
+            string[] userInfo = { "", request.UserID,request.GroupID };
             string[] registrationResult = await _adduser.AddUserAsync(userInfo);
             if (registrationResult[0] == "1")
             {
@@ -53,16 +53,12 @@ namespace chatapp.Controllers
         [HttpPost("GroupName")]
         public async Task<IActionResult> GroupName([FromBody] GroupnameDTO request)
         {
-            string[] userInfo = { "", request.Username };
+            string[] userInfo = { "", request.UserID };
             string[] registrationResult = await _groupname.GroupNameAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                var groupNames = registrationResult.Skip(1).ToArray();
-                return Ok(new { groupname = groupNames });
-            }
-            else if (registrationResult[0] == "0")
-            {
-                return Ok(new { groupname = registrationResult });
+                var groupidNames = registrationResult.Skip(1).ToArray();
+                return Ok(new { groupidname = groupidNames });
             }
             else
             {

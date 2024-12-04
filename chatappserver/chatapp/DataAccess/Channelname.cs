@@ -2,6 +2,8 @@
 using chatapp.Data;
 using System.Data;
 using chatapp.Models;
+using System.Text.RegularExpressions;
+using System.Threading.Channels;
 
 namespace chatapp.DataAccess
 {
@@ -25,13 +27,12 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT ch.ChannelName,ch.IsChat,dm.DanhmucName " +
+                    string strQuery = "SELECT ch.ChannelId,ch.ChannelName,ch.IsChat,dm.Danhmucid " +
                         "FROM Channels ch " +
-                        "JOIN Groups gr ON gr.GroupId= ch.GroupId " +
                         "LEFT JOIN danhmuc dm on dm.DanhmucId = ch.Danhmucid " +
-                        "WHERE gr.GroupName= @groupname ";
+                        "WHERE ch.GroupId = @groupid";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@groupname", userInfo[1]);
+                    command.Parameters.AddWithValue("@groupid", userInfo[1]);
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -42,13 +43,17 @@ namespace chatapp.DataAccess
                         result = new string[dataTable.Rows.Count + 1];
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
-                            string danhmucname = dataTable.Rows[i]["DanhmucName"] == DBNull.Value ? null : dataTable.Rows[i]["DanhmucName"].ToString();
-                            result[i + 1] = dataTable.Rows[i]["ChannelName"].ToString()+"|"+danhmucname+"|"+ dataTable.Rows[i]["IsChat"].ToString();
+                            string Danhmucid = dataTable.Rows[i]["Danhmucid"] == DBNull.Value ? null : dataTable.Rows[i]["Danhmucid"].ToString();
+                            result[i + 1] = dataTable.Rows[i]["ChannelId"].ToString() + "|" + dataTable.Rows[i]["ChannelName"].ToString() + "|" + Danhmucid + "|" + dataTable.Rows[i]["IsChat"].ToString();
                         }
                         result[0] = "1";
                         return result;
                     }
-                    else return result;
+                    else
+                    {
+                        result[0] = "1";
+                        return result;
+                    }
                 }
             }
             catch (Exception ex)

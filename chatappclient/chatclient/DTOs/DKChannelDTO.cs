@@ -1,10 +1,10 @@
-﻿namespace chatapp.DTOs
+﻿namespace QLUSER.DTOs
 {
     public class DKChannelDTO
     {
-        public string Groupname { get; set; }
+        public string GroupID { get; set; }
         public string Channelname { get; set; }
         public bool ischat { get; set; }
-        public string danhmucname { get; set; }
+        public string danhmucID { get; set; }
     }
 }

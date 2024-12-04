@@ -14,9 +14,8 @@ namespace chatapp.DataAccess
         }
         public async Task<string[]> savefileinfoAsync(string[] userInfo)
         {
-            string[] result = new string[1];
-            result[0] = "0";
-            string messageid = "", channelid = "", userid = "";
+            string[] result = new string[2+userInfo.Length-4];
+            result[0] = "0"; result[1] = "";
             try
             {
                 using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
@@ -26,54 +25,31 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT ch.ChannelId, us.UserId FROM Users us,Channels ch,Groups gr WHERE us.Username = @username AND ch.ChannelName=@channelname and gr.GroupId=ch.GroupId and gr.GroupName=@groupname";
-                    SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@username", userInfo[4]);
-                    command.Parameters.AddWithValue("@channelname", userInfo[2]);
-                    command.Parameters.AddWithValue("@groupname", userInfo[3]);
-                    DataTable dataTable = new DataTable();
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        adapter.Fill(dataTable);
-                    }
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        DataRow row = dataTable.Rows[0];
-                        userid = row["UserId"].ToString();
-                        channelid = row["ChannelId"].ToString();
-                    }
-                    string query = "INSERT INTO Messages(ChannelId,UserId,MessageText,IsAttachment,SentTime) VALUES (@channelid,@userid,@message,@isattachment,@senttime)";
+
+                    string query = "INSERT INTO Messages(ChannelId,UserId,MessageText,IsAttachment,SentTime) " +
+                        "OUTPUT INSERTED.MessageId " +
+                        "VALUES (@channelid,@userid,@message,@isattachment,@senttime)";
                     SqlCommand command1 = new SqlCommand(query, connectionDB);
-                    command1.Parameters.AddWithValue("@channelid", channelid);
-                    command1.Parameters.AddWithValue("@userid", userid);
+                    command1.Parameters.AddWithValue("@channelid", userInfo[2]);
+                    command1.Parameters.AddWithValue("@userid", userInfo[3]);
                     command1.Parameters.AddWithValue("@isattachment", "1");
                     command1.Parameters.AddWithValue("@message", userInfo[1]);
                     command1.Parameters.AddWithValue("@senttime", DateTime.Now);
-                    command1.ExecuteNonQuery();
-                    string strQuery1 = "select ms.MessageId from Messages ms,Users us,Channels ch,Groups gr where ms.IsAttachment = 1 and ch.ChannelName=@channelname and gr.GroupName=@groupname and us.UserId=ms.UserId and ch.ChannelId=ms.ChannelId and gr.GroupId=ch.GroupId ORDER BY ms.SentTime desc";
-                    SqlCommand command3 = new SqlCommand(strQuery1, connectionDB);
-                    command3.Parameters.AddWithValue("@channelname", userInfo[2]);
-                    command3.Parameters.AddWithValue("@groupname", userInfo[3]);
-                    DataTable dataTable1 = new DataTable();
-                    using (SqlDataAdapter adapter1 = new SqlDataAdapter(command3))
-                    {
-                        adapter1.Fill(dataTable1);
-                    }
-                    if (dataTable1.Rows.Count > 0)
-                    {
-                        DataRow row1 = dataTable1.Rows[0];
-                        messageid = row1["MessageId"].ToString();
-                    }
-                    for (int i = 5; i < userInfo.Length; i++)
+                    int messageId = (int)command1.ExecuteScalar();
+                    result[1] = messageId.ToString();
+                    for (int i = 4; i < userInfo.Length; i++)
                     {
                         if (!string.IsNullOrEmpty(userInfo[i]))
                         {
-                            string query1 = "INSERT INTO Attachments(MessageId, Filename, UploadedAt) VALUES (@messageid, @filename, @uploadedat)";
+                            string query1 = "INSERT INTO Attachments(MessageId, Filename, UploadedAt) " +
+                                "OUTPUT INSERTED.AttachmentId " +
+                                "VALUES (@messageid, @filename, @uploadedat) ";
                             SqlCommand command2 = new SqlCommand(query1, connectionDB);
-                            command2.Parameters.AddWithValue("@messageid", messageid);
+                            command2.Parameters.AddWithValue("@messageid", messageId.ToString());
                             command2.Parameters.AddWithValue("@filename", userInfo[i]);
                             command2.Parameters.AddWithValue("@uploadedat", DateTime.Now);
-                            await command2.ExecuteNonQueryAsync();
+                            int AttachmentId = (int)command2.ExecuteScalar();
+                            result[i-2] = AttachmentId.ToString();
                         }
                     }
                     result[0] = "1";

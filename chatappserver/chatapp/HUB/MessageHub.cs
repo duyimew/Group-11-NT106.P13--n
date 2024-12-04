@@ -4,6 +4,7 @@ using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 namespace chatserver.HUB
 {
@@ -12,44 +13,40 @@ namespace chatserver.HUB
         private static readonly Dictionary<string, List<string>> CallParticipants = new();
 
 
-        public async Task JoinGroup(string tennhom,string tenkenh, string username)
+        public async Task JoinGroup(string channelid, string username)
         {
-            string groupid=tennhom+"|"+tenkenh;
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupid);
-            if (!CallParticipants.ContainsKey(groupid))
+            await Groups.AddToGroupAsync(Context.ConnectionId, channelid);
+            if (!CallParticipants.ContainsKey(channelid))
             {
-                CallParticipants[groupid] = new List<string>();
+                CallParticipants[channelid] = new List<string>();
             }
-            var participants = CallParticipants[groupid];
+            var participants = CallParticipants[channelid];
             if (!participants.Contains(username))
             {
                 participants.Add(username);
             }
         }
 
-        public async Task LeaveGroup(string tennhom, string tenkenh, string username)
+        public async Task LeaveGroup(string channelid, string username)
         {
-            string groupid = tennhom + "|" + tenkenh;
-            if (CallParticipants.ContainsKey(groupid))
+            if (CallParticipants.ContainsKey(channelid))
             {
-                CallParticipants[groupid].Remove(username);
-                if (CallParticipants[groupid].Count == 0)
+                CallParticipants[channelid].Remove(username);
+                if (CallParticipants[channelid].Count == 0)
                 {
-                    CallParticipants.Remove(groupid);
+                    CallParticipants.Remove(channelid);
                 }
             }
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupid);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, channelid);
         }
 
-        public async Task SendMessage(string username, string groupname, string channelname, string message, string[] filenames)
+        public async Task SendMessage(string messageid,string username, string channelid, string message, string[] filenames)
         {
-            string groupid = groupname + "|" + channelname;
-            await Clients.Group(groupid).SendAsync("ReceiveMessage", message, username, filenames);
+            await Clients.Group(channelid).SendAsync("ReceiveMessage", messageid,message, username, filenames);
         }
-        public async Task SendAvataUpdate(string url,string groupname,string channelname)
+        public async Task SendAvataUpdate(string url, string channelid)
         {
-            string groupid = groupname + "|" + channelname;
-            await Clients.OthersInGroup(groupid).SendAsync("ReceiveAvataUpdate", url);
+            await Clients.OthersInGroup(channelid).SendAsync("ReceiveAvataUpdate", url);
         }
     }
 }

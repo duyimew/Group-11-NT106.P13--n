@@ -1,4 +1,4 @@
-﻿using chatapp.DTOs;
+﻿using QLUSER.DTOs;
 using Newtonsoft.Json;
 using QLUSER.DTOs;
 using System;
@@ -51,6 +51,31 @@ namespace QLUSER.Models
             catch (FormatException)
             {
                 return false;
+            }
+        }
+        public async Task<string> finduserid(string username)
+        {
+            var Username = new InforuserDTO
+            {
+                Username = username,
+            };
+            var json = JsonConvert.SerializeObject(Username);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "User/FindUserID", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string[] userid = responseData.message;
+                return userid[0];
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                return null;
             }
         }
     }

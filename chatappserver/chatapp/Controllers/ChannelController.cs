@@ -23,11 +23,11 @@ namespace chatapp.Controllers
         [HttpPost("DKChannel")]
         public async Task<IActionResult> DKChannel([FromBody] DKChannelDTO request)
         {
-            string[] userInfo = { "", request.Channelname,request.Groupname,request.ischat.ToString(),request.danhmucname };
+            string[] userInfo = { "", request.Channelname,request.GroupID,request.ischat.ToString(),request.danhmucID };
             string[] registrationResult = await _dkchannel.DangkyChannelAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                return Ok(new { message = "Đăng ký channel thành công" });
+                return Ok(new { message = "Đăng ký channel thành công", channelID = registrationResult[1] });
             }
             else
             {
@@ -37,16 +37,12 @@ namespace chatapp.Controllers
         [HttpPost("ChannelName")]
         public async Task<IActionResult> ChannelName([FromBody] ChannelnameDTO request)
         {
-            string[] userInfo = { "", request.Groupname };
+            string[] userInfo = { "", request.GroupID };
             string[] registrationResult = await _channelname.ChannelNameAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                var ChannelNames = registrationResult.Skip(1).ToArray();
-                return Ok(new { ChannelName = ChannelNames });
-            }
-            else if(registrationResult[0] == "0")
-            {
-                return Ok(new { ChannelName = registrationResult });
+                var ChannelIDNames = registrationResult.Skip(1).ToArray();
+                return Ok(new { ChannelIDName = ChannelIDNames });
             }
             else
             {

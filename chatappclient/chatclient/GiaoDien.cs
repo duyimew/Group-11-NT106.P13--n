@@ -32,16 +32,17 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 
-
 namespace QLUSER
 {
     public partial class GiaoDien : Form
     {
         string username1;
+        string userid1;
         Dangnhap DN;
         Group group = new Group();
         Channel channel = new Channel();
-        Models.Message message1 =new Models.Message();
+        Models.Message message1 = new Models.Message();
+        Models.User user = new Models.User();
         file file1 = new file();
         Token token = new Token();
         Find find1 = new Find();
@@ -49,8 +50,8 @@ namespace QLUSER
         private bool isReceivingMessages = true;
         private List<string> selectedFilePaths = new List<string>();
         UserAvatar avatar = new UserAvatar();
-        private HubConnection connection=null;
-        private bool isstop=false;
+        private HubConnection connection = null;
+        private bool isstop = false;
         private bool isRecevie = false;
         private TreeNode chatNode; // Khai báo biến toàn cục
         private TreeNode videoNode; // Khai báo biến toàn cục
@@ -60,10 +61,11 @@ namespace QLUSER
         private bool isMenuVisible = false; // Trạng thái hiển thị menu
         DanhMuc danhmuc = new DanhMuc();
         private bool isFirstClick = true;
-        public GiaoDien(string username, Dangnhap dn)
+        public GiaoDien(string username, string userid, Dangnhap dn)
         {
             InitializeComponent();
             username1 = username;
+            userid1 = userid;
             DN = dn;
             UserSession.AvatarUpdated += UpdateAvatarDisplay;
             UserSession.AvatarGroupCreated += UpdateGroupDislay;
@@ -77,7 +79,7 @@ namespace QLUSER
             {
                 if (connection != null && connection.State == HubConnectionState.Connected)
                 {
-                    await connection.SendAsync("SendAvataUpdate", UserSession.AvatarUrl,label1.Text,label2.Text);
+                    await connection.SendAsync("SendAvataUpdate", UserSession.AvatarUrl, label2.Name);
                     break;
                 }
             }
@@ -87,14 +89,15 @@ namespace QLUSER
             flowLayoutPanel2.Controls.Clear();
             flowLayoutPanel2.AutoScrollPosition = new Point(0, 0);
             flowLayoutPanel2.AutoScroll = true;
-            string[] groupname = await group.RequestGroupName(username1);
-            LoadGroup(groupname);
+            var result = await group.RequestGroupName(userid1);
+            if (result.issuccess)
+                LoadGroup(result.groupidname);
             flowLayoutPanel2.PerformLayout();
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-            UserSession.AvatarUpdated -= UpdateAvatarDisplay; 
+            UserSession.AvatarUpdated -= UpdateAvatarDisplay;
         }
 
         private async void bt_thoat_Click(object sender, EventArgs e)
@@ -105,9 +108,9 @@ namespace QLUSER
             DN.Close();
             Environment.Exit(0);
             this.Close();
-            
+
         }
-        
+
 
         private async void TreeView_AfterExpandCollapse(object sender, TreeViewEventArgs e)
         {
@@ -121,11 +124,13 @@ namespace QLUSER
             .ToList();
             foreach (var node in matchedNodes)
             {
-                Label label = (Label)node.Tag;
-                int x = treeView1.Location.X + treeView1.Size.Width - label.Size.Width - 1;
-                int nodeY = node.Bounds.Location.Y;
-                int y = treeView1.Location.Y + 1 + nodeY;
-                label.Location = new Point(x, y);
+                if (node.Tag is Label label)
+                {
+                    int x = treeView1.Location.X + treeView1.Size.Width - label.Size.Width - 1;
+                    int nodeY = node.Bounds.Location.Y;
+                    int y = treeView1.Location.Y + 1 + nodeY;
+                    label.Location = new Point(x, y);
+                }
             }
         }
         private async Task CloseLabel()
@@ -136,18 +141,21 @@ namespace QLUSER
             .ToList();
             foreach (var node in matchedNodes)
             {
-                Label label = (Label)node.Tag;
-                label.Parent?.Controls.Remove(label);
-                label.Dispose();
-                node.Tag = null;
+                if (node.Tag is Label label)
+                {
+                    label.Parent?.Controls.Remove(label);
+                    label.Dispose();
+                    node.Tag = null;
+                }
             }
         }
         private async void GiaoDien_Load(object sender, EventArgs e)
         {
-            string[] groupname = await group.RequestGroupName(username1);
-            LoadGroup(groupname);
+            var result = await group.RequestGroupName(userid1);
+            if (result.issuccess)
+                LoadGroup(result.groupidname);
             UserAvatar userAvatar = new UserAvatar();
-            Image avatarImage = await userAvatar.LoadAvatarAsync(username1); 
+            Image avatarImage = await userAvatar.LoadAvatarAsync(username1);
 
             if (avatarImage != null)
             {
@@ -159,7 +167,7 @@ namespace QLUSER
             //CircularPicture circularfriend = new CircularPicture();
             //try
             //{
-            //    circularfriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
+              //  circularfriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
             //}
             //catch (Exception ex)
             //{
@@ -170,25 +178,26 @@ namespace QLUSER
             //circularfriend.SizeMode = PictureBoxSizeMode.Zoom;
             //circularfriend.Anchor = AnchorStyles.None;
             //circularfriend.Click += (s, e) =>
-            //{
+            {
             //    SearchUser searchForm = new SearchUser(username1);
             //    searchForm.Show();
-            //};
+            };
             //flowLayoutPanel2.Controls.Add(circularfriend);
             if (groupname != null)
             {
                 for (int i = 0; i < groupname.Length; i++)
                 {
+                    string[] group = groupname[i].Split('|');
                     CircularPicture circulargroup = new CircularPicture();
                     try
                     {
-                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(groupname[i]);
+                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(group[0]);
                         circulargroup.SizeMode = PictureBoxSizeMode.Zoom;
-                        circulargroup.Name=groupname[i];
+                        circulargroup.Text = group[1];
+                        circulargroup.Name = $"group|{group[0]}";
                         UserSession.AvatarGroupUpdated += async () =>
                         {
-                            circulargroup.Image = await avatar.LoadAvatarGroupAsync(groupname[i]);
-                            circulargroup.Name = groupname[i];
+                            circulargroup.Image = await avatar.LoadAvatarGroupAsync(group[0]);
                         };
                     }
                     catch (Exception ex)
@@ -201,61 +210,78 @@ namespace QLUSER
                     circulargroup.Anchor = AnchorStyles.None;
                     circulargroup.Click += async (s, e) =>
                     {
-                            tabControl1.SelectedIndex = 0;
+                        tabControl1.SelectedIndex = 0;
                         ServerOrFriend.SelectedIndex = 1;
-                            if (connection != null) await StopSignalR();
-                            CloseLabel();
-                            treeView1.Nodes.Clear();
-                            flowLayoutPanel1.Controls.Clear();
-                            flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
-                            flowLayoutPanel1.PerformLayout();
-                            label2.Text = "kênh";
-                            string selectedGroupName = circulargroup.Name.ToString();
-                            label1.Text = selectedGroupName;
-                            label6.Text = selectedGroupName;
-                            string[] danhmucs = await danhmuc.RequestDanhMucName(selectedGroupName);
-                            if(danhmucs!=null)
+                        if (connection != null) await StopSignalR();
+                        CloseLabel();
+                        treeView1.Nodes.Clear();
+                        flowLayoutPanel1.Controls.Clear();
+                        flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
+                        flowLayoutPanel1.PerformLayout();
+                        label2.Text = "kênh";
+                        label2.Name = "kênh";
+                        string selectedGroupName = circulargroup.Text;
+                        label1.Text = selectedGroupName;
+                        string[] groupid = circulargroup.Name.Split('|');
+                        label1.Name = groupid[1];
+                        label6.Text = selectedGroupName;
+                        var result = await danhmuc.RequestDanhMucName(label1.Name);
+                        if (result.issuccess)
+                        {
+                            for (int ib = 0; ib < result.danhmucidname.Length; ib++)
                             {
-                            for (int ib = 0; ib < danhmucs.Length; ib++)
-                            {
-                                TreeNode node =treeView1.Nodes.Add($"danhmuc|{danhmucs[ib]}",danhmucs[ib]);
+                                string[] danhmuc = result.danhmucidname[ib].Split('|');
+                                TreeNode node = treeView1.Nodes.Add($"danhmuc|{danhmuc[0]}", danhmuc[1]);
                                 createlabel(node);
                             }
-                            }
-                            string[] channels = await channel.RequestChannelName(selectedGroupName);
-                            if (channels != null)
+                        }
+                        var result1 = await channel.RequestChannelName(label1.Name);
+                        if (result1.issuccess)
+                        {
+                            for (int ia = 0; ia < result1.channelidname.Length; ia++)
                             {
-                                for (int ia = 0; ia < channels.Length; ia++)
+
+                                string[] channel = result1.channelidname[ia].Split('|');
+                                if (channel[3] == "True")
                                 {
-                                    string[] channel = channels[ia].Split('|');
-                                if (channel[2] == "True")
-                                {
-                                    if (!string.IsNullOrEmpty(channel[1]))
+                                    if (!string.IsNullOrEmpty(channel[2]))
                                     {
-                                        TreeNode[] nodes = treeView1.Nodes.Find($"danhmuc|{channel[1]}", false);
-                                        if (nodes != null) nodes[0].Nodes.Add($"VanBanChat|{channel[0]}",channel[0]);
+                                        TreeNode[] nodes = treeView1.Nodes.Find($"danhmuc|{channel[2]}", false);
+                                        if (nodes != null)
+                                        {
+                                            TreeNode node = nodes[0].Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
+                                        }
                                     }
-                                    else treeView1.Nodes.Add($"VanBanChat|{channel[0]}", channel[0]);
-                                }
-                                else if (channel[2] == "False")
-                                {
-                                    if (channel[1] != null)
+                                    else
                                     {
-                                        TreeNode[] nodes = treeView1.Nodes.Find($"danhmuc|{channel[1]}", false);
-                                        if (nodes != null) nodes[0].Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[0]);
+                                        TreeNode node = treeView1.Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
                                     }
-                                    else treeView1.Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[0]);
                                 }
+                                else if (channel[3] == "False")
+                                {
+                                    if (!string.IsNullOrEmpty(channel[2]))
+                                    {
+                                        TreeNode[] nodes = treeView1.Nodes.Find($"danhmuc|{channel[2]}", false);
+                                        if (nodes != null)
+                                        {
+                                            TreeNode node = nodes[0].Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TreeNode node = treeView1.Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                                    }
                                 }
                             }
-                            treeView1.AfterExpand += TreeView_AfterExpandCollapse;
-                            treeView1.AfterCollapse += TreeView_AfterExpandCollapse;
-                        
+                        }
+                        treeView1.AfterExpand += TreeView_AfterExpandCollapse;
+                        treeView1.AfterCollapse += TreeView_AfterExpandCollapse;
+
                     };
                     flowLayoutPanel2.Controls.Add(circulargroup);
                 }
             }
-            
+
             CircularPicture circularadd = new CircularPicture();
 
             try
@@ -277,12 +303,12 @@ namespace QLUSER
             };
             flowLayoutPanel2.Controls.Add(circularadd);
 
-            flowLayoutPanel2.FlowDirection = FlowDirection.LeftToRight; 
+            flowLayoutPanel2.FlowDirection = FlowDirection.LeftToRight;
             flowLayoutPanel2.WrapContents = true;
             flowLayoutPanel2.AutoScroll = false;
             flowLayoutPanel2.MouseWheel += FlowLayoutPanel2_MouseWheel;
 
-            flowLayoutPanel2.Padding = new Padding((flowLayoutPanel2.ClientSize.Width - 50) / 2, 0, 0, 10); 
+            flowLayoutPanel2.Padding = new Padding((flowLayoutPanel2.ClientSize.Width - 50) / 2, 0, 0, 10);
         }
         void FlowLayoutPanel2_MouseWheel(object sender, MouseEventArgs e)
         {
@@ -302,45 +328,51 @@ namespace QLUSER
                 {
                     textBox1.Clear();
                     string[] filenames = selectedFilePaths.Select(Path.GetFileName).ToArray();
-                    while (true)
+                    var result = await file1.SendFileToServer(userid1, label2.Name, message, selectedFilePaths);
+                    if (result.issuccess)
                     {
-                        if (connection != null && connection.State == HubConnectionState.Connected)
+                        string[] messageid = result.messatid.Split('|');
+                        while (true)
                         {
-                            await connection.SendAsync("SendMessage", username1, label1.Text, label2.Text, message, filenames);
-                            break;
+                            if (connection != null && connection.State == HubConnectionState.Connected)
+                            {
+                                await connection.SendAsync("SendMessage", messageid[0], username1, label2.Name, message, filenames);
+                                break;
+                            }
                         }
+                        label3.Text = string.Empty;
                     }
-                    await connection.SendAsync("SendMessage", username1, label1.Text, label2.Text, message, filenames);
-                    await file1.SendFileToServer(connection,username1, label1.Text, label2.Text, message, selectedFilePaths);
-                    label3.Text = string.Empty;
                 }
                 else if (!string.IsNullOrWhiteSpace(message))
                 {
                     textBox1.Clear();
-                    while (true)
+                    var result = await message1.SendMessage(label2.Name, userid1, message);
+                    if (result.issuccess)
                     {
-                        if (connection!=null && connection.State == HubConnectionState.Connected)
+                        while (true)
                         {
-                            await connection.SendAsync("SendMessage", username1, label1.Text, label2.Text, message, null);
-                            break;
+                            if (connection != null && connection.State == HubConnectionState.Connected)
+                            {
+                                await connection.SendAsync("SendMessage", result.messageid, username1, label2.Name, message, null);
+                                break;
+                            }
                         }
                     }
-                    await message1.SendMessage(connection, label1.Text, label2.Text, username1, message);
                 }
             }
         }
 
-        
-        private async Task AddMessageToChat(string username, string messageContent, string[] filename)
+
+        private async Task AddMessageToChat(string messageid, string username, string messageContent, string[] filename)
         {
             Panel panelMessage = new Panel
             {
-                Width = flowLayoutPanel1.Width+40,
+                Width = flowLayoutPanel1.Width + 40,
                 BackColor = Color.FromArgb(66, 69, 73),
                 Padding = new Padding(5),
                 AutoSize = true,
-                Margin = new Padding(10, 0, 0, 0)
-
+                Margin = new Padding(10, 0, 0, 0),
+                Name = messageid
             };
 
             CircularPicture pictureBoxAvatar = new CircularPicture
@@ -350,7 +382,6 @@ namespace QLUSER
                 Height = 40,
                 ImageLocation = UserSession.AvatarUrl,
                 Image = await avatar.LoadAvatarAsync(username),
-
                 Margin = new Padding(0, 0, 10, 0)
             };
             pictureBoxAvatar.Click += (s, e) =>
@@ -385,7 +416,7 @@ namespace QLUSER
                     ForeColor = Color.White,
                     AutoSize = true,
                     Top = lblUsername.Bottom + 5,
-                    Left = pictureBoxAvatar.Right + 10
+                    Left = pictureBoxAvatar.Right + 10,
 
                 };
                 panelMessage.Controls.Add(lblMessage);
@@ -396,7 +427,7 @@ namespace QLUSER
             {
                 foreach (var Filename in filename)
                 {
-                    
+
                     string fileExtension = System.IO.Path.GetExtension(Filename).ToLower();
 
                     if (fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".png" ||
@@ -561,7 +592,7 @@ namespace QLUSER
                 e.Handled = true;
                 e.SuppressKeyPress = true;
             }
-            
+
         }
         private async Task InitializeSignalR()
         {
@@ -569,24 +600,24 @@ namespace QLUSER
             .WithUrl(ConfigurationManager.AppSettings["HubUrl"] + "messageHub")
             .ConfigureLogging(logging =>
             {
-            logging.AddConsole();
-            logging.SetMinimumLevel(LogLevel.Debug);
+                logging.AddConsole();
+                logging.SetMinimumLevel(LogLevel.Debug);
             })
             .Build();
             await connection.StartAsync();
-            await connection.SendAsync("JoinGroup", label1.Text,label2.Text , username1);
-            connection.On<string,string,string[]>("ReceiveMessage", async (message, username, filenames) =>
+            await connection.SendAsync("JoinGroup", label2.Name, username1);
+            connection.On<string, string, string, string[]>("ReceiveMessage", async (messageid, message, username, filenames) =>
             {
                 try
                 {
                     isRecevie = true;
                     this.Invoke(new Action(async () =>
                     {
-                        await AddMessageToChat(username, message, filenames);
+                        await AddMessageToChat(messageid, username, message, filenames);
                     }));
                     isRecevie = false;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 { MessageBox.Show(ex.Message); }
 
             });
@@ -619,7 +650,7 @@ namespace QLUSER
                 if (connection.State != HubConnectionState.Connected)
                 {
                     await connection.StartAsync();
-                    await connection.SendAsync("JoinGroup", label1.Text, label2.Text, username1);
+                    await connection.SendAsync("JoinGroup", label2.Name, username1);
                 }
             }
             catch (Exception ex)
@@ -633,7 +664,7 @@ namespace QLUSER
             {
                 try
                 {
-                    await connection.SendAsync("LeaveGroup", label1.Text, label2.Text, username1);
+                    await connection.SendAsync("LeaveGroup", label2.Name, username1);
                 }
                 catch (Exception ex)
                 {
@@ -663,7 +694,6 @@ namespace QLUSER
             TreeNode selectedNode = e.Node;
             if (selectedNode != null)
             {
-                
                 if (selectedNode.Name.Contains("VanBanChat"))
                 {
                     if (connection != null)
@@ -672,39 +702,40 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Clear();
                     flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
                     flowLayoutPanel1.PerformLayout();
-                    string selectedKenhName = selectedNode.Text.ToString();
+                    string selectedKenhName = selectedNode.Text;
                     label2.Text = selectedKenhName;
-                    string[] serverResponse = await message1.ReceiveMessage(label1.Text, label2.Text);
-                    if (serverResponse != null)
+                    string[] channelid = selectedNode.Name.Split('|');
+                    label2.Name = channelid[1];
+                    var result = await message1.ReceiveMessage(label2.Name);
+                    if (result.issuccess)
                     {
-                        for (int i = serverResponse.Length - 1; i > 0; i -= 4)
+                        for (int i = result.messagetext.Length - 1; i > 0; i -= 4)
                         {
-                            if (i - 3 < serverResponse.Length)
+                            if (i - 3 < result.messagetext.Length)
                             {
-                                string messageid = serverResponse[i - 3];
-                                string username = serverResponse[i - 2];
-                                string message = serverResponse[i - 1];
-                                string filename = serverResponse[i];
-                                string combinedKey = messageid + "|" + username + "|" + message + "|" + filename;
+                                string messageid = result.messagetext[i - 3];
+                                string username = result.messagetext[i - 2];
+                                string message = result.messagetext[i - 1];
+                                string filename = result.messagetext[i];
+                                string combinedKey = messageid;
                                 if (!displayedMessages.Contains(combinedKey))
                                 {
                                     if (displayedMessages.Count >= 100)
                                     {
                                         displayedMessages.Remove(displayedMessages.First());
                                     }
-
                                     displayedMessages.Add(combinedKey);
                                     string[] filenames = filename.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
-                                    await AddMessageToChat(username, message, filenames);
+                                    await AddMessageToChat(messageid, username, message, filenames);
                                 }
                             }
                         }
                     }
                     await InitializeSignalR();
                 }
-                else if(selectedNode.Name.Contains("CuocGoiVideo"))
+                else if (selectedNode.Name.Contains("CuocGoiVideo"))
                 {
-                    VideoCall vc = new VideoCall(username1,label1.Text,label2.Text);
+                    VideoCall vc = new VideoCall(username1, label2.Name);
                     vc.Show();
                     if (connection != null)
                         await StopSignalR();
@@ -712,30 +743,31 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Clear();
                     flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
                     flowLayoutPanel1.PerformLayout();
-                    string selectedKenhName = selectedNode.Text.ToString();
+                    string selectedKenhName = selectedNode.Text;
                     label2.Text = selectedKenhName;
-                    string[] serverResponse = await message1.ReceiveMessage(label1.Text, label2.Text);
-                    if (serverResponse != null)
+                    string[] channelid = selectedNode.Name.Split('|');
+                    label2.Name = channelid[1];
+                    var result = await message1.ReceiveMessage(label2.Name);
+                    if (result.issuccess)
                     {
-                        for (int i = serverResponse.Length - 1; i > 0; i -= 4)
+                        for (int i = result.messagetext.Length - 1; i > 0; i -= 4)
                         {
-                            if (i - 3 < serverResponse.Length)
+                            if (i - 3 < result.messagetext.Length)
                             {
-                                string messageid = serverResponse[i - 3];
-                                string username = serverResponse[i - 2];
-                                string message = serverResponse[i - 1];
-                                string filename = serverResponse[i];
-                                string combinedKey = messageid + "|" + username + "|" + message + "|" + filename;
+                                string messageid = result.messagetext[i - 3];
+                                string username = result.messagetext[i - 2];
+                                string message = result.messagetext[i - 1];
+                                string filename = result.messagetext[i];
+                                string combinedKey = messageid;
                                 if (!displayedMessages.Contains(combinedKey))
                                 {
                                     if (displayedMessages.Count >= 100)
                                     {
                                         displayedMessages.Remove(displayedMessages.First());
                                     }
-
                                     displayedMessages.Add(combinedKey);
                                     string[] filenames = filename.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
-                                    await AddMessageToChat(username, message, filenames);
+                                    await AddMessageToChat(messageid, username, message, filenames);
                                 }
                             }
                         }
@@ -782,10 +814,10 @@ namespace QLUSER
             label.TextAlign = ContentAlignment.MiddleLeft;
             label.Click += (s, e) =>
             {
-                switch(text)
+                switch (text)
                 {
-                    case "Mời Mọi Người": MoiMoiNguoi(label1.Text); break;
-                    case "Tạo kênh": TaoKenh(null,null); break;
+                    case "Mời Mọi Người": MoiMoiNguoi(label1.Name); break;
+                    case "Tạo kênh": TaoKenh(null, null); break;
                     case "Tạo Danh Mục": TaoDanhMuc(); break;
                 }
             };
@@ -796,9 +828,9 @@ namespace QLUSER
 
         private void button5_Click_1(object sender, EventArgs e)
         {
-                ServerOrFriend.SelectedIndex = 2;
-                CreateMenu();   
-            
+            ServerOrFriend.SelectedIndex = 2;
+            CreateMenu();
+
 
         }
         private void MoiMoiNguoi(string group)
@@ -863,7 +895,7 @@ namespace QLUSER
             label.AutoSize = true;
 
             label.PerformLayout();
-            int labelWidth = TextRenderer.MeasureText(label.Text, label.Font).Width; 
+            int labelWidth = TextRenderer.MeasureText(label.Text, label.Font).Width;
             label.Location = new Point((form.ClientSize.Width - labelWidth) / 2, 50);
 
             label.TextAlign = ContentAlignment.MiddleCenter;
@@ -871,7 +903,7 @@ namespace QLUSER
             Button btncreate = new Button();
             btncreate.Text = "Tạo Group mới";
             btncreate.Location = new Point(20, 100);
-            btncreate.Size = new Size(340,30);
+            btncreate.Size = new Size(340, 30);
             btncreate.Click += (s, e) =>
             {
                 form.Hide();
@@ -888,9 +920,9 @@ namespace QLUSER
             label1.ForeColor = Color.Black;
             label1.AutoSize = true;
 
-            label1.PerformLayout(); 
-            int labelWidth1 = TextRenderer.MeasureText(label1.Text, label1.Font).Width; 
-            label1.Location = new Point((form.ClientSize.Width - labelWidth1) / 2, 150); 
+            label1.PerformLayout();
+            int labelWidth1 = TextRenderer.MeasureText(label1.Text, label1.Font).Width;
+            label1.Location = new Point((form.ClientSize.Width - labelWidth1) / 2, 150);
 
             label1.TextAlign = ContentAlignment.MiddleCenter;
 
@@ -915,7 +947,7 @@ namespace QLUSER
             Image image = global::QLUSER.Properties.Resources.group_1824145_1280;
             string imagepath = find1.find("group-1824145_1280.png");
             Form form = new Form();
-            form.Text = $"Tùy chỉnh máy chủ của bạn"; 
+            form.Text = $"Tùy chỉnh máy chủ của bạn";
             form.Size = new Size(600, 400);
             form.StartPosition = FormStartPosition.CenterParent;
             Label label = new Label();
@@ -974,9 +1006,9 @@ namespace QLUSER
             ten.Text = $"máy chủ của {username1}";
             ten.Font = new Font("Arial", 12, FontStyle.Bold);
             ten.ForeColor = Color.Black;
-            ten.Size = new Size(540,30);
+            ten.Size = new Size(540, 30);
 
-            ten.PerformLayout(); 
+            ten.PerformLayout();
             ten.Location = new Point(20, 250);
 
             Button btncreate = new Button();
@@ -987,23 +1019,32 @@ namespace QLUSER
             {
                 if (!string.IsNullOrEmpty(ten.Text))
                 {
-                    bool dk = await group.SaveGroupToDatabase(ten.Text);
-                    if (dk)
+                    var result = await group.SaveGroupToDatabase(ten.Text);
+                    if (result.issuccess)
                     {
-                        await group.AddMembersToGroup(username1, ten.Text);
-                        await danhmuc.SaveDanhMucToDatabase(ten.Text, "Chat");
-                        await danhmuc.SaveDanhMucToDatabase(ten.Text, "Video");
-                        await channel.SaveKenhToDatabase(ten.Text, "ChatChung", true,"Chat");
-                        await channel.SaveKenhToDatabase(ten.Text, "Videochung", false,"Video");
-                        string avatargroupUrl = await avatar.UploadAvatarGroupAsync(imagepath, ten.Text);
-                        if (avatargroupUrl != null)
+                        var result1 = await group.AddMembersToGroup(userid1, result.groupid);
+                        if (result1)
                         {
-                            UserSession.AvatarGroupUrl = (avatargroupUrl, true);
-                            MessageBox.Show("Avatar group uploaded successfully!");
-                        }
-                        else
-                        {
-                            MessageBox.Show("Failed to upload avatar.");
+                            var result2 = await danhmuc.SaveDanhMucToDatabase(result.groupid, "Chat");
+                            if (result2.issuccess)
+                            {
+                                await channel.SaveKenhToDatabase(result.groupid, "ChatChung", true, result2.danhmucID);
+                            }
+                            result2 = await danhmuc.SaveDanhMucToDatabase(result.groupid, "Video");
+                            if (result2.issuccess)
+                            {
+                                await channel.SaveKenhToDatabase(result.groupid, "Videochung", false, result2.danhmucID);
+                            }
+                            string avatargroupUrl = await avatar.UploadAvatarGroupAsync(imagepath, result.groupid);
+                            if (avatargroupUrl != null)
+                            {
+                                UserSession.AvatarGroupUrl = (avatargroupUrl, true);
+                                MessageBox.Show("Avatar group uploaded successfully!");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to upload avatar.");
+                            }
                         }
                         form.Close();
                         form1.Close();
@@ -1049,7 +1090,7 @@ namespace QLUSER
 
             label.TextAlign = ContentAlignment.MiddleCenter;
 
-            
+
 
             Label tenmaychu = new Label();
             tenmaychu.Text = $"Liên kết mời";
@@ -1078,21 +1119,21 @@ namespace QLUSER
             {
                 if (!string.IsNullOrEmpty(ten.Text))
                 {
-                   
-                        if (!string.IsNullOrEmpty(username1))
+
+                    if (!string.IsNullOrEmpty(username1))
+                    {
+                        bool add = await group.AddMembersToGroup(userid1, ten.Text);
+                        if (add)
                         {
-                            bool add = await group.AddMembersToGroup(username1, ten.Text);
-                            if (add)
+                            string avatargroupUrl = await avatar.LoadGroupUrlAsync(ten.Text);
+                            if (avatargroupUrl != null)
                             {
-                                string avatargroupUrl = await avatar.LoadGroupUrlAsync(ten.Text);
-                                if (avatargroupUrl != null)
-                                {
-                                    UserSession.AvatarGroupUrl = (avatargroupUrl, true);
-                                }
-                                form.Close();
-                                form1.Close();
+                                UserSession.AvatarGroupUrl = (avatargroupUrl, true);
                             }
+                            form.Close();
+                            form1.Close();
                         }
+                    }
                 }
             };
             Button btnClose = new Button();
@@ -1153,7 +1194,7 @@ namespace QLUSER
 
             return imagePaths;
         }
-        private void TaoKenh(string danhmuc,TreeNode node)
+        private void TaoKenh(string danhmucid, TreeNode node)
         {
             Form form = new Form();
             form.Text = $"Tạo kênh";
@@ -1165,7 +1206,7 @@ namespace QLUSER
             label.ForeColor = Color.Black;
             label.AutoSize = true;
 
-            label.PerformLayout(); 
+            label.PerformLayout();
             label.Location = new Point(20, 20);
 
             label.TextAlign = ContentAlignment.MiddleCenter;
@@ -1185,7 +1226,7 @@ namespace QLUSER
             RadioButton vanban = new RadioButton();
             vanban.Text = "Văn bản";
             vanban.Checked = true;
-            vanban.Size=new Size(540,30);
+            vanban.Size = new Size(540, 30);
             vanban.Location = new Point(20, 100);
 
             RadioButton giongnoi = new RadioButton();
@@ -1219,35 +1260,36 @@ namespace QLUSER
             btncreate.Location = new Point(560 - btncreate.Width, 280);
             btncreate.Click += async (s, e) =>
             {
-                if (!string.IsNullOrEmpty(ten.Text)&& label1.Text != "groupname")
+                if (!string.IsNullOrEmpty(ten.Text) && label1.Text != "groupname")
                 {
 
                     if (!string.IsNullOrEmpty(username1))
                     {
                         if (vanban.Checked == true)
                         {
-                            bool ok=await channel.SaveKenhToDatabase(label1.Text, ten.Text, true, danhmuc);
-                            if (ok)
+                            var result = await channel.SaveKenhToDatabase(label1.Name, ten.Text, true, danhmucid);
+                            if (result.issuccess)
                             {
+
                                 if (node != null)
                                 {
-                                    node.Nodes.Add($"VanBanChat|{ten.Text}", ten.Text);
+                                    node.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
                                 }
-                                else treeView1.Nodes.Add($"VanBanChat|{ten.Text}", ten.Text);
+                                else treeView1.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
                                 ChangeLabelLocation();
                                 form.Close();
                             }
                         }
                         else
                         {
-                            bool ok= await channel.SaveKenhToDatabase(label1.Text, ten.Text, false, danhmuc);
-                            if (ok)
+                            var result = await channel.SaveKenhToDatabase(label1.Name, ten.Text, false, danhmucid);
+                            if (result.issuccess)
                             {
                                 if (node != null)
                                 {
-                                    node.Nodes.Add($"CuocGoiVideo|{ten.Text}", ten.Text);
+                                    node.Nodes.Add($"CuocGoiVideo|{result.channelID}", ten.Text);
                                 }
-                                else treeView1.Nodes.Add($"CuoiGoiVideo|{ten.Text}", ten.Text);
+                                else treeView1.Nodes.Add($"CuoiGoiVideo|{result.channelID}", ten.Text);
                                 ChangeLabelLocation();
                                 form.Close();
                             }
@@ -1255,15 +1297,15 @@ namespace QLUSER
 
                     }
                 }
-                else if(string.IsNullOrEmpty(ten.Text))
+                else if (string.IsNullOrEmpty(ten.Text))
                 {
                     MessageBox.Show("Vui lòng nhập tên kênh.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                else if(label1.Text == "groupname") MessageBox.Show("Tạo kênh thất bại");
+                else if (label1.Text == "groupname") MessageBox.Show("Tạo kênh thất bại");
             };
             Button btnClose = new Button();
             btnClose.Text = "Hủy bỏ";
-            btnClose.Location = new Point(560-btncreate.Width-btnClose.Width-20, 280);
+            btnClose.Location = new Point(560 - btncreate.Width - btnClose.Width - 20, 280);
             btnClose.AutoSize = AutoSize;
             btnClose.Click += (s, e) =>
             {
@@ -1324,10 +1366,10 @@ namespace QLUSER
                 if (!string.IsNullOrEmpty(ten.Text) && label1.Text != "groupname")
                 {
 
-                    bool ok = await danhmuc.SaveDanhMucToDatabase(label1.Text, ten.Text);
-                    if (ok)
+                    var result = await danhmuc.SaveDanhMucToDatabase(label1.Name, ten.Text);
+                    if (result.issuccess)
                     {
-                        TreeNode node = treeView1.Nodes.Add($"danhmuc|{ten.Text}", ten.Text);
+                        TreeNode node = treeView1.Nodes.Add($"danhmuc|{result.danhmucID}", ten.Text);
                         await createlabel(node);
                         form.Close();
                     }
@@ -1357,6 +1399,7 @@ namespace QLUSER
         }
         private async Task createlabel(TreeNode node)
         {
+
             Label label = new Label();
             label.Size = new Size(13, 13);
             label.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
@@ -1370,13 +1413,15 @@ namespace QLUSER
             label.Location = new Point(x, y);
             label.Click += (s, e) =>
             {
-                TaoKenh(node.Text,node);
+                string[] danhmucid = node.Name.Split('|');
+                TaoKenh(danhmucid[1], node);
 
             };
             panel12.Controls.Add(label);
             label.BringToFront();
             node.Tag = label;
-            if(panelMenu!=null) panelMenu.BringToFront();
+            if (panelMenu != null) panelMenu.BringToFront();
+
         }
 
         private void cp_Menu_Click(object sender, EventArgs e)
@@ -1486,7 +1531,6 @@ namespace QLUSER
                 }
             }
         }
-
         private async Task AcceptFriendRequest(string username)
         {
             try
@@ -1514,8 +1558,6 @@ namespace QLUSER
         }
 
 
-
-
         bool on = false;
         private async void USERINFOR(string username)
         {
@@ -1526,10 +1568,11 @@ namespace QLUSER
 
             form.Deactivate += (s, e) =>
             {
-                if(!on)
-                form.Close();
+                if (!on)
+                    form.Close();
 
             };
+            string userid = await user.finduserid(username);
             CircularPicture userpicture = new CircularPicture();
             try
             {
@@ -1546,7 +1589,7 @@ namespace QLUSER
             userpicture.Anchor = AnchorStyles.None;
             userpicture.Click += async (s, e) =>
             {
-                GroupUser user = new GroupUser(username,username1);
+                GroupUser user = new GroupUser(username, username1);
                 user.Show();
             };
             UserSession.AvatarUpdated += async () =>
@@ -1564,22 +1607,23 @@ namespace QLUSER
             label.Location = new Point(20, 120);
             label.TextAlign = ContentAlignment.MiddleCenter;
 
-            string[] groupname = await group.RequestGroupName(username);
-            string[] groupname1 = await group.RequestGroupName(username1);
-            string[] commongroupnames = groupname.Intersect(groupname1).ToArray();
+            var result = await group.RequestGroupName(userid);
+            var result1 = await group.RequestGroupName(userid1);
+            string[] commongroupnames = result.groupidname.Intersect(result1.groupidname).ToArray();
             string[] commonGroupNames = commongroupnames.Take(3).ToArray();
             for (int i = 0; i < commonGroupNames.Length; i++)
             {
                 CircularPicture circulargroup = new CircularPicture();
                 try
                 {
-                    circulargroup.Image = await avatar.LoadAvatarGroupAsync(commonGroupNames[i]);
+                    string[] group = commonGroupNames[i].Split('|');
+                    circulargroup.Image = await avatar.LoadAvatarGroupAsync(group[0]);
                     circulargroup.SizeMode = PictureBoxSizeMode.Zoom;
-                    circulargroup.Name = commonGroupNames[i];
+                    circulargroup.Text = group[1];
+                    circulargroup.Name = $"group|{group[0]}";
                     UserSession.AvatarGroupUpdated += async () =>
                     {
-                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(commonGroupNames[i]);
-                        circulargroup.Name = commonGroupNames[i];
+                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(group[0]);
                     };
                 }
                 catch (Exception ex)
@@ -1592,7 +1636,7 @@ namespace QLUSER
                 circulargroup.Anchor = AnchorStyles.None;
                 circulargroup.Click += async (s, e) =>
                 {
-                    GroupUser user = new GroupUser(username,username1);
+                    GroupUser user = new GroupUser(username, username1);
                     user.Show();
                 };
                 form.Controls.Add(circulargroup);
@@ -1621,10 +1665,10 @@ namespace QLUSER
             thongtin.Location = new Point(460 - thongtin.Width, 20);
             thongtin.Click += async (s, e) =>
             {
-                 if(form1==null)TrangChu(username);
-                 else
-                 {
-                    if(form2!=null)
+                if (form1 == null) TrangChu(username, userid);
+                else
+                {
+                    if (form2 != null)
                     {
                         form2.Dispose();
                         form2.Close();
@@ -1634,7 +1678,7 @@ namespace QLUSER
                     form1.Close();
                     on = false;
                     form1 = null;
-                 }
+                }
             };
 
             Button banbe = new Button();
@@ -1649,8 +1693,8 @@ namespace QLUSER
 
             form.Controls.Add(userpicture);
             form.Controls.Add(label);
-            if (username!=username1)
-            { 
+            if (username != username1)
+            {
                 form.Controls.Add(label1);
                 form.Controls.Add(nhantin);
                 form.Controls.Add(thongtin);
@@ -1659,7 +1703,7 @@ namespace QLUSER
             form.Show();
         }
         Form form1;
-        private void TrangChu(string username)
+        private void TrangChu(string username, string userid)
         {
             on = true;
             form1 = new Form();
@@ -1684,7 +1728,7 @@ namespace QLUSER
             button.Location = new Point(20, 20);
             button.Click += (s1, e1) =>
             {
-                GroupUser user = new GroupUser(username,username1);
+                GroupUser user = new GroupUser(username, username1);
                 user.Show();
             };
             Button moivaomaychu = new Button();
@@ -1694,23 +1738,23 @@ namespace QLUSER
             moivaomaychu.Click += async (s1, e1) =>
             {
 
-                if (form2 == null) moivaogroup(username);
+                if (form2 == null) moivaogroup(username, userid);
                 else
                 {
                     form2.Dispose();
                     form2.Close();
                     form2 = null;
                 }
-                
+
 
             };
-            
+
             form1.Controls.Add(button);
             form1.Controls.Add(moivaomaychu);
             form1.Show();
         }
         Form form2;
-        private async void moivaogroup(string username)
+        private async void moivaogroup(string username, string userid)
         {
             form2 = new Form();
             form2.Text = $"moi vao may chu";
@@ -1728,25 +1772,27 @@ namespace QLUSER
             form2.Controls.Add(flowLayoutPanel1);
 
             // Get group names from the server
-            string[] groupname2 = await group.RequestGroupName(username1);
-
-            for (int i = 0; i < groupname2.Length; i++)
+            var result = await group.RequestGroupName(username1);
+            if (result.issuccess)
             {
-                // Create a button for each group
-                Button moivaogroup = new Button();
-                moivaogroup.Text = $"{groupname2[i]}";
-                moivaogroup.Name = groupname2[i];
-                moivaogroup.Size = new Size(120, 30);  // Adjust the size of the buttons
-                moivaogroup.Click += async (s2, e2) =>
+                for (int i = 0; i < result.groupidname.Length; i++)
                 {
-                    await group.AddMembersToGroup(username, moivaogroup.Name);
-                };
+                    string[] group1 = result.groupidname[i].Split('|');
+                    Button moivaogroup = new Button();
+                    moivaogroup.Name = $"group|{group1[0]}";
+                    moivaogroup.Text = group1[1];
+                    moivaogroup.Size = new Size(120, 30);  // Adjust the size of the buttons
+                    moivaogroup.Click += async (s2, e2) =>
+                    {
+                        await group.AddMembersToGroup(userid, group1[0]);
+                    };
 
-                // Add the button to the FlowLayoutPanel
-                flowLayoutPanel1.Controls.Add(moivaogroup);
+                    // Add the button to the FlowLayoutPanel
+                    flowLayoutPanel1.Controls.Add(moivaogroup);
+                }
             }
             form2.Show();
-            
+
         }
     }
 }

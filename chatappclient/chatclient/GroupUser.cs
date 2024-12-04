@@ -18,6 +18,7 @@ namespace QLUSER
         Group group =new Group();
         string username1="";
         string usernametk1;
+        User user = new User();
         public GroupUser(string username,string usernametk)
         {
             InitializeComponent();
@@ -53,23 +54,25 @@ namespace QLUSER
         private async void label4_Click(object sender, EventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
-            string[] groupname = await group.RequestGroupName(username1);
-            string[] groupname1 = await group.RequestGroupName(usernametk1);
-            string[] commonGroupNames = groupname.Intersect(groupname1).ToArray();
+            string userid1 = await user.finduserid(username1);
+            string useridtk1 = await user.finduserid(usernametk1);
+            var result = await group.RequestGroupName(userid1);
+            var result1 = await group.RequestGroupName(useridtk1);
+            string[] commonGroupNames = result.groupidname.Intersect(result1.groupidname).ToArray();
 
             for (int i = 0; i < commonGroupNames.Length; i++)
             {
+                string[] groupid = commonGroupNames[i].Split('|');
                 CircularPicture circulargroup = new CircularPicture();
                 try
                 {
-                    circulargroup.Image = await avatar.LoadAvatarGroupAsync(commonGroupNames[i]);
+                    circulargroup.Image = await avatar.LoadAvatarGroupAsync(groupid[0]);
                     circulargroup.SizeMode = PictureBoxSizeMode.Zoom;
                     circulargroup.Name = commonGroupNames[i];
 
-                    // Handling Avatar update event (if any)
                     UserSession.AvatarGroupUpdated += async () =>
                     {
-                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(commonGroupNames[i]);
+                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(groupid[0]);
                         circulargroup.Name = commonGroupNames[i];
                     };
                 }

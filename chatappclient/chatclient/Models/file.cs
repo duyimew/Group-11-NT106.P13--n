@@ -24,7 +24,7 @@ namespace QLUSER.Models
     internal class file
     {
         public static Image userAvatarImage;
-        public async Task SendFileToServer(HubConnection connection,string username,string groupname,string channelname,string message, List<string> selectedFilePaths)
+        public async Task<(bool issuccess, string messatid)> SendFileToServer(string userid, string channelid, string message, List<string> selectedFilePaths)
         {
             try
             {
@@ -36,9 +36,8 @@ namespace QLUSER.Models
                 string[] filenames = selectedFilePaths.Select(Path.GetFileName).ToArray();
                 var sendfile = new savefileinfoDTO
                 { 
-                Username=username,
-                Groupname=groupname,
-                Channelname=channelname,
+                UserID=userid,
+                ChannelID=channelid,
                 Message=message,
                 filename=filenames
                 };
@@ -51,7 +50,9 @@ namespace QLUSER.Models
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                     string Message = responseData.message;
+                    string messatid = responseData.messatid;
                     MessageBox.Show(Message);
+                    return (true,messatid);
                 }
                 else
                 {
@@ -59,12 +60,13 @@ namespace QLUSER.Models
                     var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                     string message1= responseData.message;
                     MessageBox.Show(message1);
+                    return (false, null);
                 }
-                
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi gửi file: {ex.Message}");
+                return (false, null);
             }
         }
         private async Task UploadFileAsync(string filePath)

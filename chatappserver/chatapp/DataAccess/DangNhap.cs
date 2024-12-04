@@ -1,5 +1,7 @@
 ﻿using chatapp.Data;
 using Microsoft.Data.SqlClient;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Data;
 
 namespace chatapp.DataAccess
 {
@@ -13,7 +15,8 @@ namespace chatapp.DataAccess
         }
         public async Task<string[]> DangNhapUserAsync(string[] userInfo)
         {
-            string[] result = new string[1];
+            string[] result = new string[2];
+            result[0] = "0"; result[1] = "";
             try
             {
                 SqlConnection connectionDB = _connectDB.ConnectToDatabase();
@@ -22,13 +25,18 @@ namespace chatapp.DataAccess
                     result[0] = "Kết nối tới database thất bại";
                     return result;
                 }
-                string login = "SELECT COUNT(*) FROM Users WHERE Username = @username AND Password = @password";
+                string login = "SELECT UserId FROM Users WHERE Username = @username AND Password = @password";
                 SqlCommand loginCmd = new SqlCommand(login, connectionDB);
                 loginCmd.Parameters.AddWithValue("@username", userInfo[1]);
                 loginCmd.Parameters.AddWithValue("@password", userInfo[2]);
-                int count = (int)loginCmd.ExecuteScalar();
-                if (count == 1)
+                DataTable dataTable = new DataTable();
+                using (SqlDataAdapter adapter = new SqlDataAdapter(loginCmd))
                 {
+                    adapter.Fill(dataTable);
+                }
+                if (dataTable.Rows.Count == 1)
+                {
+                    result[1] = dataTable.Rows[0]["UserId"].ToString();   
                     result[0] = "1";
                     return result;
                 }

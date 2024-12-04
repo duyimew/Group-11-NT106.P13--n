@@ -24,10 +24,15 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "	SELECT   ms.MessageId,    us.Username,   ms.MessageText,    STRING_AGG(am.Filename, '; ') AS Filename FROM    Messages ms JOIN     Users us ON us.UserId = ms.UserId JOIN     Channels ch ON ch.ChannelId = ms.ChannelId JOIN     Groups gr ON gr.GroupId = ch.GroupId LEFT JOIN     Attachments am ON ms.MessageId = am.MessageId WHERE    ch.ChannelName = @channelname    AND gr.GroupName = @groupname GROUP BY    ms.MessageId, us.Username, ms.MessageText,ms.SentTime ORDER BY   ms.SentTime DESC";
+                    string strQuery = "	SELECT ms.MessageId, us.Username, ms.MessageText, STRING_AGG(am.Filename, '; ') AS Filename " +
+                        "FROM Messages ms " +
+                        "JOIN Users us ON us.UserId = ms.UserId " +
+                        "LEFT JOIN Attachments am ON ms.MessageId = am.MessageId " +
+                        "WHERE ms.ChannelId=@channelid " +
+                        "GROUP BY ms.MessageId, us.Username, ms.MessageText,ms.SentTime " +
+                        "ORDER BY ms.SentTime DESC";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@channelname", userInfo[2]);
-                    command.Parameters.AddWithValue("@groupname", userInfo[1]);
+                    command.Parameters.AddWithValue("@channelid", userInfo[1]);
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -57,7 +62,12 @@ namespace chatapp.DataAccess
                         }
                         result[0] = "1";
                     }
-                    else return result;
+                    else
+                    {
+                        result[0] = "1";
+                        return result;
+                    }
+                    
                     return result;
                 }
             }

@@ -3,8 +3,6 @@ using chatapp.Data;
 using chatapp.DataAccess;
 using chatapp.DTOs;
 using chatapp.Models;
-using chatserver.DataAccess;
-using chatserver.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -67,20 +65,25 @@ public class FileController : ControllerBase
     [HttpPost("savefileinfo")]
     public async Task<IActionResult> savefileinfo([FromBody] savefileinfoDTO request)
     {
-        string[] userInfo = new string[6 + request.filename.Length];
+        string[] userInfo = new string[4 + request.filename.Length];
         userInfo[0] = "";
         userInfo[1] = request.Message;
-        userInfo[2] = request.Channelname;
-        userInfo[3] = request.Groupname;
-        userInfo[4] = request.Username;
+        userInfo[2] = request.ChannelID;
+        userInfo[3] = request.UserID;
         for (int i = 0; i < request.filename.Length; i++)
         {
-            userInfo[5 + i] = request.filename[i];
+            userInfo[4 + i] = request.filename[i];
         }
         string[] registrationResult = await _savefileinfo.savefileinfoAsync(userInfo);
         if (registrationResult[0] == "1")
         {
-            return Ok(new { message = "Gửi tin nhắn thành công" });
+            string result = "";
+            for(int i=1; i<registrationResult.Length-1;i++)
+            {
+                result += registrationResult[i] +"|";
+            }
+            result += registrationResult[registrationResult.Length-1];
+            return Ok(new { message = "Gửi tin nhắn thành công", messatid=result });
         }
         else
         {
@@ -123,7 +126,7 @@ public class FileController : ControllerBase
         }
     }
     [HttpPost("upload-avatar-group")]
-    public async Task<IActionResult> UploadAvatarGroup(IFormFile avatargroup, string groupname)
+    public async Task<IActionResult> UploadAvatarGroup(IFormFile avatargroup, string groupid)
     {
         try
         {
@@ -133,21 +136,21 @@ public class FileController : ControllerBase
             BlobServiceClient blobServiceClient = new BlobServiceClient(_connectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(_containerName); // Sử dụng container dành riêng cho ảnh đại diện
 
-            string blobName = $"{groupname}_avatargroup_{Path.GetExtension(avatargroup.FileName)}";
+            string blobName = $"{groupid}_avatargroup_{Path.GetExtension(avatargroup.FileName)}";
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             using (var stream = avatargroup.OpenReadStream())
             {
                 await blobClient.UploadAsync(stream, true);
             }
             string avatargroupUrl = blobClient.Uri.ToString();
-            var group = await _context.Groups.FirstOrDefaultAsync(u => u.GroupName == groupname);
+            var group = await _context.Groups.FirstOrDefaultAsync(u => u.GroupId == int.Parse(groupid));
             if (group != null)
             {
                 group.GroupAva = avatargroupUrl;
                 await _context.SaveChangesAsync();
             }
 
-            return Ok(new { message = "Avatar uploaded successfully!", AvatarGroupUrl = avatargroupUrl });
+            return Ok(new { message = "Avatar group uploaded successfully!", AvatarGroupUrl = avatargroupUrl });
         }
         catch (Exception ex)
         {
@@ -167,9 +170,9 @@ public class FileController : ControllerBase
         return Ok(new { AvatarUrl = user.UserAva });
     }
     [HttpGet("get-avatar-group")]
-    public async Task<IActionResult> GetAvatarGroupUrl(string groupname)
+    public async Task<IActionResult> GetAvatarGroupUrl(string groupid)
     {
-        var group = await _context.Groups.FirstOrDefaultAsync(u => u.GroupName == groupname);
+        var group = await _context.Groups.FirstOrDefaultAsync(u => u.GroupId == int.Parse(groupid));
 
         if (group == null || string.IsNullOrEmpty(group.GroupAva))
         {

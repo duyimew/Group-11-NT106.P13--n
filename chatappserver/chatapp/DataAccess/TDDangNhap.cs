@@ -15,8 +15,8 @@ namespace chatapp.DataAccess
         }
         public async Task<string[]> TDDangNhapAsync(string[] userInfo)
         {
-            string[] result = new string[2];
-            result[0] = ""; result[1] = "";
+            string[] result = new string[3];
+            result[0] = ""; result[1] = ""; result[2] = "";
             try
             {
                 using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
@@ -28,19 +28,24 @@ namespace chatapp.DataAccess
                     }
                     if (_token.ValidateToken(userInfo[2]))
                     {
-                        string login = "SELECT COUNT(*) FROM Users WHERE Username = @username";
+                        string login = "SELECT UserId FROM Users WHERE Username = @username";
                         SqlCommand loginCmd = new SqlCommand(login, connectionDB);
                         loginCmd.Parameters.AddWithValue("@username", userInfo[1]);
-                        int count = (int)loginCmd.ExecuteScalar();
-                        if (count == 1)
+                        DataTable dataTable = new DataTable();
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(loginCmd))
+                        {
+                            adapter.Fill(dataTable);
+                        }
+                        if (dataTable.Rows.Count == 1)
                         {
                             result[1] = userInfo[1];
+                            result[2] = dataTable.Rows[0]["UserId"].ToString();
                             result[0] = "1";
                             return result;
                         }
                         else
                         {
-                            result[0] = "Không tìm thấy username. Vui lòng đăng nhập lại.";
+                            result[0] = "Không tìm thấy user. Vui lòng đăng nhập lại.";
                             return result;
                         }
                     }

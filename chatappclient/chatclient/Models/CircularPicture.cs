@@ -11,6 +11,20 @@ namespace QLUSER.Models
 {
     public class CircularPicture : PictureBox
     {
+        private string _text = string.Empty;
+
+        public string Text
+        {
+            get => _text;
+            set
+            {
+                _text = value;
+                Invalidate();
+            }
+        }
+
+        public Font TextFont { get; set; } = new Font("Arial", 10, FontStyle.Bold);
+        public Color TextColor { get; set; } = Color.Black;
         protected override void OnPaint(PaintEventArgs e)
         {
             // Tạo vùng hình tròn để cắt hình ảnh

@@ -2,7 +2,6 @@
 {
     public class ReceivemessDTO
     {
-        public string Groupname { get; set; }
-        public string Channelname { get; set; }
+        public string ChannelID { get; set; }
     }
 }

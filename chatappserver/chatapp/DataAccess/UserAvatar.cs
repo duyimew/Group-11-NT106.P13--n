@@ -1,7 +1,7 @@
-﻿using chatapp.DataAccess;
+﻿
 using Microsoft.Data.SqlClient;
 
-namespace chatserver.DataAccess
+namespace chatapp.DataAccess
 {
     public class UserAvatar
     {

@@ -18,7 +18,7 @@ namespace chatapp.DataAccess
                 var claims = new[]
                 {
         new Claim(ClaimTypes.Name, username),
-        new Claim(JwtRegisteredClaimNames.Exp, DateTime.UtcNow.AddMinutes(30).ToString())
+        new Claim(JwtRegisteredClaimNames.Exp, DateTime.UtcNow.AddDays(1).ToString())
     };
 
                 var token = new JwtSecurityToken(

@@ -65,8 +65,8 @@ namespace QLUSER
                 }
                 var dangnhap = new DangNhapDTO
                 {
-                    Username=username,
-                    HashPassword= hashpwd,
+                    Username = username,
+                    HashPassword = hashpwd,
                 };
                 var json = JsonConvert.SerializeObject(dangnhap);
                 var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -77,8 +77,9 @@ namespace QLUSER
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                     string message = responseData.message;
+                    string userid = responseData.userid;
                     MessageBox.Show(message);
-                    GiaoDien giaodien = new GiaoDien(username, this);
+                    GiaoDien giaodien = new GiaoDien(username, userid, this);
                     giaodien.Show();
                     this.Hide();
                 }
@@ -95,6 +96,7 @@ namespace QLUSER
                 MessageBox.Show("Lỗi đăng nhập" + ex.Message);
             }
         }
+
 
         private void Dangnhap_Load(object sender, EventArgs e)
         {

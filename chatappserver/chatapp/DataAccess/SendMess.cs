@@ -13,9 +13,8 @@ namespace chatapp.DataAccess
         }
         public async Task<string[]> SendMessAsync(string[] userInfo)
         {
-            string[] result = new string[1];
-            result[0] = "0";
-            string ChannelId, UserId;
+            string[] result = new string[2];
+            result[0] = "0"; result[1] = "";
             try
             {
                 using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
@@ -25,31 +24,17 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT ch.ChannelId, us.UserId FROM Users us,Channels ch,Groups gr WHERE us.Username = @username AND ch.ChannelName=@channelname and gr.GroupId=ch.GroupId and gr.GroupName=@groupname";
-                    SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@username", userInfo[4]);
-                    command.Parameters.AddWithValue("@channelname", userInfo[2]);
-                    command.Parameters.AddWithValue("@groupname", userInfo[3]);
-                    DataTable dataTable = new DataTable();
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                    {
-                        adapter.Fill(dataTable);
-                    }
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        DataRow row = dataTable.Rows[0];
-                        UserId = row["UserId"].ToString();
-                        ChannelId = row["ChannelId"].ToString();
-                    }
-                    else return result;
-                    string query = "INSERT INTO Messages(ChannelId,UserId,MessageText,IsAttachment,SentTime) VALUES (@channelid,@userid,@message,@isattachment,@SentTime)";
+                    string query = "INSERT INTO Messages(ChannelId,UserId,MessageText,IsAttachment,SentTime) " +
+                        "OUTPUT INSERTED.MessageId " +
+                        "VALUES (@channelid,@userid,@message,@isattachment,@senttime)";
                     SqlCommand command1 = new SqlCommand(query, connectionDB);
-                    command1.Parameters.AddWithValue("@channelid", ChannelId);
-                    command1.Parameters.AddWithValue("@userid", UserId);
-                    command1.Parameters.AddWithValue("@message", userInfo[1]);
+                    command1.Parameters.AddWithValue("@channelid", userInfo[2]);
+                    command1.Parameters.AddWithValue("@userid", userInfo[3]);
                     command1.Parameters.AddWithValue("@isattachment", "0");
-                    command1.Parameters.AddWithValue("SentTime", DateTime.Now);
-                    command1.ExecuteNonQuery();
+                    command1.Parameters.AddWithValue("@message", userInfo[1]);
+                    command1.Parameters.AddWithValue("@senttime", DateTime.Now);
+                    int messageId = (int)command1.ExecuteScalar();
+                    result[1] = messageId.ToString();
                     result[0] = "1";
                     return result;
                 }

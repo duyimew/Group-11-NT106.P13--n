@@ -65,7 +65,7 @@ namespace QLUSER.Models
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                         Dangnhap dangnhap = new Dangnhap();
-                        GiaoDien giaoDien = new GiaoDien(responseData.username, dangnhap);
+                        GiaoDien giaoDien = new GiaoDien(responseData.username,responseData.userid, dangnhap);
                         Application.Run(giaoDien);
                         dangnhap.Show();
                         Environment.Exit(0);

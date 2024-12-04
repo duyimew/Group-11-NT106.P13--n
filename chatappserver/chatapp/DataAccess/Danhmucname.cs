@@ -24,9 +24,11 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT dm.DanhmucName FROM Danhmuc dm,Groups gr WHERE gr.GroupName = @groupname AND dm.GroupId=gr.GroupId";
+                    string strQuery = "SELECT dm.DanhmucId,dm.DanhmucName " +
+                        "FROM Danhmuc dm " +
+                        "WHERE dm.GroupId=@groupid";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@groupname", userInfo[1]);
+                    command.Parameters.AddWithValue("@groupid", userInfo[1]);
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -37,12 +39,16 @@ namespace chatapp.DataAccess
                         result = new string[dataTable.Rows.Count + 1];
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
-                            result[i + 1] = dataTable.Rows[i]["DanhmucName"].ToString();
+                            result[i + 1] = dataTable.Rows[i]["DanhmucId"].ToString() + "|" + dataTable.Rows[i]["DanhmucName"].ToString();
                         }
                         result[0] = "1";
                         return result;
                     }
-                    else return result;
+                    else
+                    {
+                        result[0] = "1";
+                        return result;
+                    }
                 }
             }
             catch (Exception ex)

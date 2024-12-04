@@ -1,4 +1,4 @@
-﻿namespace chatapp.DTOs
+﻿namespace QLUSER.DTOs
 {
     public class DKGroupDTO
     {

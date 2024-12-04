@@ -12,8 +12,8 @@ namespace chatapp.DataAccess
         }
         public async Task<string[]> DangkyGroupAsync(string[] userInfo)
         {
-            string[] result = new string[1];
-            result[0] = "0";
+            string[] result = new string[2];
+            result[0] = "0"; result[1] = "";
             try
             {
                 using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
@@ -23,23 +23,15 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string checkgroupnameQuery = "SELECT COUNT(*) FROM Groups WHERE GroupName = @groupname";
-                    using (SqlCommand checkgroupnameCmd = new SqlCommand(checkgroupnameQuery, connectionDB))
-                    {
-                        checkgroupnameCmd.Parameters.AddWithValue("@groupname", userInfo[1]);
-                        int userExists = (int)await checkgroupnameCmd.ExecuteScalarAsync();
-                        if (userExists > 0)
-                        {
-                            result[0] = "Tên máy chủ đã tồn tại";
-                            return result;
-                        }
-                    }
-                    string query = "INSERT INTO Groups (GroupName,CreatedAt) VALUES (@GroupName,@CreatedAt)";
+                    string query = "INSERT INTO Groups (GroupName,CreatedAt) " +
+                        "OUTPUT INSERTED.GroupId " +
+                        "VALUES (@GroupName,@CreatedAt)";
                     SqlCommand command = new SqlCommand(query, connectionDB);
                     command.Parameters.AddWithValue("@GroupName", userInfo[1]);
                     command.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
-                    command.ExecuteNonQuery();
+                    int insertedId = (int)command.ExecuteScalar();
                     result[0] = "1";
+                    result[1] = insertedId.ToString();
                     return result;
                 }
             }

@@ -1,10 +1,9 @@
-﻿namespace chatapp.DTOs
+﻿namespace QLUSER.DTOs
 {
     public class SendmessDTO
     {
-        public string Username { get; set; }
-        public string Groupname { get; set; }
-        public string Channelname { get; set; }
+        public string UserID { get; set; }
+        public string ChannelID { get; set; }
         public string Message { get; set; }
 
     }

@@ -2,7 +2,7 @@
 {
     public class ChannelnameDTO
     {
-        public string Groupname { get; set; }
+        public string GroupID { get; set; }
 
     }
 }

@@ -57,7 +57,7 @@ namespace QLUSER.Models
                 return null;
             }
         }
-        public async Task<string> UploadAvatarGroupAsync(string imagePath, string groupname)
+        public async Task<string> UploadAvatarGroupAsync(string imagePath, string groupid)
         {
             try
             {
@@ -70,9 +70,9 @@ namespace QLUSER.Models
                         fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
                         content.Add(fileContent, "avatargroup", Path.GetFileName(imagePath));
 
-                        content.Add(new StringContent(groupname), "groupname");
+                        content.Add(new StringContent(groupid), "groupid");
 
-                        string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}File/upload-avatar-group?groupname={groupname}";
+                        string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}File/upload-avatar-group?groupid={groupid}";
 
                         var response = await client.PostAsync(url, content);
 
@@ -80,7 +80,6 @@ namespace QLUSER.Models
                         {
                             var responseContent = await response.Content.ReadAsStringAsync();
                             var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-
                             return responseData.avatarGroupUrl;
                         }
                         else
@@ -132,13 +131,13 @@ namespace QLUSER.Models
                 return null;
             }
         }
-        public async Task<Image> LoadAvatarGroupAsync(string groupname)
+        public async Task<Image> LoadAvatarGroupAsync(string groupid)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar-group"}?groupname={Uri.EscapeDataString(groupname)}";
+                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar-group"}?groupid={Uri.EscapeDataString(groupid)}";
                     var response = await client.GetAsync(new Uri(fullUrl));
 
                     if (response.IsSuccessStatusCode)
@@ -165,13 +164,13 @@ namespace QLUSER.Models
                 return null;
             }
         }
-        public async Task<string> LoadGroupUrlAsync(string groupname)
+        public async Task<string> LoadGroupUrlAsync(string groupid)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar-group"}?groupname={Uri.EscapeDataString(groupname)}";
+                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar-group"}?groupid={Uri.EscapeDataString(groupid)}";
                     var response = await client.GetAsync(new Uri(fullUrl));
 
                     if (response.IsSuccessStatusCode)

@@ -23,11 +23,11 @@ namespace chatapp.Controllers
         [HttpPost("DKDanhMuc")]
         public async Task<IActionResult> DKDanhMuc([FromBody] DKDanhMucDTO request)
         {
-            string[] userInfo = { "", request.DanhMucname,request.Groupname };
+            string[] userInfo = { "", request.DanhMucname,request.GroupID };
             string[] registrationResult = await _DKDanhMuc.DangkyDanhmucAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                return Ok(new { message = "Đăng ký danh mục thành công" });
+                return Ok(new { message = "Đăng ký danh mục thành công",danhmucID = registrationResult[1] });
             }
             else
             {
@@ -37,16 +37,12 @@ namespace chatapp.Controllers
         [HttpPost("Danhmucname")]
         public async Task<IActionResult> Danhmucname([FromBody] DanhMucnameDTO request)
         {
-            string[] userInfo = { "", request.Groupname };
+            string[] userInfo = { "", request.GroupID };
             string[] registrationResult = await _Danhmucname.DanhmucnameAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                var Danhmucname = registrationResult.Skip(1).ToArray();
-                return Ok(new { DanhmucName = Danhmucname });
-            }
-            else if(registrationResult[0] == "0")
-            {
-                return Ok(new { DanhmucName = registrationResult });
+                var DanhmucIDname = registrationResult.Skip(1).ToArray();
+                return Ok(new { DanhmucIDName = DanhmucIDname });
             }
             else
             {

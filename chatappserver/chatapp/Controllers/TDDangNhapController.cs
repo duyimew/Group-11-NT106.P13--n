@@ -26,7 +26,7 @@ namespace chatapp.Controllers
             string[] registrationResult = await _tddangnhap.TDDangNhapAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                return Ok(new { Username = registrationResult[1] });
+                return Ok(new { Username = registrationResult[1], userid = registrationResult[2] });
             }
             else
             {

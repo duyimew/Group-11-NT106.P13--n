@@ -13,9 +13,8 @@ namespace chatapp.DataAccess
         }
         public async Task<string[]> DangkyDanhmucAsync(string[] userInfo)
         {
-            string[] result = new string[1];
-            result[0] = "0";
-            string GroupId;
+            string[] result = new string[2];
+            result[0] = "0"; result[1] = "";
 
             try
             {
@@ -27,41 +26,17 @@ namespace chatapp.DataAccess
                         return result;
                     }
 
-                    string strQuery = "SELECT GroupId FROM Groups WHERE GroupName = @groupname";
-                    SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@groupname", userInfo[2]);
-
-                    object groupIdObj = await command.ExecuteScalarAsync();
-                    if (groupIdObj == null)
-                    {
-                        result[0] = "Không tìm thấy tên group";
-                        return result;
-                    }
-                    GroupId = groupIdObj.ToString();
-
-                    // Kiểm tra DanhmucName trong cùng GroupId
-                    string checkDanhmucQuery = "SELECT COUNT(*) FROM Danhmuc WHERE DanhmucName = @DanhmucName AND GroupId = @groupid";
-                    SqlCommand checkDanhmucCmd = new SqlCommand(checkDanhmucQuery, connectionDB);
-                    checkDanhmucCmd.Parameters.AddWithValue("@DanhmucName", userInfo[1]);
-                    checkDanhmucCmd.Parameters.AddWithValue("@groupid", GroupId);
-
-                    int danhMucExists = (int)await checkDanhmucCmd.ExecuteScalarAsync();
-                    if (danhMucExists > 0)
-                    {
-                        result[0] = "Tên danh mục đã tồn tại trong nhóm này";
-                        return result;
-                    }
-
-                    // Thêm Danhmuc mới
-                    string insertQuery = "INSERT INTO Danhmuc (DanhmucName, GroupId, CreatedAt) VALUES (@DanhmucName, @groupid, @createdat)";
+                    string insertQuery = "INSERT INTO Danhmuc (DanhmucName, GroupId, CreatedAt) " +
+                        "OUTPUT INSERTED.DanhmucId " +
+                        "VALUES (@DanhmucName, @groupid, @createdat)";
                     SqlCommand insertCmd = new SqlCommand(insertQuery, connectionDB);
                     insertCmd.Parameters.AddWithValue("@DanhmucName", userInfo[1]);
-                    insertCmd.Parameters.AddWithValue("@groupid", GroupId);
+                    insertCmd.Parameters.AddWithValue("@groupid", userInfo[2]);
                     insertCmd.Parameters.AddWithValue("@createdat", DateTime.Now);
 
-                    await insertCmd.ExecuteNonQueryAsync();
-
-                    result[0] = "1"; // Thành công
+                    int insertedId = (int)insertCmd.ExecuteScalar();
+                    result[0] = "1";
+                    result[1] = insertedId.ToString();
                     return result;
                 }
             }

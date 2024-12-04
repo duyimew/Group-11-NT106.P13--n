@@ -2,9 +2,9 @@
 {
     public class AddUserDTO
     {
-        public string Username { get; set; }
+        public string UserID { get; set; }
 
-        public string Groupname { get; set; }
+        public string GroupID { get; set; }
 
     }
 }

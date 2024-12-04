@@ -2,7 +2,7 @@
 {
     public class GroupnameDTO
     {
-        public string Username { get; set; }
+        public string UserID { get; set; }
 
     }
 }

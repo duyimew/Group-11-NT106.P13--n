@@ -1,4 +1,4 @@
-﻿using chatapp.DTOs;
+﻿using QLUSER.DTOs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,11 +13,11 @@ namespace QLUSER.Models
 {
     internal class DanhMuc
     {
-        public async Task<bool> SaveDanhMucToDatabase(string groupName,string danhmucname)
+        public async Task<(bool issuccess, string danhmucID)> SaveDanhMucToDatabase(string groupid,string danhmucname)
         {
             var DKDanhMuc = new DKDanhMucDTO
             {
-                Groupname = groupName,
+                GroupID = groupid,
                 DanhMucname = danhmucname,
             };
             var json = JsonConvert.SerializeObject(DKDanhMuc);
@@ -29,8 +29,9 @@ namespace QLUSER.Models
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
+                string danhmucID = responseData.danhmucID;
                 MessageBox.Show(message);
-                return true;
+                return (true,danhmucID);
             }
             else
             {
@@ -38,14 +39,14 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
                 MessageBox.Show(message);
-                return false;
+                return (false, null);
             }
         }
-        public async Task<string[]> RequestDanhMucName(string groupname)
+        public async Task<(bool issuccess, string[] danhmucidname)> RequestDanhMucName(string groupid)
         {
             var DanhMucName = new DanhMucnameDTO
             {
-                Groupname=groupname,
+                GroupID=groupid,
             };
             var json = JsonConvert.SerializeObject(DanhMucName);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -55,14 +56,13 @@ namespace QLUSER.Models
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                List<string> danhmucNamesList = new List<string>();
-                foreach (var name in responseData.danhmucName)
+                List<string> danhmucidNamesList = new List<string>();
+                foreach (var name in responseData.danhmucIDName)
                 {
-                    danhmucNamesList.Add((string)name);
+                    danhmucidNamesList.Add((string)name);
                 }
-                string[] danhmucNamesArray = danhmucNamesList.ToArray();
-                if (danhmucNamesArray[0] == "0") return null;
-                return danhmucNamesArray;
+                string[] danhmucidNamesArray = danhmucidNamesList.ToArray();
+                return (true,danhmucidNamesArray);
             }
             else
             {
@@ -70,7 +70,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message= responseData.message;
                 MessageBox.Show(message);
-                return null;
+                return (false,null);
             }
         }
     }

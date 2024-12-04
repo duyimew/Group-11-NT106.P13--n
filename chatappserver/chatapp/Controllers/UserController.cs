@@ -49,6 +49,19 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = result[0] });
             }
         }
-
+        [HttpPost("FindUserID")]
+        public async Task<IActionResult> FindUserID([FromBody] InforuserDTO request)
+        {
+            string[] userName = { "", request.Username };
+            string[] result = await _findUser.FindUserIDAsync(userName);
+            if (result[0] == "1")
+            {
+                return Ok(new { message = result.Skip(1) });
+            }
+            else
+            {
+                return BadRequest(new { message = result[0] });
+            }
+        }
     }
 }

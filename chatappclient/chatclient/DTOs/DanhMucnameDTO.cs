@@ -1,8 +1,8 @@
-﻿namespace chatapp.DTOs
+﻿namespace QLUSER.DTOs
 {
     public class DanhMucnameDTO
     {
-        public string Groupname { get; set; }
+        public string GroupID { get; set; }
 
     }
 }

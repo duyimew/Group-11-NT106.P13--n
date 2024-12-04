@@ -23,15 +23,11 @@ namespace chatapp.Controllers
         [HttpPost("SendMessage")]
         public async Task<IActionResult> SendMessage([FromBody] SendmessDTO request)
         {
-            string[] userInfo = { "", request.Message, request.Channelname,request.Groupname,request.Username };
+            string[] userInfo = { "", request.Message, request.ChannelID,request.UserID };
             string[] registrationResult = await _SendMess.SendMessAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                return Ok(new { message = "Gửi tin nhắn thành công" });
-            }
-            else if (registrationResult[0] == "0")
-            {
-                return Ok(new { message = "Gửi tin nhắn thất bại" });
+                return Ok(new { message = "Gửi tin nhắn thành công", messageid = registrationResult[1] });
             }
             else
             {
@@ -41,16 +37,12 @@ namespace chatapp.Controllers
         [HttpPost("ReceiveMessage")]
         public async Task<IActionResult> ReceiveMessage([FromBody] ReceivemessDTO request)
         {
-            string[] userInfo = { "", request.Groupname,request.Channelname };
+            string[] userInfo = { "", request.ChannelID };
             string[] registrationResult = await _receivemess.ReceiveMessAsync(userInfo);
             if (registrationResult[0] == "1")
             {
                 var Messagetext = registrationResult.Skip(1).ToArray();
                 return Ok(new { messagetext = Messagetext });
-            }
-            else if (registrationResult[0] == "0")
-            {
-                return Ok(new { messagetext = registrationResult });
             }
             else
             {

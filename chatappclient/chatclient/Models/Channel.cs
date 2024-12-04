@@ -1,4 +1,4 @@
-﻿using chatapp.DTOs;
+﻿using QLUSER.DTOs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,15 +13,17 @@ namespace QLUSER.Models
 {
     internal class Channel
     {
-        public async Task<bool> SaveKenhToDatabase(string groupName,string channelname,bool ischat,string danhmuc)
+        public async Task<(bool issuccess,string channelID)> SaveKenhToDatabase(string groupID, string channelname,bool ischat,string danhmucid)
         {
-            if (danhmuc == null) danhmuc = "null";
+
+            if (danhmucid == null) danhmucid = "null";
             var DKChannel = new DKChannelDTO
             {
-                Groupname = groupName,
+                GroupID = groupID,
                 Channelname = channelname,
                 ischat=ischat,
-                danhmucname = danhmuc
+                danhmucID = danhmucid
+                
             };
             var json = JsonConvert.SerializeObject(DKChannel);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -32,8 +34,9 @@ namespace QLUSER.Models
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
+                string channelID = responseData.channelID;
                 MessageBox.Show(message);
-                return true;
+                return (true,channelID);
             }
             else
             {
@@ -41,14 +44,14 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
                 MessageBox.Show(message);
-                return false;
+                return (false,null);
             }
         }
-        public async Task<string[]> RequestChannelName(string groupname)
+        public async Task<(bool issuccess, string[] channelidname)> RequestChannelName(string groupid)
         {
             var channelname = new ChannelnameDTO
             {
-                Groupname=groupname,
+                GroupID=groupid,
             };
             var json = JsonConvert.SerializeObject(channelname);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -58,14 +61,13 @@ namespace QLUSER.Models
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                List<string> channelNamesList = new List<string>();
-                foreach (var name in responseData.channelName)
+                List<string> channelidNamesList = new List<string>();
+                foreach (var name in responseData.channelIDName)
                 {
-                    channelNamesList.Add((string)name);
+                    channelidNamesList.Add((string)name);
                 }
-                string[] channelNamesArray = channelNamesList.ToArray();
-                if (channelNamesArray[0] == "0") return null;
-                return channelNamesArray;
+                string[] channelidNamesArray = channelidNamesList.ToArray();
+                return (true,channelidNamesArray);
             }
             else
             {
@@ -73,7 +75,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message= responseData.message;
                 MessageBox.Show(message);
-                return null;
+                return (false,null);
             }
         }
     }

@@ -26,7 +26,7 @@ namespace chatapp.Controllers
             string[] registrationResult = await _dangnhap.DangNhapUserAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                return Ok(new { message = "Đăng nhập thành công"});
+                return Ok(new { message = "Đăng nhập thành công", userid = registrationResult[1] });
             }
             else
             {

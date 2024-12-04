@@ -139,6 +139,7 @@ namespace QLUSER
             }
             MessageBox.Show("Đăng xuất thành công!");
             DN.Show();
+            GD.Dispose();
             GD.Close();
             this.Close();
         }
