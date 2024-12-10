@@ -27,9 +27,9 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                        string strQuery = "SELECT Email, FullName, Birthday FROM Users WHERE Username = @username";
+                        string strQuery = "SELECT Email, FullName, Birthday FROM Users WHERE Displayname = @Displayname";
                         SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                        command.Parameters.AddWithValue("@username", userInfo[1]);
+                        command.Parameters.AddWithValue("@Displayname", userInfo[1]);
                         DataTable dataTable = new DataTable();
                         using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                         {

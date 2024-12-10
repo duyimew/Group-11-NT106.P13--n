@@ -1,4 +1,4 @@
-﻿using QLUSER.DTOs;
+﻿using chatclient.DTOs.Message;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading.Channels;
+using chatclient.DTOs.Group;
 
 namespace QLUSER.Models
 {
@@ -78,6 +79,122 @@ namespace QLUSER.Models
                 return (false, null);
             }
         }
-        
+        public async Task<bool> EditMessage(string messagetext, string messageid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new EditMessageRequestDTO
+                    {
+                        messageid = messageid,
+                        newmessage= messagetext
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Message/EditMessage";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return false;
+            }
+        }
+        public async Task<string> Onemessage(string messageid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new OneMessageDTO
+                    {
+                        messageid=messageid,
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Message/OneMessage";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string messagetext = responseData.messagetext;
+                        return messagetext;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return null;
+            }
+        }
+        public async Task<bool> DeleteMessage(string messageid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new DeleteMessageRequestDTO
+                    {
+                        messageid=messageid,
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Message/DeleteMessage";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return false;
+            }
+        }
     }
 }

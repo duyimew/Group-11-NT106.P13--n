@@ -1,4 +1,4 @@
-﻿using QLUSER.DTOs;
+﻿using chatclient.DTOs.User;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -52,22 +52,23 @@ namespace QLUSER.Models
                 return false;
             }
         }
-        public async Task<string> finduserid(string username)
+        public async Task<string> finduserid(string displayname)
         {
             var Username = new InforuserDTO
             {
-                Username = username,
+                displayname = displayname,
             };
             var json = JsonConvert.SerializeObject(Username);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
             HttpClient client = new HttpClient();
+            
             var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "User/FindUserID", content);
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                string[] userid = responseData.message;
-                return userid[0];
+                string userid = responseData.userid;
+                return userid;
             }
             else
             {
@@ -75,6 +76,72 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
                 return null;
+            }
+        }
+        public async Task<string> FindDisplayname(string userid)
+        {
+            var Username = new InforuserDTO
+            {
+                UserId=userid
+            };
+            var json = JsonConvert.SerializeObject(Username);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "User/FindDisplayname", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string displayname = responseData.displayname;
+                return displayname;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                return null;
+            }
+        }
+        public async Task<bool> RenameDisplayname(string newdisplayname, string userid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new InforuserDTO
+                    {
+                        newdisplayname = newdisplayname,
+                        UserId = userid
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}User/RenameDisplayname";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return false;
             }
         }
     }

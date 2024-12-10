@@ -2,8 +2,10 @@
 using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using chatapp.DTOs;
 using chatapp.DataAccess;
+using chatserver.DTOs.Danhmuc;
+using chatserver.DTOs.Group;
+using chatserver.DTOs.Channel;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -47,6 +49,80 @@ namespace chatapp.Controllers
             else
             {
                 return BadRequest(new { message = registrationResult[0] });
+            }
+        }
+        [HttpPost("RenameDanhmuc")]
+        public async Task<IActionResult> RenameDanhmuc([FromBody] RenameDanhmucRequestDTO request)
+        {
+            try
+            {
+
+                var danhmuc = await _context.danhmuc.FirstOrDefaultAsync(g => g.DanhmucId == int.Parse(request.danhmucid));
+                if (danhmuc == null)
+                {
+                    return NotFound(new { message = "danhmuc not found." });
+                }
+
+                danhmuc.DanhmucName = request.newdanhmucname;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Rename danhmuc successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+
+
+        [HttpPost("OneDanhmucname")]
+        public async Task<IActionResult> OneDanhmucname([FromBody] OneDanhmucNameDTO request)
+        {
+            try
+            {
+                var danhmuc = await _context.danhmuc.FirstOrDefaultAsync(g => g.DanhmucId == int.Parse(request.danhmucid));
+                if (danhmuc == null)
+                {
+                    return NotFound(new { message = "danhmuc not found." });
+                }
+
+                string danhmucname = danhmuc.DanhmucName;
+
+                return Ok(new { danhmucname = danhmucname });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+        [HttpDelete("DeleteDanhmuc")]
+        public async Task<IActionResult> DeleteDanhmuc([FromBody] DeleteDanhmucRequestDTO request)
+        {
+            try
+            {
+                var danhmuc = await _context.danhmuc
+            .Include(c => c.Channels)
+            .FirstOrDefaultAsync(d => d.DanhmucId == int.Parse(request.danhmucid));
+
+                if (danhmuc == null)
+                {
+                    return NotFound(new { message = "danh muc not found." });
+                }
+
+                foreach (var channel in danhmuc.Channels.ToList())
+                {
+                    _context.Channels.Remove(channel);
+                }
+
+                _context.danhmuc.Remove(danhmuc);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "danh muc deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
     }

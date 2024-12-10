@@ -12,7 +12,8 @@ namespace chatapp.DataAccess
         }
         public async Task<string[]> DangkyUserAsync(string[] userInfo)
         {
-            string[] result = new string[] { "0" };
+            string[] result = new string[2];
+            result[0] = "0"; result[1] = "";
 
             try
             {
@@ -41,9 +42,12 @@ namespace chatapp.DataAccess
                         await setDateFormatCmd.ExecuteNonQueryAsync();
                     }
 
-                    string insertQuery = "INSERT INTO Users (Username, Password, Email, FullName, Birthday, CreatedAt) VALUES (@username, @password, @Email, @ten, @ngaysinh, @createdAt)";
+                    string insertQuery = "INSERT INTO Users (Displayname,Username, Password, Email, FullName, Birthday, CreatedAt) " +
+                        "OUTPUT INSERTED.UserId " +
+                        "VALUES (@displayname,@username, @password, @Email, @ten, @ngaysinh, @createdAt)";
                     using (SqlCommand insertCmd = new SqlCommand(insertQuery, connectionDB))
                     {
+                        insertCmd.Parameters.AddWithValue("@displayname", userInfo[1]);
                         insertCmd.Parameters.AddWithValue("@username", userInfo[1]);
                         insertCmd.Parameters.AddWithValue("@password", userInfo[2]);
                         insertCmd.Parameters.AddWithValue("@Email", userInfo[3]);
@@ -51,7 +55,8 @@ namespace chatapp.DataAccess
                         insertCmd.Parameters.AddWithValue("@ngaysinh", userInfo[5]);
                         insertCmd.Parameters.AddWithValue("@createdAt", DateTime.Now);
 
-                        await insertCmd.ExecuteNonQueryAsync();
+                        int insertedId = (int)insertCmd.ExecuteScalar();
+                        result[1] = insertedId.ToString();
                     }
                     result[0] = "1";
                     return result;

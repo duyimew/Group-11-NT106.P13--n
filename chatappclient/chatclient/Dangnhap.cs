@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using QLUSER.DTOs;
+using chatclient.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -79,7 +79,9 @@ namespace QLUSER
                     string message = responseData.message;
                     string userid = responseData.userid;
                     MessageBox.Show(message);
-                    GiaoDien giaodien = new GiaoDien(username, userid, this);
+                    tb_username.Clear();
+                    tb_pwd.Clear();
+                    GiaoDien giaodien = new GiaoDien(username,userid, this);
                     giaodien.Show();
                     this.Hide();
                 }

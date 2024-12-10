@@ -2,8 +2,9 @@
 using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using chatapp.DTOs;
 using chatapp.DataAccess;
+using chatserver.DTOs.Channel;
+using chatserver.DTOs.Group;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -49,5 +50,73 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = registrationResult[0] });
             }
         }
+        [HttpPost("RenameChannel")]
+        public async Task<IActionResult> RenameChannel([FromBody] RenameChannelRequestDTO request)
+        {
+            try
+            {
+
+                var Channel = await _context.Channels.FirstOrDefaultAsync(g => g.ChannelId == int.Parse(request.channelId));
+                if (Channel == null)
+                {
+                    return NotFound(new { message = "Channel not found." });
+                }
+
+                Channel.ChannelName = request.newchannelName;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Rename Channel successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error:{ex.Message}" });
+            }
+        }
+
+
+        [HttpPost("OneChannelname")]
+        public async Task<IActionResult> OneChannelname([FromBody] OneChannelNameDTO request)
+        {
+            try
+            {
+                var Channel = await _context.Channels.FirstOrDefaultAsync(g => g.ChannelId == int.Parse(request.channelid));
+                if (Channel == null)
+                {
+                    return NotFound(new { message = "Channel not found." });
+                }
+
+                string Channelname = Channel.ChannelName;
+
+                return Ok(new { channelname = Channelname });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error:{ex.Message}" });
+            }
+        }
+        [HttpDelete("DeleteChannel")]
+        public async Task<IActionResult> DeleteChannel([FromBody] DeleteChannelRequestDTO request)
+        {
+            try
+            {
+                var channel = await _context.Channels.FirstOrDefaultAsync(c => c.ChannelId == int.Parse(request.ChannelId));
+
+                if (channel == null)
+                {
+                    return NotFound(new { message = "Channel not found." });
+                }
+                _context.Channels.Remove(channel);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Channel deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+
+
     }
 }

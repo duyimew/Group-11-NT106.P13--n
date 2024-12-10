@@ -63,6 +63,26 @@ namespace QLUSER.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _1F60A_color {
+            get {
+                object obj = ResourceManager.GetObject("1F60A_color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _271ceac1b418978b9096830a695e79e9 {
+            get {
+                object obj = ResourceManager.GetObject("271ceac1b418978b9096830a695e79e9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _379512_chat_icon {
             get {
                 object obj = ResourceManager.GetObject("_379512_chat_icon", resourceCulture);
@@ -96,6 +116,16 @@ namespace QLUSER.Properties {
         internal static System.Drawing.Bitmap group_1824145_1280 {
             get {
                 object obj = ResourceManager.GetObject("group_1824145_1280", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Icon_kinh_lup_don_gian_PNG {
+            get {
+                object obj = ResourceManager.GetObject("Icon-kinh-lup-don-gian-PNG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

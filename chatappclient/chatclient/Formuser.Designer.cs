@@ -208,6 +208,7 @@
             this.circularPicture1.TabStop = false;
             this.circularPicture1.TextColor = System.Drawing.Color.Black;
             this.circularPicture1.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
+            this.circularPicture1.Click += new System.EventHandler(this.circularPicture1_Click);
             // 
             // btn_ChangeAva
             // 

@@ -12,7 +12,7 @@ namespace chatapp.DataAccess
         {
             _connectDB = connectDB;
         }
-        public async Task<string[]> FriendListAsync(string username)
+        public async Task<string[]> FriendListAsync(string userid)
         {
             string[] result = new string[1];
             result[0] = "0";
@@ -26,23 +26,11 @@ namespace chatapp.DataAccess
                         return result;
                     }
 
-                    // Lấy userId từ username
-                    string userIdQuery = "SELECT UserId FROM Users WHERE Username = @Username";
-                    SqlCommand userIdCommand = new SqlCommand(userIdQuery, connectionDB);
-                    userIdCommand.Parameters.AddWithValue("@Username", username);
-                    object userIdObj = await userIdCommand.ExecuteScalarAsync();
-
-                    if (userIdObj == null)
-                    {
-                        result[0] = "Người dùng không tồn tại";
-                        return result;
-                    }
-
-                    int userId = Convert.ToInt32(userIdObj);
+                    
 
                     // Lấy danh sách bạn bè
                     string strQuery = @"
-                SELECT Username 
+                SELECT Displayname 
                 FROM Users 
                 WHERE UserId IN 
                 (
@@ -54,7 +42,7 @@ namespace chatapp.DataAccess
                     WHERE UserId_1 = @UserId OR UserId_2 = @UserId
                 )";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@UserId", userid);
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -66,7 +54,7 @@ namespace chatapp.DataAccess
                         result = new string[dataTable.Rows.Count + 1];
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
-                            result[i + 1] = dataTable.Rows[i]["Username"].ToString();
+                            result[i + 1] = dataTable.Rows[i]["Displayname"].ToString();
                         }
                         result[0] = "1";
                         return result;
@@ -84,7 +72,7 @@ namespace chatapp.DataAccess
             }
         }
 
-        public async Task<string[]> ListSentRequest(string username)
+        public async Task<string[]> ListSentRequest(string userid)
         {
             string[] result = new string[1];
             result[0] = "0"; // Default to failure status
@@ -98,23 +86,10 @@ namespace chatapp.DataAccess
                         return result;
                     }
 
-                    // Get userId from username
-                    string userIdQuery = "SELECT UserId FROM Users WHERE Username = @Username";
-                    SqlCommand userIdCommand = new SqlCommand(userIdQuery, connectionDB);
-                    userIdCommand.Parameters.AddWithValue("@Username", username);
-                    object userIdObj = await userIdCommand.ExecuteScalarAsync();
-
-                    if (userIdObj == null)
-                    {
-                        result[0] = "Người dùng không tồn tại";
-                        return result;
-                    }
-
-                    int userId = Convert.ToInt32(userIdObj);
 
                     // Fetch the list of received friend requests (where the user is the receiver)
                     string strQuery = @"
-                SELECT Username 
+                SELECT Displayname 
                 FROM Users 
                 WHERE UserId IN 
                 (
@@ -123,7 +98,7 @@ namespace chatapp.DataAccess
                     WHERE ReceiverId = @UserId
                 )";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@UserId", userid);
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -135,7 +110,7 @@ namespace chatapp.DataAccess
                         result = new string[dataTable.Rows.Count + 1];
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
-                            result[i + 1] = dataTable.Rows[i]["Username"].ToString();
+                            result[i + 1] = dataTable.Rows[i]["Displayname"].ToString();
                         }
                         result[0] = "1"; // Success
                         return result;

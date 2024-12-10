@@ -1,0 +1,7 @@
+﻿namespace chatclient.DTOs.Message
+{
+    public class OneMessageDTO
+    {
+        public string messageid { get; set; }
+    }
+}

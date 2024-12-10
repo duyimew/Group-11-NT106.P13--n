@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using chatapp.Data;
 using System.Data;
+using chatapp.Models;
 
 namespace chatapp.DataAccess
 {
@@ -24,13 +25,16 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "	SELECT ms.MessageId, us.Username, ms.MessageText, STRING_AGG(am.Filename, '; ') AS Filename " +
+                    string strQuery = "SELECT ms.MessageId, gm.GroupDisplayname, ms.MessageText, STRING_AGG(am.Filename, '; ') AS Filename " +
                         "FROM Messages ms " +
-                        "JOIN Users us ON us.UserId = ms.UserId " +
+                        "JOIN Channels ch on ch.ChannelId = ms.ChannelId " +
+                        "JOIN Groups gr on gr.GroupId = ch.GroupId " +
+                        "JOIN GroupMembers gm ON gm.UserId = ms.UserId AND gr.GroupId = gm.GroupId " +
                         "LEFT JOIN Attachments am ON ms.MessageId = am.MessageId " +
-                        "WHERE ms.ChannelId=@channelid " +
-                        "GROUP BY ms.MessageId, us.Username, ms.MessageText,ms.SentTime " +
-                        "ORDER BY ms.SentTime DESC";
+                        "WHERE ms.ChannelId = @channelid " +
+                        "GROUP BY ms.MessageId, gm.GroupDisplayname, ms.MessageText, ms.SentTime " +
+                        "ORDER BY ms.SentTime DESC;";
+
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
                     command.Parameters.AddWithValue("@channelid", userInfo[1]);
                     DataTable dataTable = new DataTable();
@@ -44,7 +48,7 @@ namespace chatapp.DataAccess
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
                             result[4 * i + 1] = dataTable.Rows[i]["MessageId"].ToString();
-                            result[4 * i + 2] = dataTable.Rows[i]["Username"].ToString();
+                            result[4 * i + 2] = dataTable.Rows[i]["GroupDisplayname"].ToString();
                             result[4 * i + 3] = dataTable.Rows[i]["MessageText"].ToString();
                             result[4 * i + 4] = dataTable.Rows[i]["Filename"].ToString();
                         }
@@ -56,7 +60,7 @@ namespace chatapp.DataAccess
                         for (int i = 0; i < 100; i++)
                         {
                             result[4 * i + 1] = dataTable.Rows[i]["MessageId"].ToString();
-                            result[4 * i + 2] = dataTable.Rows[i]["Username"].ToString();
+                            result[4 * i + 2] = dataTable.Rows[i]["GroupDisplayname"].ToString();
                             result[4 * i + 3] = dataTable.Rows[i]["MessageText"].ToString();
                             result[4 * i + 4] = dataTable.Rows[i]["Filename"].ToString();
                         }

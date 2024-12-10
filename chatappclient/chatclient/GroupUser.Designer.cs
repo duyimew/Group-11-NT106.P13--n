@@ -64,6 +64,7 @@
             this.label3.Size = new System.Drawing.Size(100, 23);
             this.label3.TabIndex = 3;
             this.label3.Text = "Ban be";
+            this.label3.Visible = false;
             this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
@@ -74,6 +75,7 @@
             this.label4.Size = new System.Drawing.Size(100, 23);
             this.label4.TabIndex = 4;
             this.label4.Text = "May chu";
+            this.label4.Visible = false;
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // flowLayoutPanel1
@@ -92,6 +94,8 @@
             this.circularPicture1.Size = new System.Drawing.Size(100, 93);
             this.circularPicture1.TabIndex = 0;
             this.circularPicture1.TabStop = false;
+            this.circularPicture1.TextColor = System.Drawing.Color.Black;
+            this.circularPicture1.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
             // 
             // GroupUser
             // 

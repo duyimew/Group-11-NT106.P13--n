@@ -9,7 +9,7 @@ namespace chatserver.HUB
         private static readonly Dictionary<string, List<string>> CallParticipants = new();
 
 
-        public async Task JoinCall(string callId, string userId)
+        public async Task JoinCall(string callId, string groupdisplayname)
         {
            
                     await Groups.AddToGroupAsync(Context.ConnectionId, callId);
@@ -20,34 +20,34 @@ namespace chatserver.HUB
 
                     var participants = CallParticipants[callId];
                     await Clients.Caller.SendAsync("ExistingParticipants", participants);
-                    if (!participants.Contains(userId))
+                    if (!participants.Contains(groupdisplayname))
                     {
-                        participants.Add(userId);
+                        participants.Add(groupdisplayname);
                     }
-                    await Clients.OthersInGroup(callId).SendAsync("UserJoined", userId);
+                    await Clients.OthersInGroup(callId).SendAsync("UserJoined", groupdisplayname);
 
         }
 
-        public async Task LeaveCall(string callId, string userId)
+        public async Task LeaveCall(string callId, string groupdisplayname)
         {
 
                     if (CallParticipants.ContainsKey(callId))
                     {
-                        CallParticipants[callId].Remove(userId);
+                        CallParticipants[callId].Remove(groupdisplayname);
                         if (CallParticipants[callId].Count == 0)
                         {
                             CallParticipants.Remove(callId);
                         }
                     }
-                    await Clients.OthersInGroup(callId).SendAsync("UserLeft", userId);
+                    await Clients.OthersInGroup(callId).SendAsync("UserLeft", groupdisplayname);
 
                     await Groups.RemoveFromGroupAsync(Context.ConnectionId, callId);
         }
 
-        public async Task SendVideoFrame(string callId, byte[] frameData, string userId)
+        public async Task SendVideoFrame(string callId, byte[] frameData, string groupdisplayname)
         {
             
-                await Clients.OthersInGroup(callId).SendAsync("ReceiveVideoFrame", frameData, userId);
+                await Clients.OthersInGroup(callId).SendAsync("ReceiveVideoFrame", frameData, groupdisplayname);
                
         }
 

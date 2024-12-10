@@ -6,11 +6,11 @@ namespace chatapp.Models
     {
         public int GroupId { get; set; }
         public string? GroupAva { get; set; }
-        public string GroupName { get; set; }
+        public string? GroupName { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public ICollection<GroupMember> GroupMembers { get; set; }
-        public ICollection<Channel> Channels { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<GroupMember>? GroupMembers { get; set; }
+        public ICollection<Channel>? Channels { get; set; }
+        public ICollection<Danhmuc> Danhmucs { get; set; } = new List<Danhmuc>();
     }
 }

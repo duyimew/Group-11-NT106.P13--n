@@ -3,15 +3,12 @@
     public class Danhmuc
     {
         public int DanhmucId { get; set; }
-        public string DanhmucName { get; set; }
-
-        // Thuộc về Group (bắt buộc)
+        public string? DanhmucName { get; set; }
         public int GroupId { get; set; }
-        public Group Group { get; set; }
+        public Group? Group { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // Danh sách các Channel thuộc Danhmuc này
-        public ICollection<Channel> Channels { get; set; }
+        public ICollection<Channel>? Channels { get; set; }
     }
 }

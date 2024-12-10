@@ -34,7 +34,7 @@ namespace QLUSER
         private Button btnToggleMic;
         private bool isMicOn = false;
         private bool isSendingData = false;
-        string username1;
+        string _groupdisplayname;
         private PictureBox[] pictureBoxes;
         private System.Threading.Timer captureTimer;
         private bool isImageDisposed = false;
@@ -44,10 +44,10 @@ namespace QLUSER
         private bool picture = false;
         private bool isstop = false;
         private string callId;
-        public VideoCall(string username, string channelid)
+        public VideoCall(string groupdisplayname, string channelid)
         {
             InitializeComponent();
-            username1 = username;
+            _groupdisplayname = groupdisplayname;
             pictureBoxes = new PictureBox[10];
             callId = channelid;
         }
@@ -181,26 +181,14 @@ namespace QLUSER
             int originalWidth = frame.Width;
             int originalHeight = frame.Height;
 
-            // Kích thước khung đích
             int targetWidth = pictureBoxes[0].Width;
             int targetHeight = pictureBoxes[0].Height;
 
-            // Tính tỷ lệ khung hình
             float originalAspectRatio = (float)originalWidth / originalHeight;
             float targetAspectRatio = (float)targetWidth / targetHeight;
 
-            // Tạo kích thước mới để thu nhỏ ảnh sao cho một chiều vừa khít với khung đích
             int scaledWidth = targetWidth, scaledHeight = targetHeight;
-            //if (originalAspectRatio > targetAspectRatio)
-            {
-                //  scaledHeight = targetHeight;
-                //  scaledWidth = (int)(targetHeight * originalAspectRatio);
-            }
-            //else
-            {
-                //    scaledWidth = targetWidth;
-                //  scaledHeight = (int)(targetWidth / originalAspectRatio);
-            }
+
             Bitmap resizedImage = new Bitmap(scaledWidth, scaledHeight);
             using (Graphics g = Graphics.FromImage(resizedImage))
             {
@@ -233,7 +221,7 @@ namespace QLUSER
                     if (connection.State == HubConnectionState.Connected)
                     {
                         byte[] frameData = ConvertFrameToByteArray(finalImage);
-                        await connection.SendAsync("SendVideoFrame", callId, frameData, username1);
+                        await connection.SendAsync("SendVideoFrame", callId, frameData, _groupdisplayname);
                     }
                 }
             });
@@ -259,9 +247,9 @@ namespace QLUSER
             {
                 listBox1.Invoke(new Action(() =>
                 {
-                    if (!listBox1.Items.Contains(username1))
+                    if (!listBox1.Items.Contains(_groupdisplayname))
                     {
-                        listBox1.Items.Add(username1);
+                        listBox1.Items.Add(_groupdisplayname);
                         int n = listBox1.Items.Count;
                         SetPictureBoxLayout(n);
                     }
@@ -269,9 +257,9 @@ namespace QLUSER
             }
             else
             {
-                if (!listBox1.Items.Contains(username1))
+                if (!listBox1.Items.Contains(_groupdisplayname))
                 {
-                    listBox1.Items.Add(username1);
+                    listBox1.Items.Add(_groupdisplayname);
                     int n = listBox1.Items.Count;
                     SetPictureBoxLayout(n);
                 }
@@ -281,10 +269,10 @@ namespace QLUSER
                 .Build();
 
             await connection.StartAsync();
-            await connection.SendAsync("JoinCall", callId, username1);
+            await connection.SendAsync("JoinCall", callId, _groupdisplayname);
 
 
-            connection.On<string>("UserJoined", (userId) =>
+            connection.On<string>("UserJoined", (groupdisplayname) =>
             {
                 isleft = true;
                 isRecevie = true;
@@ -293,10 +281,10 @@ namespace QLUSER
                     if (button4.Text == "Share Screen on")
                     {
                         button4_Click(null, EventArgs.Empty);
-                        await AddUserToListBox(userId);
+                        await AddUserToListBox(groupdisplayname);
                         button4_Click(null, EventArgs.Empty);
                     }
-                    else await AddUserToListBox(userId);
+                    else await AddUserToListBox(groupdisplayname);
                 }));
                 isRecevie = false;
                 isleft = false;
@@ -312,17 +300,17 @@ namespace QLUSER
                     if (button4.Text == "Share Screen on")
                     {
                         button4_Click(null, EventArgs.Empty);
-                        foreach (var userId in participants)
+                        foreach (var groupdisplayname in participants)
                         {
-                            await AddUserToListBox(userId);
+                            await AddUserToListBox(groupdisplayname);
                         }
                         button4_Click(null, EventArgs.Empty);
                     }
                     else
                     {
-                        foreach (var userId in participants)
+                        foreach (var groupdisplayname in participants)
                         {
-                            await AddUserToListBox(userId);
+                            await AddUserToListBox(groupdisplayname);
                         }
                     }
                 }));
@@ -333,7 +321,7 @@ namespace QLUSER
             // Xử lý sự kiện khi người dùng rời khỏi cuộc gọi
 
 
-            connection.On<string>("UserLeft", (userId) =>
+            connection.On<string>("UserLeft", (groupdisplayname) =>
             {
                 isleft = true;
                 isRecevie = true;
@@ -342,10 +330,10 @@ namespace QLUSER
                     if (button4.Text == "Share Screen on")
                     {
                         button4_Click(null, EventArgs.Empty);
-                        await RemoveUserFromListBox(userId);
+                        await RemoveUserFromListBox(groupdisplayname);
                         button4_Click(null, EventArgs.Empty);
                     }
-                    else await RemoveUserFromListBox(userId);
+                    else await RemoveUserFromListBox(groupdisplayname);
                 }));
 
                 isRecevie = false;
@@ -354,7 +342,7 @@ namespace QLUSER
 
             // Xử lý sự kiện nhận khung hình video từ người khác
 
-            connection.On<byte[], string>("ReceiveVideoFrame", (frameData, userId) =>
+            connection.On<byte[], string>("ReceiveVideoFrame", (frameData, groupdisplayname) =>
             {
 
                 if (isleft) return;
@@ -364,7 +352,7 @@ namespace QLUSER
                     Bitmap image = new Bitmap(ms);
 
                     // Xác định vị trí của userId trong listBox1
-                    int index = listBox1.Items.IndexOf(userId);
+                    int index = listBox1.Items.IndexOf(groupdisplayname);
 
                     // Kiểm tra nếu userId tồn tại trong listBox1
                     if (index >= 0 && index < pictureBoxes.Length)
@@ -420,15 +408,15 @@ namespace QLUSER
         }
 
         // Hàm tiện ích để thêm người dùng vào ListBox1
-        private async Task AddUserToListBox(string userId)
+        private async Task AddUserToListBox(string groupdisplayname)
         {
             if (listBox1.InvokeRequired)
             {
                 listBox1.Invoke(new Action(() =>
                 {
-                    if (!listBox1.Items.Contains(userId))
+                    if (!listBox1.Items.Contains(groupdisplayname))
                     {
-                        listBox1.Items.Add(userId);
+                        listBox1.Items.Add(groupdisplayname);
                         int n = listBox1.Items.Count;
                         SetPictureBoxLayout(n);
                     }
@@ -436,9 +424,9 @@ namespace QLUSER
             }
             else
             {
-                if (!listBox1.Items.Contains(userId))
+                if (!listBox1.Items.Contains(groupdisplayname))
                 {
-                    listBox1.Items.Add(userId);
+                    listBox1.Items.Add(groupdisplayname);
                     int n = listBox1.Items.Count;
                     SetPictureBoxLayout(n);
                 }
@@ -446,20 +434,20 @@ namespace QLUSER
         }
 
         // Hàm tiện ích để xóa người dùng khỏi ListBox1
-        private async Task RemoveUserFromListBox(string userId)
+        private async Task RemoveUserFromListBox(string groupdisplayname)
         {
             if (listBox1.InvokeRequired)
             {
                 listBox1.Invoke(new Action(() =>
                 {
-                    listBox1.Items.Remove(userId);
+                    listBox1.Items.Remove(groupdisplayname);
                     int n = listBox1.Items.Count;
                     SetPictureBoxLayout(n);
                 }));
             }
             else
             {
-                listBox1.Items.Remove(userId);
+                listBox1.Items.Remove(groupdisplayname);
                 int n = listBox1.Items.Count;
                 SetPictureBoxLayout(n);
             }
@@ -500,7 +488,7 @@ namespace QLUSER
             {
                 try
                 {
-                    await connection.SendAsync("LeaveCall", callId, username1);
+                    await connection.SendAsync("LeaveCall", callId, _groupdisplayname);
                 }
                 catch (Exception ex)
                 {
@@ -633,16 +621,7 @@ namespace QLUSER
                                 float targetAspectRatio = (float)targetWidth / targetHeight;
 
                                 int scaledWidth = targetWidth, scaledHeight = targetHeight;
-                                //if (originalAspectRatio > targetAspectRatio)
-                                {
-                                    //    scaledHeight = targetHeight;
-                                    //  scaledWidth = (int)(targetHeight * originalAspectRatio);
-                                }
-                                // else
-                                {
-                                    //scaledWidth = targetWidth;
-                                    //scaledHeight = (int)(targetWidth / originalAspectRatio);
-                                }
+
                                 Bitmap resizedImage = new Bitmap(scaledWidth, scaledHeight);
                                 using (Graphics g = Graphics.FromImage(resizedImage))
                                 {
@@ -673,7 +652,7 @@ namespace QLUSER
                                         if (connection.State == HubConnectionState.Connected)
                                         {
                                             byte[] frameData = ConvertFrameToByteArray(finalImage);
-                                            await connection.SendAsync("SendVideoFrame", callId, frameData, username1);
+                                            await connection.SendAsync("SendVideoFrame", callId, frameData, _groupdisplayname);
                                         }
 
                                     }
@@ -703,7 +682,7 @@ namespace QLUSER
                 if (connection.State != HubConnectionState.Connected)
                 {
                     await connection.StartAsync();
-                    await connection.SendAsync("JoinCall", callId, username1);
+                    await connection.SendAsync("JoinCall", callId, _groupdisplayname);
                 }
             }
             catch (Exception ex)

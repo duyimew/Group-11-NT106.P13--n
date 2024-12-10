@@ -1,4 +1,4 @@
-﻿using QLUSER.DTOs;
+﻿using chatclient.DTOs.Channel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -76,6 +76,87 @@ namespace QLUSER.Models
                 string message= responseData.message;
                 MessageBox.Show(message);
                 return (false,null);
+            }
+        }
+        public async Task<(bool issuccess, string channelname)> RequestoneChannelName(string channelid)
+        {
+            var onechannelname = new OneChannelNameDTO
+            {
+               channelid=channelid,
+            };
+            var json = JsonConvert.SerializeObject(onechannelname);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Channel/OneChannelname", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string channelname1 = responseData.channelname;
+                return (true, channelname1);
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return (false, null);
+            }
+        }
+        public async Task<bool> RenameChannel(string channelid,string newchannelname)
+        {
+            var RenameChannelRequest = new RenameChannelRequestDTO
+            {
+                newchannelName=newchannelname,
+                channelId = channelid
+            };
+            var json = JsonConvert.SerializeObject(RenameChannelRequest);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Channel/RenameChannel", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return true;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return false;
+            }
+        }
+        public async Task<bool> DeleteChannel(string channelid)
+        {
+            var DeleteChannelRequest = new DeleteChannelRequestDTO
+            {
+                ChannelId = channelid
+            };
+            var json = JsonConvert.SerializeObject(DeleteChannelRequest);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Channel/DeleteChannel", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return true;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return false;
             }
         }
     }

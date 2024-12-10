@@ -16,7 +16,7 @@ namespace QLUSER.Models
     internal class UserAvatar
     {
         
-        public async Task<string> UploadAvatarAsync(string filePath, string username)
+        public async Task<string> UploadAvatarAsync(string filePath, string userid)
         {
             try
             {
@@ -29,9 +29,9 @@ namespace QLUSER.Models
                         fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data"); 
                         content.Add(fileContent, "avatar", Path.GetFileName(filePath)); 
 
-                        content.Add(new StringContent(username), "username");
+                        content.Add(new StringContent(userid), "userid");
 
-                        string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}File/upload-avatar?username={username}";
+                        string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}File/upload-avatar?userid={userid}";
 
                         var response = await client.PostAsync(url, content);
 
@@ -97,13 +97,13 @@ namespace QLUSER.Models
                 return null;
             }
         }
-        public async Task<Image> LoadAvatarAsync(string username)
+        public async Task<Image> LoadAvatarAsync(string userid)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar"}?username={Uri.EscapeDataString(username)}";
+                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar"}?userid={Uri.EscapeDataString(userid)}";
                     var response = await client.GetAsync(new Uri(fullUrl));
 
                     if (response.IsSuccessStatusCode)

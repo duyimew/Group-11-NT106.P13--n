@@ -27,6 +27,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -60,6 +62,9 @@
     </Reference>
     <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
       <HintPath>..\packages\AForge.Video.DirectShow.2.2.5\lib\AForge.Video.DirectShow.dll</HintPath>
+    </Reference>
+    <Reference Include="ExCSS, Version=4.2.3.0, Culture=neutral, PublicKeyToken=bdbe16be9b936b9a, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExCSS.4.2.3\lib\netstandard2.0\ExCSS.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNetCore.Authentication.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Authentication.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.Abstractions.dll</HintPath>
@@ -200,6 +205,15 @@
       <HintPath>..\packages\Microsoft.Net.Http.Headers.2.2.0\lib\netstandard2.0\Microsoft.Net.Http.Headers.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.2903.40, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2903.40\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.2903.40, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2903.40\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.2903.40, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2903.40\lib\net462\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.7.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
@@ -226,6 +240,11 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Svg, Version=3.4.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Svg.3.4.7\lib\net472\Svg.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -330,6 +349,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -338,8 +358,16 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaiDatMayChu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaiDatMayChu.Designer.cs">
+      <DependentUpon>CaiDatMayChu.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dangky.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -352,23 +380,39 @@
     <Compile Include="Dangnhap.Designer.cs">
       <DependentUpon>Dangnhap.cs</DependentUpon>
     </Compile>
-    <Compile Include="DTOs\AddUserDTO.cs" />
-    <Compile Include="DTOs\DanhMucnameDTO.cs" />
-    <Compile Include="DTOs\ChannelnameDTO.cs" />
-    <Compile Include="DTOs\DangKyDTO.cs" />
-    <Compile Include="DTOs\DangNhapDTO.cs" />
-    <Compile Include="DTOs\DKDanhMucDTO.cs" />
-    <Compile Include="DTOs\DKChannelDTO.cs" />
-    <Compile Include="DTOs\DKGroupDTO.cs" />
-    <Compile Include="DTOs\GroupnameDTO.cs" />
-    <Compile Include="DTOs\InforuserDTO.cs" />
-    <Compile Include="DTOs\ReceivemessDTO.cs" />
-    <Compile Include="DTOs\RespondFriendRequestDTO.cs" />
-    <Compile Include="DTOs\savefileinfoDTO.cs" />
-    <Compile Include="DTOs\SendFriendRequestDTO.cs" />
-    <Compile Include="DTOs\SendMessDTO.cs" />
-    <Compile Include="DTOs\TDDangNhapDTO.cs" />
-    <Compile Include="DTOs\TokenDTO.cs" />
+    <Compile Include="DTOs\Channel\ChannelnameDTO.cs" />
+    <Compile Include="DTOs\Channel\DeleteChannelRequestDTO.cs" />
+    <Compile Include="DTOs\Channel\DKChannelDTO.cs" />
+    <Compile Include="DTOs\Channel\OneChannelNameDTO.cs" />
+    <Compile Include="DTOs\Channel\RenameChannelRequestDTO.cs" />
+    <Compile Include="DTOs\Danhmuc\DanhMucnameDTO.cs" />
+    <Compile Include="DTOs\Danhmuc\DeleteDanhmucRequestDTO.cs" />
+    <Compile Include="DTOs\Danhmuc\DKDanhMucDTO.cs" />
+    <Compile Include="DTOs\Danhmuc\OneDanhmucNameDTO.cs" />
+    <Compile Include="DTOs\Danhmuc\RenameDanhmucRequestDTO.cs" />
+    <Compile Include="DTOs\Friends\RespondFriendRequestDTO.cs" />
+    <Compile Include="DTOs\Friends\SendFriendRequestDTO.cs" />
+    <Compile Include="DTOs\Group\AddUserDTO.cs" />
+    <Compile Include="DTOs\Group\DeleteGroupMemberRequestDTO.cs" />
+    <Compile Include="DTOs\Group\DeleteGroupRequestDTO.cs" />
+    <Compile Include="DTOs\Group\DKGroupDTO.cs" />
+    <Compile Include="DTOs\Group\GroupnameDTO.cs" />
+    <Compile Include="DTOs\Group\OneGroupNameDTO.cs" />
+    <Compile Include="DTOs\Group\RenameGroupRequestDTO.cs" />
+    <Compile Include="DTOs\Message\DeleteMessageRequestDTO.cs" />
+    <Compile Include="DTOs\Message\EditMessageRequestDTO.cs" />
+    <Compile Include="DTOs\Message\OneMessageDTO.cs" />
+    <Compile Include="DTOs\Message\ReceivemessDTO.cs" />
+    <Compile Include="DTOs\Message\savefileinfoDTO.cs" />
+    <Compile Include="DTOs\Message\SearchMessageDTO.cs" />
+    <Compile Include="DTOs\Message\SendMessDTO.cs" />
+    <Compile Include="DTOs\User\DangKyDTO.cs" />
+    <Compile Include="DTOs\User\DangNhapDTO.cs" />
+    <Compile Include="DTOs\User\DeleteUserRequestDTO.cs" />
+    <Compile Include="DTOs\User\InforuserDTO.cs" />
+    <Compile Include="DTOs\User\TDDangNhapDTO.cs" />
+    <Compile Include="DTOs\User\TokenDTO.cs" />
+    <Compile Include="DTOs\User\UploadAvataDTO.cs" />
     <Compile Include="Formuser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -392,6 +436,7 @@
     <Compile Include="Models\CircularPicture.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Models\Emoji.cs" />
     <Compile Include="Models\file.cs" />
     <Compile Include="Models\Find.cs" />
     <Compile Include="Models\Group.cs" />
@@ -407,6 +452,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SearchMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchMessage.Designer.cs">
+      <DependentUpon>SearchMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="SearchUser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -419,6 +470,9 @@
     <Compile Include="VideoCall.Designer.cs">
       <DependentUpon>VideoCall.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CaiDatMayChu.resx">
+      <DependentUpon>CaiDatMayChu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dangky.resx">
       <DependentUpon>Dangky.cs</DependentUpon>
     </EmbeddedResource>
@@ -438,6 +492,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchMessage.resx">
+      <DependentUpon>SearchMessage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SearchUser.resx">
       <DependentUpon>SearchUser.cs</DependentUpon>
@@ -483,6 +540,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
+    <None Include="Resources\Icon-kinh-lup-don-gian-PNG.png" />
+    <None Include="Resources\1F60A_color.png" />
+    <None Include="Resources\271ceac1b418978b9096830a695e79e9.jpg" />
     <None Include="Resources\Upload-Icon-Logo-PNG-Clipart-Background.png" />
     <None Include="Resources\user-2517433_1280.png" />
     <None Include="Resources\379512_chat_icon.png" />
@@ -490,4 +550,11 @@
     <None Include="Resources\group-1824145_1280.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\Microsoft.Web.WebView2.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\Microsoft.Web.WebView2.targets'))" />
+  </Target>
 </Project>

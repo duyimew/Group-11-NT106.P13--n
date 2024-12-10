@@ -19,10 +19,10 @@ namespace chatapp.Controllers
             _friend= friend;
         }
 
-        [HttpGet("{username}")]
-        public async Task<IActionResult> List(string username)
+        [HttpGet("{userid}")]
+        public async Task<IActionResult> List(string userid)
         {
-            string[] result = await _friend.FriendListAsync(username);
+            string[] result = await _friend.FriendListAsync(userid);
             if (result[0] == "1")
             {
                 return Ok(new { message = result.Skip(1) });
@@ -33,10 +33,10 @@ namespace chatapp.Controllers
             }
         }
 
-        [HttpGet("Request/{username}")]
-        public async Task<IActionResult> ListSentRequest(string username)
+        [HttpGet("Request/{userid}")]
+        public async Task<IActionResult> ListSentRequest(string userid)
         {
-            string[] result = await _friend.ListSentRequest(username);
+            string[] result = await _friend.ListSentRequest(userid);
             if (result[0] == "1")
             {
                 return Ok(new { message = result.Skip(1) });

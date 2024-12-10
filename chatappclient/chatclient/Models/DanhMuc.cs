@@ -1,4 +1,5 @@
-﻿using QLUSER.DTOs;
+﻿using chatclient.DTOs.Channel;
+using chatclient.DTOs.Danhmuc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -71,6 +72,87 @@ namespace QLUSER.Models
                 string message= responseData.message;
                 MessageBox.Show(message);
                 return (false,null);
+            }
+        }
+        public async Task<(bool issuccess, string danhmucname)> RequestonedanhmucName(string danhmucid)
+        {
+            var OneDanhmucName = new OneDanhmucNameDTO
+            {
+                danhmucid = danhmucid,
+            };
+            var json = JsonConvert.SerializeObject(OneDanhmucName);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "DanhMuc/OneDanhmucname", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string danhmucname1 = responseData.danhmucname;
+                return (true, danhmucname1);
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return (false, null);
+            }
+        }
+        public async Task<bool> RenameChannel(string danhmucid, string newdanhmucname)
+        {
+            var RenameDanhmucRequest = new RenameDanhmucRequestDTO
+            {
+                newdanhmucname = newdanhmucname,
+                danhmucid = danhmucid,
+            };
+            var json = JsonConvert.SerializeObject(RenameDanhmucRequest);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "DanhMuc/RenameDanhmuc", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return true;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return false;
+            }
+        }
+        public async Task<bool> Deletedanhmuc(string danhmucid)
+        {
+            var DeleteDanhmucRequest = new DeleteDanhmucRequestDTO
+            {
+                danhmucid = danhmucid
+            };
+            var json = JsonConvert.SerializeObject(DeleteDanhmucRequest);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Channel/DeleteDanhmuc", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return true;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                MessageBox.Show(message);
+                return false;
             }
         }
     }

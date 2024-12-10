@@ -1,5 +1,4 @@
 ﻿using chatapp.DataAccess;
-using chatapp.DTOs;
 using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -13,7 +12,7 @@ namespace chatserver.HUB
         private static readonly Dictionary<string, List<string>> CallParticipants = new();
 
 
-        public async Task JoinGroup(string channelid, string username)
+        public async Task JoinGroup(string channelid, string groupdisplayname)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, channelid);
             if (!CallParticipants.ContainsKey(channelid))
@@ -21,17 +20,17 @@ namespace chatserver.HUB
                 CallParticipants[channelid] = new List<string>();
             }
             var participants = CallParticipants[channelid];
-            if (!participants.Contains(username))
+            if (!participants.Contains(groupdisplayname))
             {
-                participants.Add(username);
+                participants.Add(groupdisplayname);
             }
         }
 
-        public async Task LeaveGroup(string channelid, string username)
+        public async Task LeaveGroup(string channelid, string groupdisplayname)
         {
             if (CallParticipants.ContainsKey(channelid))
             {
-                CallParticipants[channelid].Remove(username);
+                CallParticipants[channelid].Remove(groupdisplayname);
                 if (CallParticipants[channelid].Count == 0)
                 {
                     CallParticipants.Remove(channelid);
@@ -40,10 +39,12 @@ namespace chatserver.HUB
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, channelid);
         }
 
-        public async Task SendMessage(string messageid,string username, string channelid, string message, string[] filenames)
+        public async Task SendMessage(string messageid,string groupdisplayname, string channelid, string message, string[] filenames)
         {
-            await Clients.Group(channelid).SendAsync("ReceiveMessage", messageid,message, username, filenames);
+            await Clients.Group(channelid).SendAsync("ReceiveMessage", messageid,message, groupdisplayname, filenames);
         }
+
+
         public async Task SendAvataUpdate(string url, string channelid)
         {
             await Clients.Others.SendAsync("ReceiveAvataUpdate", url);

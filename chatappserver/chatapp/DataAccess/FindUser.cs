@@ -25,9 +25,9 @@ namespace chatapp.DataAccess
                         result.Add("Kết nối tới database thất bại");
                         return result.ToArray();
                     }
-                    string strQuery = "SELECT Username FROM Users WHERE Username LIKE @username";
+                    string strQuery = "SELECT Displayname FROM Users WHERE Displayname LIKE @Displayname";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@username", $"%{userInfo[1]}%");
+                    command.Parameters.AddWithValue("@Displayname", $"%{userInfo[1]}%");
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
@@ -38,7 +38,7 @@ namespace chatapp.DataAccess
                         result.Add("1");
                         foreach (DataRow row in dataTable.Rows)
                         {
-                            result.Add(row["Username"].ToString());
+                            result.Add(row["Displayname"].ToString());
                         }
                     }
                     else

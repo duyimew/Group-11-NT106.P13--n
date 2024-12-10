@@ -11,9 +11,11 @@ namespace QLUSER.Models
         public static event Action AvatarUpdated;
         public static event Action AvatarGroupUpdated;
         public static event Action AvatarGroupCreated;
+        public static event Action UpdateGroupname;
         private static string _avatarUrl;
         private static string _avatargroupUrl;
         private static bool _createnew;
+        public static string _newgroupname;
 
         public static string AvatarUrl
         {
@@ -41,6 +43,18 @@ namespace QLUSER.Models
                         AvatarGroupUpdated?.Invoke();
                     }
                     else AvatarGroupCreated?.Invoke();
+                }
+            }
+        }
+        public static string RenameGroupname
+        {
+            get => _newgroupname;
+            set
+            {
+                if (_newgroupname != value)
+                {
+                    _newgroupname = value;
+                    UpdateGroupname?.Invoke();
                 }
             }
         }

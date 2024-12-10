@@ -2,8 +2,8 @@
 using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using chatapp.DTOs;
 using chatapp.DataAccess;
+using chatserver.DTOs.User;
 
 namespace chatapp.Controllers
 {

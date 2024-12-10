@@ -18,7 +18,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Threading;
 using System.Net.NetworkInformation;
-using QLUSER.DTOs;
+using chatclient.DTOs.User;
 using Newtonsoft.Json;
 using QLUSER.Models;
 using System.Configuration;
@@ -90,9 +90,16 @@ namespace QLUSER
                     var responseContent = await response.Content.ReadAsStringAsync();
                     var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                     string message = responseData.message;
+                    string userid= responseData.userid;
                     string filepath = find.find("user-2517433_1280.png");
-                    await avatar.UploadAvatarAsync(filepath, username);
+                    await avatar.UploadAvatarAsync(filepath, userid);
                     MessageBox.Show(message);
+                    tb_username.Clear();
+                    tb_pwd.Clear();
+                    tb_cfpwd.Clear();
+                    tb_email.Clear();
+                    tb_hoten.Clear();
+                    tb_ngsinh.Clear();
                 }
                 else
                 {

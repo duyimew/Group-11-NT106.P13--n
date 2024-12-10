@@ -1,6 +1,7 @@
-﻿using chatapp.DTOs;
+﻿
 using Newtonsoft.Json;
-using QLUSER.DTOs;
+using chatclient.DTOs.User;
+using chatclient.DTOs.Friends;
 using QLUSER.Models;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,14 @@ namespace QLUSER
 {
     public partial class SearchUser : Form
     {
-        private string _username;
-        public SearchUser(string username)
+        private string _displayname;
+        public SearchUser(string displayname)
         {
             InitializeComponent();
-            _username = username;
+            _displayname = displayname;
         }
 
-        private Panel UserRow(string userName)
+        private Panel UserRow(string displayname)
         {
             Panel userRow = new Panel {
                 Height = 30,
@@ -36,7 +37,7 @@ namespace QLUSER
             };
             Label username = new Label
             {
-                Text = userName,
+                Text = displayname,
                 Dock = DockStyle.Fill,
                 ForeColor = Color.White,
             };
@@ -45,8 +46,8 @@ namespace QLUSER
             {
                 var requestInfo = new SendFriendRequestDTO 
                 {
-                    sender = _username,
-                    receiver = userName
+                    sender = _displayname,
+                    receiver = displayname
                 };
                 var json = JsonConvert.SerializeObject(requestInfo);
                 var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -76,7 +77,7 @@ namespace QLUSER
         {
             var Username = new InforuserDTO
             {
-                Username = txtUser.Text ?? "",
+                displayname = txtUser.Text ?? "",
             };
             var json = JsonConvert.SerializeObject(Username);
             var content = new StringContent(json, Encoding.Unicode, "application/json");

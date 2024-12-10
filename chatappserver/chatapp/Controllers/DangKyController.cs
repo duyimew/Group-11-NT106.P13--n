@@ -2,8 +2,8 @@
 using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using chatapp.DTOs;
 using chatapp.DataAccess;
+using chatserver.DTOs.User;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -25,7 +25,7 @@ namespace chatapp.Controllers
             string[] registrationResult = await _dangky.DangkyUserAsync(userInfo);
             if (registrationResult[0] == "1")
             {
-                return Ok(new { message = "Đăng ký thành công" });
+                return Ok(new { message = "Đăng ký thành công", userid = registrationResult[1] });
             }
             else
             {

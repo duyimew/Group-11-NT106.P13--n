@@ -2,8 +2,8 @@
 using chatapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using chatapp.DTOs;
 using chatapp.DataAccess;
+using chatserver.DTOs.User;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -23,7 +23,7 @@ namespace chatapp.Controllers
         [HttpPost("InforUser")]
         public async Task<IActionResult> InforUser([FromBody] InforuserDTO request)
         {
-            string[] userInfo = { "", request.Username};
+            string[] userInfo = { "", request.displayname };
             string[] registrationResult = await _inforuser.InforUserAsync(userInfo);
             if (registrationResult[0] == "1")
             {
@@ -38,7 +38,7 @@ namespace chatapp.Controllers
         [HttpPost("FindUser")]
         public async Task<IActionResult> FindUser([FromBody] InforuserDTO request)
         {
-            string[] userName = { "", request.Username };
+            string[] userName = { "", request.displayname };
             string[] result = await _findUser.FindUserAsync(userName);
             if (result[0] == "1")
             {
@@ -52,15 +52,62 @@ namespace chatapp.Controllers
         [HttpPost("FindUserID")]
         public async Task<IActionResult> FindUserID([FromBody] InforuserDTO request)
         {
-            string[] userName = { "", request.Username };
-            string[] result = await _findUser.FindUserIDAsync(userName);
-            if (result[0] == "1")
+            try
             {
-                return Ok(new { message = result.Skip(1) });
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.Displayname == request.displayname);
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                int userid = user.UserId;
+
+                return Ok(new { userid = userid.ToString() });
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { message = result[0] });
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+        [HttpPost("FindDisplayname")]
+        public async Task<IActionResult> FindDisplayname([FromBody] InforuserDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                string displayname = user.Displayname;
+
+                return Ok(new { displayname = displayname });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+        [HttpPost("RenameDisplayname")]
+        public async Task<IActionResult> RenameDisplayname([FromBody] InforuserDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                user.Displayname = request.newdisplayname;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Rename displayname successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
     }

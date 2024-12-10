@@ -16,22 +16,31 @@ namespace QLUSER
     {
         UserAvatar avatar = new UserAvatar();
         Group group =new Group();
-        string username1="";
-        string usernametk1;
+        string gdpid;
+        string gdpidtk;
+        string gdpname1 = "";
+        string gdpnametk1;
         User user = new User();
-        public GroupUser(string username,string usernametk)
+        public GroupUser(string gdpname,string gdpnametk)
         {
             InitializeComponent();
-            username1 = username;
-            usernametk1 = usernametk;
+            gdpname1 = gdpname;
+            gdpnametk1 = gdpnametk;
+            if(gdpname != gdpnametk)
+            {
+                label3.Visible = true;
+                label4.Visible = true;
+            }
         }
 
         private async void GroupUser_Load(object sender, EventArgs e)
         {
-            circularPicture1.Image = await avatar.LoadAvatarAsync(username1);
+            gdpid = await group.FindGroupDisplayID(gdpname1);
+            gdpidtk = await group.FindGroupDisplayID(gdpnametk1);
+            circularPicture1.Image = await avatar.LoadAvatarAsync(gdpid);
             circularPicture1.SizeMode = PictureBoxSizeMode.Zoom;
             circularPicture1.Anchor = AnchorStyles.None;
-            label1.Text= username1;
+            label1.Text= gdpname1;
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -54,10 +63,8 @@ namespace QLUSER
         private async void label4_Click(object sender, EventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
-            string userid1 = await user.finduserid(username1);
-            string useridtk1 = await user.finduserid(usernametk1);
-            var result = await group.RequestGroupName(userid1);
-            var result1 = await group.RequestGroupName(useridtk1);
+            var result = await group.RequestGroupName(gdpid);
+            var result1 = await group.RequestGroupName(gdpidtk);
             string[] commonGroupNames = result.groupidname.Intersect(result1.groupidname).ToArray();
 
             for (int i = 0; i < commonGroupNames.Length; i++)

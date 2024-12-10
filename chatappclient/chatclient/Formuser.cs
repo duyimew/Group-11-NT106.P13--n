@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using QLUSER.DTOs;
+using chatclient.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,20 +26,21 @@ namespace QLUSER
     public partial class Formuser : Form
     {
         Dangnhap DN;
+        string userid;
         Find find = new Find();
-        string username1;
+        string _displayname;
         Token token = new Token();
         GiaoDien GD;
         file file1 = new file();
         UserAvatar avatar = new UserAvatar();
-        public Formuser(string username, Dangnhap dN, GiaoDien gd)
+        User _user = new User();
+        public Formuser(string displayname, Dangnhap dN, GiaoDien gd)
         {
             InitializeComponent();
-            username1 = username;
+            _displayname = displayname;
             DN = dN;
             GD = gd;
             UserSession.AvatarUpdated += UpdateAvatarDisplay;
-            UpdateAvatarDisplay();
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -51,8 +52,9 @@ namespace QLUSER
         {
             try
             {
-                string[] text = await get(username1);
-                lb_uname.Text = username1;
+                userid = await _user.finduserid(_displayname);
+                string[] text = await get(_displayname);
+                lb_uname.Text = _displayname;
                 lb_mail.Text = text[0];
                 lb_name.Text = text[1];
                 lb_bd.Text = text[2];
@@ -63,7 +65,7 @@ namespace QLUSER
                 MessageBox.Show("Lỗi không lấy được thông tin người dùng: " + ex.Message);
             }
             UserAvatar userAvatar = new UserAvatar();
-            Image avatarImage = await userAvatar.LoadAvatarAsync(username1);
+            Image avatarImage = await userAvatar.LoadAvatarAsync(userid);
 
             if (avatarImage != null)
             {
@@ -73,10 +75,10 @@ namespace QLUSER
         }
         private async void UpdateAvatarDisplay()
         {
-            circularPicture1.Image = await avatar.LoadAvatarAsync(username1);
+            circularPicture1.Image = await avatar.LoadAvatarAsync(userid);
         }
 
-        private async Task<string[]> get(string username)
+        private async Task<string[]> get(string displayname)
         {
             string[] text = new string[3];
             text[0] = "";
@@ -86,7 +88,7 @@ namespace QLUSER
             {
                 var InforUser = new InforuserDTO
                 {
-                    Username = username,
+                    displayname = displayname,
                 };
                 var json = JsonConvert.SerializeObject(InforUser);
                 var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -160,7 +162,7 @@ namespace QLUSER
 
                     if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        string avatarUrl = await avatar.UploadAvatarAsync(openFileDialog.FileName, lb_uname.Text);
+                        string avatarUrl = await avatar.UploadAvatarAsync(openFileDialog.FileName, userid);
 
                         if (avatarUrl != null)
                         {
@@ -187,5 +189,9 @@ namespace QLUSER
             thread.Start();
         }
 
+        private void circularPicture1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

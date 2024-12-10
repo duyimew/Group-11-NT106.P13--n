@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 using chatapp.Data;
 using chatapp.DataAccess;
-using chatapp.DTOs;
 using chatapp.Models;
+using chatserver.DTOs.Message;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -92,7 +92,7 @@ public class FileController : ControllerBase
 
     }
     [HttpPost("upload-avatar")]
-    public async Task<IActionResult> UploadAvatar(IFormFile avatar, string username)
+    public async Task<IActionResult> UploadAvatar(IFormFile avatar, string userid)
     {
         try
         {
@@ -104,14 +104,14 @@ public class FileController : ControllerBase
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(_containerName); // Sử dụng container dành riêng cho ảnh đại diện
 
             // Tạo tên blob độc nhất, có thể sử dụng userId để đảm bảo ảnh của mỗi người dùng là duy nhất
-            string blobName = $"{username}_avatar_{Path.GetExtension(avatar.FileName)}";
+            string blobName = $"{userid}_avatar_{Path.GetExtension(avatar.FileName)}";
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             using (var stream = avatar.OpenReadStream())
             {
                 await blobClient.UploadAsync(stream, true);
             }
             string avatarUrl = blobClient.Uri.ToString();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == int.Parse(userid));
             if (user != null)
             {
                 user.UserAva = avatarUrl;
@@ -158,9 +158,9 @@ public class FileController : ControllerBase
         }
     }
     [HttpGet("get-avatar")]
-    public async Task<IActionResult> GetAvatarUrl(string username)
+    public async Task<IActionResult> GetAvatarUrl(string userid)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == int.Parse(userid));
 
         if (user == null || string.IsNullOrEmpty(user.UserAva))
         {

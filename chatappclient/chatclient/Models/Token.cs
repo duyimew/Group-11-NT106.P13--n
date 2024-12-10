@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
-using QLUSER.DTOs;
+using chatclient.DTOs.User;
 namespace QLUSER.Models
 {
     internal class Token
@@ -19,7 +19,7 @@ namespace QLUSER.Models
         {
             var token = new TokenDTO
             {
-                Username = username,
+                Username=username,
             };
             var json = JsonConvert.SerializeObject(token);
             var content = new StringContent(json, Encoding.Unicode, "application/json");

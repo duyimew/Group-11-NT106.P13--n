@@ -14,7 +14,7 @@ using System.Data;
 using System.Drawing;
 using Newtonsoft.Json;
 using System.Net.NetworkInformation;
-using QLUSER.DTOs;
+using chatclient.DTOs.Message;
 using Newtonsoft.Json.Linq;
 using System.Net.Sockets;
 using System.Threading;
