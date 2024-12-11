@@ -1,4 +1,4 @@
-﻿namespace chatserver.DTOs.Group
+﻿namespace chatserver.DTOs.GroupMember
 {
     public class DeleteGroupMemberRequestDTO
     {

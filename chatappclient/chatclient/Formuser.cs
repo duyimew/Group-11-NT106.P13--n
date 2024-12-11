@@ -58,7 +58,12 @@ namespace QLUSER
                 lb_mail.Text = text[0];
                 lb_name.Text = text[1];
                 lb_bd.Text = text[2];
-
+                UserSession.AvatarGroupCreated +=  () => {
+                    if (this != null && !this.IsDisposed)
+                    {
+                        this.Close();
+                    }
+                };
             }
             catch (Exception ex)
             {
@@ -166,7 +171,7 @@ namespace QLUSER
 
                         if (avatarUrl != null)
                         {
-                            UserSession.AvatarUrl = avatarUrl;
+                            UserSession.AvatarUrl = true;
                             MessageBox.Show("Avatar uploaded successfully!");
                             circularPicture1.Invoke((MethodInvoker)(() =>
                             {

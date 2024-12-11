@@ -15,6 +15,7 @@ using System.Drawing.Imaging;
 using System.Threading;
 using System.Diagnostics.Tracing;
 using System.Runtime.InteropServices;
+using QLUSER.Models;
 
 namespace QLUSER
 {
@@ -57,7 +58,12 @@ namespace QLUSER
             InitializeSignalR();
             InitializeAudio();
             InitializeCamera();
-
+            UserSession.AvatarGroupCreated += () => {
+                if (this != null && !this.IsDisposed)
+                {
+                    this.Close();
+                }
+            };
         }
         private void SetPictureBoxLayout(int n)
         {

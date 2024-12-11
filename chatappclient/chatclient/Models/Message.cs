@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading.Channels;
 using chatclient.DTOs.Group;
+using chatclient.DTOs.Danhmuc;
 
 namespace QLUSER.Models
 {
@@ -165,14 +166,15 @@ namespace QLUSER.Models
                 {
                     var payload = new DeleteMessageRequestDTO
                     {
-                        messageid=messageid,
+                        messageid = messageid,
                     };
 
-                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Message/DeleteMessage";
+                    var request = new HttpRequestMessage(HttpMethod.Delete, $"{ConfigurationManager.AppSettings["ServerUrl"]}Message/DeleteMessage")
+                    {
+                        Content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json")
+                    };
 
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-
-                    var response = await client.PostAsync(url, jsonContent);
+                    var response = await client.SendAsync(request);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -185,14 +187,14 @@ namespace QLUSER.Models
                     else
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        MessageBox.Show("Failed to delete group: " + errorResponse);
                         return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error renaming group: " + ex.Message);
+                MessageBox.Show("Error deleting group: " + ex.Message);
                 return false;
             }
         }

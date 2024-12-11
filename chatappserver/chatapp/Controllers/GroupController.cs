@@ -6,6 +6,7 @@ using chatapp.DataAccess;
 using chatserver.DTOs.Group;
 using chatserver.DTOs.User;
 using chatserver.DTOs.Danhmuc;
+using System.Text.RegularExpressions;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -38,20 +39,7 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = registrationResult[0] });
             }
         }
-        [HttpPost("AddUser")]
-        public async Task<IActionResult> AddUser([FromBody] AddUserDTO request)
-        {
-            string[] userInfo = { "", request.UserID,request.GroupID,request.displayname };
-            string[] registrationResult = await _adduser.AddUserAsync(userInfo);
-            if (registrationResult[0] == "1")
-            {
-                return Ok(new { message = "Thêm người dùng thành công" });
-            }
-            else
-            {
-                return BadRequest(new { message = registrationResult[0] });
-            }
-        }
+
         [HttpPost("GroupName")]
         public async Task<IActionResult> GroupName([FromBody] GroupnameDTO request)
         {
@@ -91,7 +79,6 @@ namespace chatapp.Controllers
             }
         }
 
-
         [HttpPost("OneGroupname")]
         public async Task<IActionResult> OneGroupname([FromBody] OneGroupNameDTO request)
         {
@@ -112,46 +99,7 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
-        [HttpPost("FindGroupDisplayname")]
-        public async Task<IActionResult> FindGroupDisplayname([FromBody] InforuserDTO request)
-        {
-            try
-            {
-                var user = await _context.GroupMembers.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
-                if (user == null)
-                {
-                    return NotFound(new { message = "user not found." });
-                }
-
-                string groupdisplayname = user.GroupDisplayname;
-
-                return Ok(new { groupdisplayname = groupdisplayname });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = $"Error: {ex.Message}" });
-            }
-        }
-        [HttpPost("FindGroupDisplayID")]
-        public async Task<IActionResult> FindGroupDisplayID([FromBody] InforuserDTO request)
-        {
-            try
-            {
-                var user = await _context.GroupMembers.FirstOrDefaultAsync(g => g.GroupDisplayname == request.groupdisplayname);
-                if (user == null)
-                {
-                    return NotFound(new { message = "user not found." });
-                }
-
-                string groupdisplayid = user.UserId.ToString();
-
-                return Ok(new { groupdisplayid = groupdisplayid });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = $"Error: {ex.Message}" });
-            }
-        }
+        
         [HttpDelete("DeleteGroup")]
         public async Task<IActionResult> DeleteGroup([FromBody] DeleteGroupRequestDTO request)
         {
@@ -175,49 +123,7 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
-        [HttpDelete("DeleteGroupMember")]
-        public async Task<IActionResult> DeleteGroupMember([FromBody] DeleteGroupMemberRequestDTO request)
-        {
-            try
-            {
-                var groupmember = await _context.GroupMembers.FirstOrDefaultAsync(d => d.GroupId == int.Parse(request.groupid)&&d.UserId == int.Parse(request.userid));
-
-                if (groupmember == null)
-                {
-                    return NotFound(new { message = "groupmember not found." });
-                }
-
-                _context.GroupMembers.Remove(groupmember);
-
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "groupmember deleted successfully." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = $"Error: {ex.Message}" });
-            }
-        }
-        [HttpPost("RenamegroupDisplayname")]
-        public async Task<IActionResult> RenamegroupDisplayname([FromBody] InforuserDTO request)
-        {
-            try
-            {
-                var groupmember = await _context.GroupMembers.FirstOrDefaultAsync(d => d.GroupId == int.Parse(request.groupid) && d.UserId == int.Parse(request.UserId));
-                if (groupmember == null)
-                {
-                    return NotFound(new { message = "groupmember not found." });
-                }
-
-                groupmember.GroupDisplayname = request.newgroupdisplayname;
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Rename groupdisplayname successfully!" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = $"Error: {ex.Message}" });
-            }
-        }
+        
+        
     }
 }

@@ -13,7 +13,6 @@ namespace chatapp.Data
         public DbSet<Channel> Channels { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Friends> Friends { get; set; }
         public DbSet<FriendRequests> FriendRequests { get; set; }
         public DbSet<Danhmuc> danhmuc { get; set; }
@@ -21,7 +20,6 @@ namespace chatapp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GroupMember>().HasKey(gm => new { gm.GroupId, gm.UserId });
-            modelBuilder.Entity<UserRole>().HasIndex(ur => new { ur.UserId, ur.GroupId }).IsUnique();
             modelBuilder.Entity<Friends>().HasKey(gm => new {gm.UserId_1, gm.UserId_2});
             modelBuilder.Entity<FriendRequests>().HasKey(gm => new { gm.SenderId, gm.ReceiverId });
             
@@ -96,19 +94,6 @@ namespace chatapp.Data
                 .WithMany()
                 .HasForeignKey(fr => fr.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            // UserRole: Xóa User hoặc Group sẽ xóa luôn UserRole
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany()
-                .HasForeignKey(ur => ur.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Group)
-                .WithMany()
-                .HasForeignKey(ur => ur.GroupId)
-                .OnDelete(DeleteBehavior.Cascade);
 
         
         }

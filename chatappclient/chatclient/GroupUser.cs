@@ -1,4 +1,5 @@
-﻿using QLUSER.Models;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using QLUSER.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,15 +17,18 @@ namespace QLUSER
     {
         UserAvatar avatar = new UserAvatar();
         Group group =new Group();
+        GroupMember member = new GroupMember();
         string gdpid;
         string gdpidtk;
         string gdpname1 = "";
         string gdpnametk1;
+        string _groupid;
         User user = new User();
-        public GroupUser(string gdpname,string gdpnametk)
+        public GroupUser(string gdpname,string gdpnametk,string groupid)
         {
             InitializeComponent();
             gdpname1 = gdpname;
+            _groupid=groupid;
             gdpnametk1 = gdpnametk;
             if(gdpname != gdpnametk)
             {
@@ -35,12 +39,24 @@ namespace QLUSER
 
         private async void GroupUser_Load(object sender, EventArgs e)
         {
-            gdpid = await group.FindGroupDisplayID(gdpname1);
-            gdpidtk = await group.FindGroupDisplayID(gdpnametk1);
+            gdpid = await member.FindGroupDisplayID(_groupid,gdpname1);
+            gdpidtk = await member.FindGroupDisplayID(_groupid, gdpnametk1);
             circularPicture1.Image = await avatar.LoadAvatarAsync(gdpid);
+            UserSession.AvatarUpdated += UpdateAvatarDisplay;    
             circularPicture1.SizeMode = PictureBoxSizeMode.Zoom;
             circularPicture1.Anchor = AnchorStyles.None;
             label1.Text= gdpname1;
+            UserSession.AvatarGroupCreated += () => {
+                if (this != null && !this.IsDisposed)
+                {
+                    this.Close();
+                }
+            };
+        }
+        private async void UpdateAvatarDisplay()
+        {
+            circularPicture1.Image = await avatar.LoadAvatarAsync(gdpid);
+          
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -95,7 +111,11 @@ namespace QLUSER
 
                 // Create label for group name
                 Label label = new Label();
-                label.Text = commonGroupNames[i];
+                label.Text = groupid[1];
+                UserSession.UpdateGroupname += async () =>
+                {
+                    label.Text = await group.Groupname(groupid[0]);
+                };
                 label.TextAlign = ContentAlignment.MiddleLeft;  // Align label text to the left
 
                 // Create FlowLayoutPanel to hold the avatar and label
@@ -114,6 +134,9 @@ namespace QLUSER
             }
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
 
+        }
     }
 }

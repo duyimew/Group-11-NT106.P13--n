@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using chatapp.DataAccess;
 using chatserver.DTOs.User;
+using chatserver.DTOs.Channel;
+using chatserver.DTOs.GroupMember;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -36,7 +38,7 @@ namespace chatapp.Controllers
         }
 
         [HttpPost("FindUser")]
-        public async Task<IActionResult> FindUser([FromBody] InforuserDTO request)
+        public async Task<IActionResult> FindUser([FromBody] FindUserDTO request)
         {
             string[] userName = { "", request.displayname };
             string[] result = await _findUser.FindUserAsync(userName);
@@ -50,7 +52,7 @@ namespace chatapp.Controllers
             }
         }
         [HttpPost("FindUserID")]
-        public async Task<IActionResult> FindUserID([FromBody] InforuserDTO request)
+        public async Task<IActionResult> FindUserID([FromBody] FindUserIDDTO request)
         {
             try
             {
@@ -70,7 +72,7 @@ namespace chatapp.Controllers
             }
         }
         [HttpPost("FindDisplayname")]
-        public async Task<IActionResult> FindDisplayname([FromBody] InforuserDTO request)
+        public async Task<IActionResult> FindDisplayname([FromBody] FindDisplaynameDTO request)
         {
             try
             {
@@ -89,8 +91,28 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
+        [HttpPost("FindCreatetime")]
+        public async Task<IActionResult> FindCreatetime([FromBody] FindCreatetimeDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                DateTime TIME = user.CreatedAt;
+
+                return Ok(new { time = TIME });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
         [HttpPost("RenameDisplayname")]
-        public async Task<IActionResult> RenameDisplayname([FromBody] InforuserDTO request)
+        public async Task<IActionResult> RenameDisplayname([FromBody] RenameDisplaynameDTO request)
         {
             try
             {
@@ -104,6 +126,29 @@ namespace chatapp.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok(new { message = "Rename displayname successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+        [HttpDelete("DeleteUser")]
+        public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequestDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(d => d.UserId == int.Parse(request.userid));
+
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                _context.Users.Remove(user);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "user deleted successfully." });
             }
             catch (Exception ex)
             {

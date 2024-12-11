@@ -12,32 +12,34 @@ namespace QLUSER.Models
         public static event Action AvatarGroupUpdated;
         public static event Action AvatarGroupCreated;
         public static event Action UpdateGroupname;
-        private static string _avatarUrl;
-        private static string _avatargroupUrl;
+        public static event Action UpdateRole;
+        private static bool _avatarUrl;
+        private static bool _avatargroupUrl;
         private static bool _createnew;
-        public static string _newgroupname;
+        public static bool _newgroupname;
+        public static bool _newUserRole;
 
-        public static string AvatarUrl
+        public static bool AvatarUrl
         {
             get => _avatarUrl;
             set
             {
-                if (_avatarUrl != value)
+                _avatarUrl = value;
+                if (_avatarUrl)
                 {
-                    _avatarUrl = value;
                     AvatarUpdated?.Invoke(); 
                 }
             }
         }
-        public static (string url,bool status) AvatarGroupUrl
+        public static (bool url,bool status) AvatarGroupUrl
         {
             get => ( _avatargroupUrl, _createnew );
             set
             {
-                if (_avatargroupUrl != value.url)
+                _avatargroupUrl = value.url;
+                _createnew = value.status;
+                if (_avatargroupUrl)
                 {
-                    _avatargroupUrl = value.url;
-                    _createnew = value.status;
                     if (_createnew == false)
                     {
                         AvatarGroupUpdated?.Invoke();
@@ -46,15 +48,27 @@ namespace QLUSER.Models
                 }
             }
         }
-        public static string RenameGroupname
+        public static bool RenameGroupname
         {
             get => _newgroupname;
             set
             {
-                if (_newgroupname != value)
+                _newgroupname = value;
+                if (_newgroupname)
                 {
-                    _newgroupname = value;
                     UpdateGroupname?.Invoke();
+                }
+            }
+        }
+        public static bool UpdateUserRole
+        {
+            get => _newUserRole;
+            set
+            {
+                _newUserRole = value;
+                if (_newUserRole)
+                {
+                    UpdateRole?.Invoke();
                 }
             }
         }

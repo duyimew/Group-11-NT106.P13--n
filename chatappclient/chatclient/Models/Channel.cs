@@ -134,28 +134,41 @@ namespace QLUSER.Models
         }
         public async Task<bool> DeleteChannel(string channelid)
         {
-            var DeleteChannelRequest = new DeleteChannelRequestDTO
+            try
             {
-                ChannelId = channelid
-            };
-            var json = JsonConvert.SerializeObject(DeleteChannelRequest);
-            var content = new StringContent(json, Encoding.Unicode, "application/json");
-            HttpClient client = new HttpClient();
-            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Channel/DeleteChannel", content);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                string message = responseData.message;
-                MessageBox.Show(message);
-                return true;
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new DeleteChannelRequestDTO
+                    {
+                        ChannelId = channelid
+                    };
+
+                    var request = new HttpRequestMessage(HttpMethod.Delete, $"{ConfigurationManager.AppSettings["ServerUrl"]}Channel/DeleteChannel")
+                    {
+                        Content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json")
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to delete group: " + errorResponse);
+                        return false;
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
-                string message = responseData.message;
-                MessageBox.Show(message);
+                MessageBox.Show("Error deleting group: " + ex.Message);
                 return false;
             }
         }

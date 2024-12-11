@@ -12,7 +12,7 @@ using chatapp.Data;
 namespace chatserver.Migrations
 {
     [DbContext(typeof(ChatAppContext))]
-    [Migration("20241208063822_InitialCreate")]
+    [Migration("20241209125540_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -214,6 +214,9 @@ namespace chatserver.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("GroupId", "UserId");
 
                     b.HasIndex("UserId");
@@ -251,36 +254,6 @@ namespace chatserver.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("chatapp.Models.UserRole", b =>
-                {
-                    b.Property<int>("UserRoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserRoleId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserRoleId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId", "GroupId")
-                        .IsUnique();
-
-                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("chatapp.Models.Attachment", b =>
@@ -395,25 +368,6 @@ namespace chatserver.Migrations
                         .IsRequired();
 
                     b.Navigation("Channel");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("chatapp.Models.UserRole", b =>
-                {
-                    b.HasOne("chatapp.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
 
                     b.Navigation("User");
                 });

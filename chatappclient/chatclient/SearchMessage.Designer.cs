@@ -204,6 +204,7 @@
             this.Controls.Add(this.label1);
             this.Name = "SearchMessage";
             this.Text = "SearchMessage";
+            this.Load += new System.EventHandler(this.SearchMessage_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -40,38 +40,36 @@ namespace QLUSER
 {
     public partial class GiaoDien : Form
     {
-        string username1;
-        string displayname="";
-        string groupdisplayname="";
-        string userid1;
+        string _username;
+        string _dpname="";
+        string _gdpname="";
+        string _userid;
+        string _userrole;
+
         Dangnhap DN;
         Group group = new Group();
+        GroupMember _role = new GroupMember();
         Channel channel = new Channel();
         Models.Message message1 = new Models.Message();
         Models.User _user = new Models.User();
         file file1 = new file();
         Token token = new Token();
         Find find1 = new Find();
+        UserAvatar avatar = new UserAvatar();
+        DanhMuc danhmuc = new DanhMuc();
+        GroupMember groupMember= new GroupMember();
         private HashSet<string> displayedMessages = new HashSet<string>();
         private bool isReceivingMessages = true;
         private List<string> selectedFilePaths = new List<string>();
-        UserAvatar avatar = new UserAvatar();
         public HubConnection connection = null;
         private bool isstop = false;
         private bool isRecevie = false;
-        private TreeNode chatNode; // Khai báo biến toàn cục
-        private TreeNode videoNode; // Khai báo biến toàn cục
-        private Button createChatChannelButton; // Khai báo nút toàn cục
-        private Button createVideoChannelButton; // Khai báo nút toàn cục
-        private FlowLayoutPanel panelMenu; // Lưu tham chiếu đến menu
-        private bool isMenuVisible = false; // Trạng thái hiển thị menu
-        DanhMuc danhmuc = new DanhMuc();
-        private bool isFirstClick = true;
+        private FlowLayoutPanel panelMenu;
         public GiaoDien(string username,string userid, Dangnhap dn)
         {
             InitializeComponent();
-            username1 = username;
-            userid1 = userid;
+            _username = username;
+            _userid = userid;
             DN = dn;
             UserSession.AvatarUpdated += UpdateAvatarDisplay;
             UserSession.AvatarGroupCreated += UpdateGroupDislay;
@@ -81,7 +79,7 @@ namespace QLUSER
 
         private async void UpdateAvatarDisplay()
         {
-            cp_ProfilePic.Image = await avatar.LoadAvatarAsync(userid1);
+            cp_ProfilePic.Image = await avatar.LoadAvatarAsync(_userid);
             while (true)
             {
                 if (connection != null && connection.State == HubConnectionState.Connected)
@@ -96,10 +94,12 @@ namespace QLUSER
             flowLayoutPanel2.Controls.Clear();
             flowLayoutPanel2.AutoScrollPosition = new Point(0, 0);
             flowLayoutPanel2.AutoScroll = true;
-            var result = await group.RequestGroupName(userid1);
+            var result = await group.RequestGroupName(_userid);
             if (result.issuccess)
                 LoadGroup(result.groupidname);
             flowLayoutPanel2.PerformLayout();
+            tabControl1.SelectedIndex = 1;
+            ServerOrFriend.SelectedIndex = 0;
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -111,7 +111,7 @@ namespace QLUSER
         {
             if (connection != null)
                 await StopSignalR();
-            await token.GenerateToken(username1);
+            await token.GenerateToken(_username);
             DN.Close();
             Environment.Exit(0);
             this.Close();
@@ -158,12 +158,12 @@ namespace QLUSER
         }
         private async void GiaoDien_Load(object sender, EventArgs e)
         {
-            displayname = await _user.FindDisplayname(userid1);
-            var result = await group.RequestGroupName(userid1);
+            _dpname = await _user.FindDisplayname(_userid);
+            var result = await group.RequestGroupName(_userid);
             if (result.issuccess)
                 LoadGroup(result.groupidname);
             UserAvatar userAvatar = new UserAvatar();
-            Image avatarImage = await userAvatar.LoadAvatarAsync(userid1);
+            Image avatarImage = await userAvatar.LoadAvatarAsync(_userid);
 
             if (avatarImage != null)
             {
@@ -211,7 +211,7 @@ namespace QLUSER
                         {
                             if (connection != null && connection.State == HubConnectionState.Connected)
                             {
-                                await connection.SendAsync("LeaveGroup", label2.Name, groupdisplayname);
+                                await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
                                 break;
                             }
                         }
@@ -222,7 +222,6 @@ namespace QLUSER
                         flowLayoutPanel1.PerformLayout();
                         label2.Text = "";
                         label2.Name = "";
-                        groupdisplayname = await group.FindGroupDisplayname(userid1);
                         string selectedGroupName = circulargroup.Text;
                         label1.Text = selectedGroupName;
                         UserSession.UpdateGroupname += async () =>
@@ -233,6 +232,12 @@ namespace QLUSER
                         };
                         string[] groupid = circulargroup.Name.Split('|');
                         label1.Name = groupid[1];
+                        _userrole = await groupMember.FindOneUserRole(label1.Name, _userid);
+                        UserSession.UpdateRole += async () =>
+                        {
+                            _userrole = await groupMember.FindOneUserRole(label1.Name, _userid);
+                        };
+                        _gdpname = await groupMember.FindGroupDisplayname(_userid, label1.Name);
                         label6.Text = selectedGroupName;
                         label6.Name = groupid[1];
                         var result = await danhmuc.RequestDanhMucName(label1.Name);
@@ -338,7 +343,7 @@ namespace QLUSER
                 {
                     textBox1.Clear();
                     string[] filenames = selectedFilePaths.Select(Path.GetFileName).ToArray();
-                    var result = await file1.SendFileToServer(userid1, label2.Name, message, selectedFilePaths);
+                    var result = await file1.SendFileToServer(_userid, label2.Name, message, selectedFilePaths);
                     if (result.issuccess)
                     {
                         string[] messageid = result.messatid.Split('|');
@@ -346,7 +351,7 @@ namespace QLUSER
                         {
                             if (connection != null && connection.State == HubConnectionState.Connected)
                             {
-                                await connection.SendAsync("SendMessage", messageid[0], groupdisplayname, label2.Name, message, filenames);
+                                await connection.SendAsync("SendMessage", messageid[0], _gdpname, label2.Name, message, filenames);
                                 break;
                             }
                         }
@@ -356,14 +361,14 @@ namespace QLUSER
                 else if (!string.IsNullOrWhiteSpace(message))
                 {
                     textBox1.Clear();
-                    var result = await message1.SendMessage(label2.Name, userid1, message);
+                    var result = await message1.SendMessage(label2.Name, _userid, message);
                     if (result.issuccess)
                     {
                         while (true)
                         {
                             if (connection != null && connection.State == HubConnectionState.Connected)
                             {
-                                await connection.SendAsync("SendMessage", result.messageid, groupdisplayname, label2.Name, message, null);
+                                await connection.SendAsync("SendMessage", result.messageid, _gdpname, label2.Name, message, null);
                                 break;
                             }
                         }
@@ -375,7 +380,7 @@ namespace QLUSER
 
         private async Task AddMessageToChat(string messageid, string gdpname, string messageContent, string[] filename)
         {
-            string gdpid= await group.FindGroupDisplayID(gdpname);
+            string gdpid= await groupMember.FindGroupDisplayID(label1.Name,gdpname);
             Panel panelMessage = new Panel
             {
                 Width = flowLayoutPanel1.Width + 40,
@@ -588,7 +593,7 @@ namespace QLUSER
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Formuser formuser = new Formuser(displayname, DN, this);
+            Formuser formuser = new Formuser(_dpname, DN, this);
             formuser.Show();
         }
 
@@ -630,7 +635,7 @@ namespace QLUSER
                 { MessageBox.Show(ex.Message); }
 
             });
-            connection.On<string>("ReceiveAvataUpdate", async (url) =>
+            connection.On<bool>("ReceiveAvataUpdate", async (url) =>
             {
                 UserSession.AvatarUrl = url;
             });
@@ -659,7 +664,7 @@ namespace QLUSER
                 if (connection.State != HubConnectionState.Connected)
                 {
                     await connection.StartAsync();
-                    await connection.SendAsync("JoinGroup", label2.Name, groupdisplayname);
+                    await connection.SendAsync("JoinGroup", label2.Name, _gdpname);
                 }
             }
             catch (Exception ex)
@@ -673,7 +678,7 @@ namespace QLUSER
             {
                 try
                 {
-                    await connection.SendAsync("LeaveGroup", label2.Name, groupdisplayname);
+                    await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
                 }
                 catch (Exception ex)
                 {
@@ -709,7 +714,7 @@ namespace QLUSER
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("LeaveGroup", label2.Name, groupdisplayname);
+                            await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
                             break;
                         }
                     }
@@ -750,7 +755,7 @@ namespace QLUSER
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("JoinGroup", label2.Name, groupdisplayname);
+                            await connection.SendAsync("JoinGroup", label2.Name, _gdpname);
                             break;
                         }
                     }
@@ -761,11 +766,11 @@ namespace QLUSER
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("LeaveGroup", label2.Name, groupdisplayname);
+                            await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
                             break;
                         }
                     }
-                    VideoCall vc = new VideoCall(groupdisplayname, label2.Name);
+                    VideoCall vc = new VideoCall(_gdpname, label2.Name);
                     vc.Show();
                     displayedMessages.Clear();
                     flowLayoutPanel1.Controls.Clear();
@@ -804,7 +809,7 @@ namespace QLUSER
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("JoinGroup", label2.Name, groupdisplayname);
+                            await connection.SendAsync("JoinGroup", label2.Name, _gdpname);
                             break;
                         }
                     }
@@ -871,7 +876,7 @@ namespace QLUSER
         }
         private void Caidatmaychu(string groupname,string groupid)
         {
-            CaiDatMayChu maychu = new CaiDatMayChu(groupname, groupid,groupdisplayname);
+            CaiDatMayChu maychu = new CaiDatMayChu(groupname, groupid,_gdpname);
             maychu.Show();
         }
         private void MoiMoiNguoi(string group)
@@ -907,7 +912,7 @@ namespace QLUSER
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Lỗi khi sao chép: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        btnCopy.Click += BtnCopy_Click;
                     }
                 });
                 staThread.SetApartmentState(ApartmentState.STA);
@@ -923,6 +928,12 @@ namespace QLUSER
             form.Controls.Add(btnClose);
             form.ShowDialog();
         }
+
+        private void BtnCopy_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void circularadd_Click()
         {
             Form form = new Form();
@@ -1044,7 +1055,7 @@ namespace QLUSER
             tenmaychu.TextAlign = ContentAlignment.MiddleCenter;
 
             TextBox ten = new TextBox();
-            ten.Text = $"máy chủ của {displayname}";
+            ten.Text = $"máy chủ của {_dpname}";
             ten.Font = new Font("Arial", 12, FontStyle.Bold);
             ten.ForeColor = Color.Black;
             ten.Size = new Size(540, 30);
@@ -1063,7 +1074,7 @@ namespace QLUSER
                     var result = await group.SaveGroupToDatabase(ten.Text);
                     if (result.issuccess)
                     {
-                        var result1 = await group.AddMembersToGroup(userid1, result.groupid,displayname);
+                        var result1 = await _role.AddMembersToGroup(_userid, result.groupid,_dpname,"Owner");
                         if (result1)
                         {
                             var result2 = await danhmuc.SaveDanhMucToDatabase(result.groupid, "Chat");
@@ -1079,7 +1090,7 @@ namespace QLUSER
                             string avatargroupUrl = await avatar.UploadAvatarGroupAsync(imagepath, result.groupid);
                             if (avatargroupUrl != null)
                             {
-                                UserSession.AvatarGroupUrl = (avatargroupUrl, true);
+                                UserSession.AvatarGroupUrl = (true, true);
                                 MessageBox.Show("Avatar group uploaded successfully!");
                             }
                             else
@@ -1161,15 +1172,15 @@ namespace QLUSER
                 if (!string.IsNullOrEmpty(ten.Text))
                 {
 
-                    if (!string.IsNullOrEmpty(displayname))
+                    if (!string.IsNullOrEmpty(_dpname))
                     {
-                        bool add = await group.AddMembersToGroup(userid1, ten.Text,displayname);
+                        bool add = await _role.AddMembersToGroup(_userid, ten.Text,_dpname,"Member");
                         if (add)
                         {
                             string avatargroupUrl = await avatar.LoadGroupUrlAsync(ten.Text);
                             if (avatargroupUrl != null)
                             {
-                                UserSession.AvatarGroupUrl = (avatargroupUrl, true);
+                                UserSession.AvatarGroupUrl = (true, true);
                             }
                             form.Close();
                             form1.Close();
@@ -1304,7 +1315,7 @@ namespace QLUSER
                 if (!string.IsNullOrEmpty(ten.Text) && label1.Text != "")
                 {
 
-                    if (!string.IsNullOrEmpty(displayname))
+                    if (!string.IsNullOrEmpty(_dpname))
                     {
                         if (vanban.Checked == true)
                         {
@@ -1488,7 +1499,7 @@ namespace QLUSER
 
         private void btn_Ketban_Click(object sender, EventArgs e)
         {
-            SearchUser friend = new SearchUser(displayname);
+            SearchUser friend = new SearchUser(_dpname);
             friend.Show();
         }
 
@@ -1499,7 +1510,7 @@ namespace QLUSER
                 try
                 {
                     flpFriends.Controls.Clear();
-                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Request/{userid1}";
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Request/{_userid}";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
@@ -1530,7 +1541,10 @@ namespace QLUSER
                                     SizeMode = PictureBoxSizeMode.Zoom,
                                     Location = new Point(5, 5)
                                 };
-
+                                UserSession.AvatarUpdated += async () =>
+                                {
+                                    avatarBox.Image = await avatar.LoadAvatarAsync(userid);
+                                };
                                 Label usernameLabel = new Label
                                 {
                                     Text = Displayname,
@@ -1615,7 +1629,7 @@ namespace QLUSER
                     form.Close();
 
             };
-            string gdpid = await group.FindGroupDisplayID(gdpname);
+            string gdpid = await groupMember.FindGroupDisplayID(label1.Name,gdpname);
             CircularPicture userpicture = new CircularPicture();
             try
             {
@@ -1632,7 +1646,7 @@ namespace QLUSER
             userpicture.Anchor = AnchorStyles.None;
             userpicture.Click += async (s, e) =>
             {
-                GroupUser user = new GroupUser(gdpname, groupdisplayname);
+                GroupUser user = new GroupUser(gdpname, _gdpname,label1.Name);
                 user.Show();
             };
             UserSession.AvatarUpdated += async () =>
@@ -1651,7 +1665,7 @@ namespace QLUSER
             label.TextAlign = ContentAlignment.MiddleCenter;
 
             var result = await group.RequestGroupName(gdpid);
-            var result1 = await group.RequestGroupName(userid1);
+            var result1 = await group.RequestGroupName(_userid);
             string[] commongroupnames = result.groupidname.Intersect(result1.groupidname).ToArray();
             string[] commonGroupNames = commongroupnames.Take(3).ToArray();
             for (int i = 0; i < commonGroupNames.Length; i++)
@@ -1679,20 +1693,20 @@ namespace QLUSER
                 circulargroup.Anchor = AnchorStyles.None;
                 circulargroup.Click += async (s, e) =>
                 {
-                    GroupUser user = new GroupUser(gdpname, groupdisplayname);
+                    GroupUser user = new GroupUser(gdpname, _gdpname,label1.Name);
                     user.Show();
                 };
                 form.Controls.Add(circulargroup);
             }
 
-            Label label1 = new Label();
-            label1.Text = $"{commongroupnames.Length} Máy Chủ Chung";
-            label1.Font = new Font("Arial", 12, FontStyle.Bold);
-            label1.ForeColor = Color.Black;
-            label1.AutoSize = true;
-            label1.PerformLayout();
-            label1.Location = new Point(20 + commonGroupNames.Length * 30, 150);
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            Label label2 = new Label();
+            label2.Text = $"{commongroupnames.Length} Máy Chủ Chung";
+            label2.Font = new Font("Arial", 12, FontStyle.Bold);
+            label2.ForeColor = Color.Black;
+            label2.AutoSize = true;
+            label2.PerformLayout();
+            label2.Location = new Point(20 + commonGroupNames.Length * 30, 150);
+            label2.TextAlign = ContentAlignment.MiddleCenter;
 
             TextBox nhantin = new TextBox();
             nhantin.Text = "";
@@ -1730,15 +1744,15 @@ namespace QLUSER
             banbe.AutoSize = AutoSize;
             banbe.Click += (s, e) =>
             {
-                SearchUser user = new SearchUser(displayname);
+                SearchUser user = new SearchUser(_dpname);
                 user.Show();
             };
 
             form.Controls.Add(userpicture);
             form.Controls.Add(label);
-            if (groupdisplayname != gdpname)
+            if (_gdpname != gdpname)
             {
-                form.Controls.Add(label1);
+                form.Controls.Add(label2);
                 form.Controls.Add(nhantin);
                 form.Controls.Add(thongtin);
                 form.Controls.Add(banbe);
@@ -1771,7 +1785,7 @@ namespace QLUSER
             button.Location = new Point(20, 20);
             button.Click += (s1, e1) =>
             {
-                GroupUser user = new GroupUser(gdpname, groupdisplayname);
+                GroupUser user = new GroupUser(gdpname, _gdpname,label1.Name);
                 user.Show();
             };
             Button moivaomaychu = new Button();
@@ -1815,7 +1829,7 @@ namespace QLUSER
             form2.Controls.Add(flowLayoutPanel1);
 
             // Get group names from the server
-            var result = await group.RequestGroupName(userid1);
+            var result = await group.RequestGroupName(_userid);
             if (result.issuccess)
             {
                 for (int i = 0; i < result.groupidname.Length; i++)
@@ -1824,11 +1838,15 @@ namespace QLUSER
                     Button moivaogroup = new Button();
                     moivaogroup.Name = $"group|{group1[0]}";
                     moivaogroup.Text = group1[1];
+                    UserSession.UpdateGroupname += async () =>
+                    {
+                        moivaogroup.Text = await group.Groupname(group1[0]); 
+                    };
                     moivaogroup.Size = new Size(120, 30);  // Adjust the size of the buttons
                     moivaogroup.Click += async (s2, e2) =>
                     {
                         string displayname = await _user.FindDisplayname(gdpid);
-                        await group.AddMembersToGroup(gdpid, group1[0],displayname);
+                        await _role.AddMembersToGroup(gdpid, group1[0],displayname,"Member");
                     };
 
                     // Add the button to the FlowLayoutPanel

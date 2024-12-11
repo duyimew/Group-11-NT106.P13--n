@@ -44,35 +44,7 @@ namespace QLUSER.Models
                 return (false,null);
             }
         }
-        public async Task<bool> AddMembersToGroup(string userid, string groupid,string displayname)
-        {
-            var AddUser = new AddUserDTO
-            {
-                UserID= userid,
-                GroupID = groupid,
-                displayname = displayname
-            };
-            var json = JsonConvert.SerializeObject(AddUser);
-            var content = new StringContent(json, Encoding.Unicode, "application/json");
-            HttpClient client = new HttpClient();
-            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Group/AddUser", content);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                string message = responseData.message; 
-                MessageBox.Show(message);
-                return true;
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
-                string message = responseData.message;
-                MessageBox.Show(message);
-                return false;
-            }
-        }
+        
         public async Task<(bool issuccess, string[] groupidname)> RequestGroupName(string userid)
         {
             var Groupname = new GroupnameDTO
@@ -182,82 +154,10 @@ namespace QLUSER.Models
                 return null;
             }
         }
-        public async Task<string> FindGroupDisplayname(string userid)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    var payload = new InforuserDTO
-                    {
-                        UserId = userid,
-                    };
 
-                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Group/FindGroupDisplayname";
 
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
 
-                    var response = await client.PostAsync(url, jsonContent);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                        string groupdisplayname = responseData.groupdisplayname;
-                        return groupdisplayname;
-                    }
-                    else
-                    {
-                        var errorResponse = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Failed to rename group: " + errorResponse);
-                        return null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error renaming group: " + ex.Message);
-                return null;
-            }
-        }
-        public async Task<string> FindGroupDisplayID(string gdpname)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    var payload = new InforuserDTO
-                    {
-                        groupdisplayname = gdpname,
-                    };
-
-                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Group/FindGroupDisplayID";
-
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-
-                    var response = await client.PostAsync(url, jsonContent);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                        string groupdisplayid = responseData.groupdisplayid;
-                        return groupdisplayid;
-                    }
-                    else
-                    {
-                        var errorResponse = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Failed to rename group: " + errorResponse);
-                        return null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error renaming group: " + ex.Message);
-                return null;
-            }
-        }
         public async Task<bool> DeleteGroup(string groupid)
         {
             try
@@ -269,51 +169,12 @@ namespace QLUSER.Models
                         groupid = groupid
                     };
 
-                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Group/DeleteGroup";
-
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-
-                    var response = await client.PostAsync(url, jsonContent);
-
-                    if (response.IsSuccessStatusCode)
+                    var request = new HttpRequestMessage(HttpMethod.Delete, $"{ConfigurationManager.AppSettings["ServerUrl"]}Group/DeleteGroup")
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                        string message = responseData.message;
-                        MessageBox.Show(message);
-                        return true;
-                    }
-                    else
-                    {
-                        var errorResponse = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Failed to rename group: " + errorResponse);
-                        return false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error renaming group: " + ex.Message);
-                return false;
-            }
-        }
-        public async Task<bool> DeleteGroupMember(string userid, string groupid)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    var payload = new DeleteGroupMemberRequestDTO
-                    {
-                        userid = userid,
-                        groupid = groupid
+                        Content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json")
                     };
 
-                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Group/DeleteGroupMember";
-
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-
-                    var response = await client.PostAsync(url, jsonContent);
+                    var response = await client.SendAsync(request);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -326,57 +187,19 @@ namespace QLUSER.Models
                     else
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        MessageBox.Show("Failed to delete group: " + errorResponse);
                         return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error renaming group: " + ex.Message);
+                MessageBox.Show("Error deleting group: " + ex.Message);
                 return false;
             }
         }
-        public async Task<bool> RenameGroupDisplayname(string newgroupdisplayname, string groupid,string userid)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    var payload = new InforuserDTO
-                    {
-                        newgroupdisplayname = newgroupdisplayname,
-                        groupid=groupid,
-                        UserId=userid
-                    };
 
-                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}Group/RenamegroupDisplayname";
 
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
 
-                    var response = await client.PostAsync(url, jsonContent);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                        string message = responseData.message;
-                        MessageBox.Show(message);
-                        return true;
-                    }
-                    else
-                    {
-                        var errorResponse = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Failed to rename group: " + errorResponse);
-                        return false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error renaming group: " + ex.Message);
-                return false;
-            }
-        }
     }
 }

@@ -73,6 +73,7 @@
             this.Name = "SearchUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SearchUser";
+            this.Load += new System.EventHandler(this.SearchUser_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

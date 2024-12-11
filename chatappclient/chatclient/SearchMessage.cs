@@ -13,6 +13,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Configuration;
 using chatclient.DTOs.Message;
 using System.Web.UI.WebControls;
+using QLUSER.Models;
 namespace QLUSER
 {
     public partial class SearchMessage : Form
@@ -119,6 +120,16 @@ namespace QLUSER
             {
                 checkBox2.Checked = false;
             }
+        }
+
+        private void SearchMessage_Load(object sender, EventArgs e)
+        {
+            UserSession.AvatarGroupCreated += () => {
+                if (this != null && !this.IsDisposed)
+                {
+                    this.Close();
+                }
+            };
         }
     }
 }

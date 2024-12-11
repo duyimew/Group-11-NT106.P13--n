@@ -1,6 +1,6 @@
 ﻿namespace chatclient.DTOs.User
 {
-    public class InforuserDTO
+    public class FindUserIDDTO
     {
         public string displayname { get; set; }
     }

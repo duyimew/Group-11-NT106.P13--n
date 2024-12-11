@@ -1,4 +1,4 @@
-﻿namespace chatserver.DTOs.Group
+﻿namespace chatclient.DTOs.GroupMember
 {
     public class AddUserDTO
     {
@@ -6,6 +6,7 @@
 
         public string GroupID { get; set; }
         public string displayname { get; set; }
+        public string role { get; set; }
 
     }
 }

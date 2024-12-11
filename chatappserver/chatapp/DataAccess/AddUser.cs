@@ -23,12 +23,13 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string query = "INSERT INTO GroupMembers(GroupId,UserId,JoinedAt,GroupDisplayname) VALUES (@groupid,@userid,@joinedAt,@groupDisplayname)";
+                    string query = "INSERT INTO GroupMembers(GroupId,UserId,JoinedAt,GroupDisplayname,Role) VALUES (@groupid,@userid,@joinedAt,@groupDisplayname,@role)";
                     SqlCommand command1 = new SqlCommand(query, connectionDB);
                     command1.Parameters.AddWithValue("@groupid", userInfo[2]);
                     command1.Parameters.AddWithValue("@userid", userInfo[1]);
                     command1.Parameters.AddWithValue("@joinedAt", DateTime.Now);
                     command1.Parameters.AddWithValue("@groupDisplayname", userInfo[3]);
+                    command1.Parameters.AddWithValue("@role", userInfo[4]);
                     command1.ExecuteNonQuery();
                     result[0] = "1";
                     return result;

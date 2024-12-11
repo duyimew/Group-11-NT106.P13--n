@@ -100,5 +100,15 @@ namespace QLUSER
             }
 
         }
+
+        private void SearchUser_Load(object sender, EventArgs e)
+        {
+            UserSession.AvatarGroupCreated += () => {
+                if (this != null && !this.IsDisposed)
+                {
+                    this.Close();
+                }
+            };
+        }
     }
 }

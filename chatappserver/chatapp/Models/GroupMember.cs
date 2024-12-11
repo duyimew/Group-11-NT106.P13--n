@@ -11,5 +11,6 @@
         public DateTime JoinedAt { get; set; } = DateTime.Now;
 
         public string? GroupDisplayname { get; set; }
+        public string? Role { get; set; }
     }
 }
