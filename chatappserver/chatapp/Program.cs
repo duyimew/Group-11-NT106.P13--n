@@ -32,7 +32,7 @@ builder.Services.AddScoped<DKDanhMuc>();
 builder.Services.AddScoped<Danhmucname>();
 builder.Services.AddScoped<SearchMess>();
 builder.Services.AddScoped<RequestUserRole>();
-
+builder.Services.AddScoped<FindGroup>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

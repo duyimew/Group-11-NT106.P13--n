@@ -105,6 +105,32 @@ namespace QLUSER.Models
                 return null;
             }
         }
+        public async Task<string> FindUsername(string userid)
+        {
+            var Username = new FindUsernameDTO
+            {
+                UserId = userid
+            };
+            var json = JsonConvert.SerializeObject(Username);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "User/FindUsername", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                string username = responseData.username;
+                return username;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                return null;
+            }
+        }
         public async Task<string> FindCreatetime(string userid)
         {
             var Username = new FindCreatetimeDTO
@@ -161,6 +187,166 @@ namespace QLUSER.Models
                     };
 
                     string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}User/RenameDisplayname";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return false;
+            }
+        }
+        public async Task<bool> Renameusername(string newusernamename, string userid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new RenameUsernameDTO
+                    {
+                        newusername = newusernamename,
+                        UserId = userid
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}User/RenameUsername";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return false;
+            }
+        }
+        public async Task<bool> Renameten(string newten, string userid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new RenameTenDTO
+                    {
+                        newten = newten,
+                        UserId = userid
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}User/RenameTen";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return false;
+            }
+        }
+        public async Task<bool> Renamengaysinh(string newngaysinh, string userid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new RenameNgaySinhDTO
+                    {
+                        newngaysinh = newngaysinh,
+                        UserId = userid
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}User/RenameNgaySinh";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync(url, jsonContent);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        string message = responseData.message;
+                        MessageBox.Show(message);
+                        return true;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to rename group: " + errorResponse);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return false;
+            }
+        }
+        public async Task<bool> Renameemail(string newemail, string userid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var payload = new RenameEmailDTO
+                    {
+                        newemail = newemail,
+                        UserId = userid
+                    };
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}User/RenameEmail";
 
                     var jsonContent = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
 

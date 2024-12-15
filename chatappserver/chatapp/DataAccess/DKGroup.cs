@@ -6,9 +6,11 @@ namespace chatapp.DataAccess
     public class DKGroup
     {
         private readonly ConnectDB _connectDB;
-        public DKGroup(ConnectDB connectDB)
+        private readonly Token _token;
+        public DKGroup(ConnectDB connectDB,Token token)
         {
             _connectDB = connectDB;
+            _token = token;
         }
         public async Task<string[]> DangkyGroupAsync(string[] userInfo)
         {
@@ -23,12 +25,31 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string query = "INSERT INTO Groups (GroupName,CreatedAt) " +
+                    string Maloimoi;
+                    bool isUnique = false;
+
+                    do
+                    {
+                        Maloimoi = _token.GenerateRandomPassword(8);
+
+                        // Kiểm tra mã lời mời đã tồn tại hay chưa
+                        string checkQuery = "SELECT COUNT(1) FROM Groups WHERE MaLoiMoi = @maloimoi";
+                        SqlCommand checkCommand = new SqlCommand(checkQuery, connectionDB);
+                        checkCommand.Parameters.AddWithValue("@maloimoi", Maloimoi);
+
+                        int count = (int)await checkCommand.ExecuteScalarAsync();
+                        isUnique = count == 0; // Mã là duy nhất nếu không có kết quả nào
+                    }
+                    while (!isUnique);
+
+                    string query = "INSERT INTO Groups (GroupName,CreatedAt,Isprivate,MaLoiMoi) " +
                         "OUTPUT INSERTED.GroupId " +
-                        "VALUES (@GroupName,@CreatedAt)";
+                        "VALUES (@GroupName,@CreatedAt,@isprivate,@maloimoi)";
                     SqlCommand command = new SqlCommand(query, connectionDB);
                     command.Parameters.AddWithValue("@GroupName", userInfo[1]);
                     command.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
+                    command.Parameters.AddWithValue("@isprivate", int.Parse(userInfo[2]));
+                    command.Parameters.AddWithValue("@maloimoi", Maloimoi);
                     int insertedId = (int)command.ExecuteScalar();
                     result[0] = "1";
                     result[1] = insertedId.ToString();

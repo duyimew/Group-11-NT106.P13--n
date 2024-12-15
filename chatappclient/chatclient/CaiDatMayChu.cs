@@ -18,25 +18,45 @@ namespace QLUSER
 {
     public partial class CaiDatMayChu : Form
     {
+        GiaoDien _gd;
         string _groupdisplayname;
         string _groupid;
+        string _userid;
+        string _groupname;
         string[] usermemner;
         private List<(string Username, string UserId, string UserRole)> users = new List<(string, string, string)>();
         User _user = new User();
-        UserAvatar avatar = new UserAvatar();
-        Group group = new Group();
-        GroupMember _role = new GroupMember();
+        UserAvatar _avatar = new UserAvatar();
+        Group _group = new Group();
+        GroupMember _groupMember = new GroupMember();
         string chonvaitro = "";
-        public CaiDatMayChu(string groupname, string groupid, string groupdisplayname)
+        public CaiDatMayChu(string groupname, string groupid, string groupdisplayname,GiaoDien gd)
         {
             InitializeComponent();
+            _gd = gd;
             label1.Text = groupname;
             label1.Name = groupid;
+            textBox1.Text = groupname;
             _groupid = groupid;
             _groupdisplayname = groupdisplayname;
-            textBox1.Text = groupname;
+            _groupname = groupname;
+            UserSession.ActionUpdategdpname += Updategdpname;
+            UserSession.ActionUpdateGroupname += UpdateGroupname;
         }
 
+        
+
+        private async void Updategdpname()
+        {
+            _groupdisplayname = await _groupMember.FindGroupDisplayname(_userid,_groupid);
+        }
+        private async void UpdateGroupname()
+        {
+            string groupname = await _group.Groupname(_groupid);
+            label1.Text = groupname;
+            textBox1.Text = groupname;
+            _groupname = groupname;
+        }
         private void tabPage2_Click(object sender, EventArgs e)
         {
 
@@ -49,7 +69,7 @@ namespace QLUSER
         private async void button2_Click(object sender, EventArgs e)
         {
             tabControl1.SelectedIndex = 1;
-            string[] roles = await _role.FindUserRoleNameId(_groupid);
+            string[] roles = await _groupMember.FindUserRoleNameId(_groupid);
             if(roles!=null)
                 foreach (var role in roles)
             {
@@ -67,12 +87,23 @@ namespace QLUSER
             label20.Text = admins.Count.ToString();
             var owners = users.Where(user => user.UserRole.Equals("Owner", StringComparison.OrdinalIgnoreCase)).ToList();
             label22.Text = owners.Count.ToString();
-
+            UserSession.ActionUpdateGroupMember += () =>
+            {
+                button2_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionUpdateRole += () =>
+            {
+                button2_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionDeleteuser += () =>
+            {
+                button2_Click(null, EventArgs.Empty);
+            };
         }
         private async void button3_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
-            string[] roles = await _role.FindUserRoleNameId(_groupid);
+            string[] roles = await _groupMember.FindUserRoleNameId(_groupid);
             if (roles != null)
                 foreach (var role in roles)
                 {
@@ -85,11 +116,23 @@ namespace QLUSER
             foreach (var user in users)
             {
                 string createtime = await _user.FindCreatetime(user.UserId);
-                string jointime = await _role.FindJointime(user.UserId, _groupid);
+                string jointime = await _groupMember.FindJointime(user.UserId, _groupid);
                 ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {user.Username,jointime,createtime,user.UserRole}, -1);
                 listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {listViewItem1});
             }
             tabControl1.SelectedIndex = 2;
+            UserSession.ActionUpdateGroupMember += () =>
+            {
+                button3_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionUpdateRole += () =>
+            {
+                button3_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionDeleteuser += () =>
+            {
+                button3_Click(null, EventArgs.Empty);
+            };
         }
 
         private async void button5_Click(object sender, EventArgs e)
@@ -106,8 +149,9 @@ namespace QLUSER
             if (result == DialogResult.Yes)
             {
                 // Thực hiện xóa nhóm
-                await group.DeleteGroup(_groupid);
-                UserSession.AvatarGroupUrl = (true,true);
+                await _group.DeleteGroup(_groupid);
+                UserSession.UpdateGroup = (true, true);
+                _gd.SendUpdate("GroupDislay");
                 MessageBox.Show("Nhóm đã được xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
@@ -126,12 +170,17 @@ namespace QLUSER
 
         private async void CaiDatMayChu_Load(object sender, EventArgs e)
         {
-            circularPicture1.Image = await avatar.LoadAvatarGroupAsync(label1.Name);
-            circularPicture1.Text = label1.Text;
-            circularPicture1.Name = $"group|{label1.Name}";
-            UserSession.AvatarGroupUpdated += async () =>
+            _userid = await _groupMember.FindGroupDisplayID(_groupid,_groupdisplayname);
+            circularPicture1.Image = await _avatar.LoadAvatarGroupAsync(_groupid);
+            circularPicture1.Text = _groupname;
+            circularPicture1.Name = _groupid;
+            UserSession.ActionAvatarGroupUpdated += async () =>
             {
-                circularPicture1.Image = await avatar.LoadAvatarGroupAsync(label1.Name);
+                circularPicture1.Image = await _avatar.LoadAvatarGroupAsync(_groupid);
+            };
+            UserSession.ActionUpdateGroupname += async () =>
+            {
+                circularPicture1.Text = await _group.Groupname(_groupid);
             };
         }
         private void button6_Click(object sender, EventArgs e)
@@ -144,11 +193,12 @@ namespace QLUSER
 
                     if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        string avatarUrl = await avatar.UploadAvatarGroupAsync(openFileDialog.FileName, label1.Name);
+                        string avatarUrl = await _avatar.UploadAvatarGroupAsync(openFileDialog.FileName, _groupid);
 
                         if (avatarUrl != null)
                         {
-                            UserSession.AvatarGroupUrl = (true, false);
+                            UserSession.AvatarGroupUrl = true;
+                            _gd.SendUpdate("AvatarGroupUpdated");
                             MessageBox.Show("Avatar group uploaded successfully!");
                             circularPicture1.Invoke((MethodInvoker)(() =>
                             {
@@ -173,15 +223,17 @@ namespace QLUSER
 
         private async void button10_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text != label1.Text)
+            if (textBox1.Text != _groupname)
             {
                 string newgroupname = textBox1.Text;
-                var result = await group.RenameGroup(newgroupname, label1.Name);
+                var result = await _group.RenameGroup(newgroupname, label1.Name);
                 if (result)
                 {
                     UserSession.RenameGroupname = true;
-                    label1.Text = textBox1.Text;
-                    circularPicture1.Text = textBox1.Text;
+                    _gd.SendUpdate("UpdateGroupname");
+                    _groupname = newgroupname;
+                    label1.Text = newgroupname;
+                    circularPicture1.Text = newgroupname;
                 }
             }
         }
@@ -246,7 +298,7 @@ namespace QLUSER
             flowLayoutPanel.Padding = new System.Windows.Forms.Padding(10, 0, 10, 10);
             flowLayoutPanel.Size = new System.Drawing.Size(560, 150);
             flowLayoutPanel.WrapContents = false;
-            string[] groupdisplaynameid = await _role.FindUserRoleNameId(_groupid);
+            string[] groupdisplaynameid = await _groupMember.FindUserRoleNameId(_groupid);
             if (groupdisplaynameid != null)
                 foreach (var user in groupdisplaynameid)
             {
@@ -254,6 +306,10 @@ namespace QLUSER
                 CheckBox checkBox = new CheckBox();
                 checkBox.Checked = false;
                 checkBox.Text = $"{user1[1]}";
+                    UserSession.ActionUpdategdpname += async () =>
+                            {
+                                checkBox.Text = await _groupMember.FindGroupDisplayname(user1[0], _groupid);
+                            };
                 checkBox.Name = $"{user1[0]}";
                 checkBox.Font = new Font("Arial", 12, FontStyle.Bold);
                 checkBox.ForeColor = Color.Black;
@@ -273,7 +329,9 @@ namespace QLUSER
                 {
                     if (control is CheckBox checkBox && checkBox.Checked)
                     {
-                        _role.themrole(_groupid, checkBox.Name, chonvaitro);
+                        _groupMember.themrole(_groupid, checkBox.Name, chonvaitro);
+                        UserSession.UpdateUserRole = (true, true);
+                        _gd.SendUpdate("UpdateRole");
                         var index = users.FindIndex(user => user.UserId == checkBox.Name);
 
                         if (index != -1)
@@ -319,11 +377,11 @@ namespace QLUSER
                                     SizeMode = PictureBoxSizeMode.Zoom,
                                     Width = 25,
                                     Height = 25,
-                                    Image = await avatar.LoadAvatarAsync(user.UserId),
+                                    Image = await _avatar.LoadAvatarAsync(user.UserId),
                                 };
-                                UserSession.AvatarUpdated += async () =>
+                                UserSession.ActionAvatarUpdated += async () =>
                                 {
-                                    pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(user.UserId);
+                                    pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
                                 };
                                 panel.Controls.Add(pictureBoxAvatar);
 
@@ -334,6 +392,10 @@ namespace QLUSER
                                     ForeColor = Color.FromArgb(88, 101, 242),
                                     AutoSize = true,
                                     Left = pictureBoxAvatar.Right + 10
+                                };
+                                UserSession.ActionUpdategdpname += async () =>
+                                {
+                                    lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
                                 };
                                 panel.Controls.Add(lblUsername);
                                 Button xoa = new Button
@@ -353,7 +415,6 @@ namespace QLUSER
                                 flowLayoutPanel1.Controls.Add(panel);
                             }
                         }
-                        UserSession._newUserRole = true;
                     }
                 }
 
@@ -363,6 +424,10 @@ namespace QLUSER
             btnClose.Location = new Point(560 - btncreate.Width - btnClose.Width - 20, 320);
             btnClose.AutoSize = AutoSize;
             btnClose.Click += (s1, e1) =>
+            {
+                form.Close();
+            };
+            UserSession.ActionDeleteuser += () =>
             {
                 form.Close();
             };
@@ -415,11 +480,11 @@ namespace QLUSER
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Width = 25,
                         Height = 25,
-                        Image = await avatar.LoadAvatarAsync(user.UserId),
+                        Image = await _avatar.LoadAvatarAsync(user.UserId),
                     };
-                    UserSession.AvatarUpdated += async () =>
+                    UserSession.ActionAvatarUpdated += async () =>
                     {
-                        pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(user.UserId);
+                        pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
                     };
                     panel.Controls.Add(pictureBoxAvatar);
 
@@ -430,6 +495,10 @@ namespace QLUSER
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
                         Left = pictureBoxAvatar.Right + 10
+                    };
+                    UserSession.ActionUpdategdpname += async () =>
+                    {
+                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
                     };
                     panel.Controls.Add(lblUsername);
                     Button xoa = new Button
@@ -449,6 +518,18 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
+            UserSession.ActionUpdateGroupMember += () =>
+            {
+                label30_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionUpdateRole += () =>
+            {
+                label30_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionDeleteuser += () =>
+            {
+                label30_Click(null, EventArgs.Empty);
+            };
         }
 
         private async void label27_Click(object sender, EventArgs e)
@@ -491,11 +572,11 @@ namespace QLUSER
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Width = 25,
                         Height = 25,
-                        Image = await avatar.LoadAvatarAsync(user.UserId),
+                        Image = await _avatar.LoadAvatarAsync(user.UserId),
                     };
-                    UserSession.AvatarUpdated += async () =>
+                    UserSession.ActionAvatarUpdated += async () =>
                     {
-                        pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(user.UserId);
+                        pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
                     };
                     panel.Controls.Add(pictureBoxAvatar);
 
@@ -506,6 +587,10 @@ namespace QLUSER
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
                         Left = pictureBoxAvatar.Right + 10
+                    };
+                    UserSession.ActionUpdategdpname += async () =>
+                    {
+                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
                     };
                     panel.Controls.Add(lblUsername);
                     Button xoa = new Button
@@ -525,6 +610,18 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
+            UserSession.ActionUpdateGroupMember += () =>
+            {
+                label27_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionUpdateRole += () =>
+            {
+                label27_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionDeleteuser += () =>
+            {
+                label27_Click(null, EventArgs.Empty);
+            };
         }
 
         private void tabPage4_Click(object sender, EventArgs e)
@@ -572,11 +669,11 @@ namespace QLUSER
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Width = 25,
                         Height = 25,
-                        Image = await avatar.LoadAvatarAsync(user.UserId),
+                        Image = await _avatar.LoadAvatarAsync(user.UserId),
                     };
-                    UserSession.AvatarUpdated += async () =>
+                    UserSession.ActionAvatarUpdated += async () =>
                     {
-                        pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(user.UserId);
+                        pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
                     };
                     panel.Controls.Add(pictureBoxAvatar);
 
@@ -587,6 +684,10 @@ namespace QLUSER
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
                         Left = pictureBoxAvatar.Right + 10
+                    };
+                    UserSession.ActionUpdategdpname += async () =>
+                    {
+                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
                     };
                     panel.Controls.Add(lblUsername);
                     Button xoa = new Button
@@ -606,6 +707,18 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
+            UserSession.ActionUpdateGroupMember += () =>
+            {
+                label25_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionUpdateRole += () =>
+            {
+                label25_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionDeleteuser += () =>
+            {
+                label25_Click(null, EventArgs.Empty);
+            };
         }
 
         private async void label24_Click(object sender, EventArgs e)
@@ -648,11 +761,11 @@ namespace QLUSER
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Width = 25,
                         Height = 25,
-                        Image = await avatar.LoadAvatarAsync(user.UserId),
+                        Image = await _avatar.LoadAvatarAsync(user.UserId),
                     };
-                    UserSession.AvatarUpdated += async () =>
+                    UserSession.ActionAvatarUpdated += async () =>
                     {
-                        pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(user.UserId);
+                        pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
                     };
                     panel.Controls.Add(pictureBoxAvatar);
 
@@ -663,6 +776,10 @@ namespace QLUSER
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
                         Left = pictureBoxAvatar.Right + 10
+                    };
+                    UserSession.ActionUpdategdpname += async () =>
+                    {
+                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
                     };
                     panel.Controls.Add(lblUsername);
                     Button xoa = new Button
@@ -682,6 +799,18 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
+            UserSession.ActionUpdateGroupMember += () =>
+            {
+                label24_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionUpdateRole += () =>
+            {
+                label24_Click(null, EventArgs.Empty);
+            };
+            UserSession.ActionDeleteuser += () =>
+            {
+                label24_Click(null, EventArgs.Empty);
+            };
         }
 
         private async void label11_Click(object sender, EventArgs e)
@@ -726,14 +855,20 @@ namespace QLUSER
             label1.PerformLayout();
             label1.Location = new Point(20, 50);
             label1.TextAlign = ContentAlignment.MiddleCenter;
-
+            UserSession.ActionUpdategdpname += async () =>
+            {
+                string gdpname1 = await _groupMember.FindGroupDisplayname(userid,_groupid);
+                label1.Text = $"Xóa {gdpname1} khỏi vai trò {role}";
+            };
             Button btncreate = new Button();
             btncreate.Text = "Gỡ bỏ";
             btncreate.AutoSize = AutoSize;
             btncreate.Location = new Point(340 - btncreate.Width, 120);
             btncreate.Click += async (s, e) =>
             {
-                _role.Goborole(_groupid, userid);
+                _groupMember.Goborole(_groupid, userid);
+                UserSession.UpdateUserRole = (true, true);
+                _gd.SendUpdate("UpdateRole");
                 var index = users.FindIndex(user => user.UserId == userid);
 
                 if (index != -1)
@@ -779,11 +914,11 @@ namespace QLUSER
                             SizeMode = PictureBoxSizeMode.Zoom,
                             Width = 25,
                             Height = 25,
-                            Image = await avatar.LoadAvatarAsync(user.UserId),
+                            Image = await _avatar.LoadAvatarAsync(user.UserId),
                         };
-                        UserSession.AvatarUpdated += async () =>
+                        UserSession.ActionAvatarUpdated += async () =>
                         {
-                            pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(user.UserId);
+                            pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
                         };
                         panel.Controls.Add(pictureBoxAvatar);
 
@@ -794,6 +929,10 @@ namespace QLUSER
                             ForeColor = Color.FromArgb(88, 101, 242),
                             AutoSize = true,
                             Left = pictureBoxAvatar.Right + 10
+                        };
+                        UserSession.ActionUpdategdpname += async () =>
+                        {
+                            lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
                         };
                         panel.Controls.Add(lblUsername);
                         Button xoa = new Button
@@ -813,7 +952,6 @@ namespace QLUSER
                         flowLayoutPanel1.Controls.Add(panel);
                     }
                 }
-                UserSession._newUserRole = true;
             
             };
             Button btnClose = new Button();
@@ -821,6 +959,10 @@ namespace QLUSER
             btnClose.Location = new Point(340 - btncreate.Width - btnClose.Width - 20, 120);
             btnClose.AutoSize = AutoSize;
             btnClose.Click += (s, e) =>
+            {
+                form.Close();
+            };
+            UserSession.ActionDeleteuser += () =>
             {
                 form.Close();
             };
@@ -878,11 +1020,11 @@ namespace QLUSER
                         SizeMode = PictureBoxSizeMode.Zoom,
                         Width = 25,
                         Height = 25,
-                        Image = await avatar.LoadAvatarAsync(user.UserId),
+                        Image = await _avatar.LoadAvatarAsync(user.UserId),
                     };
-                    UserSession.AvatarUpdated += async () =>
+                    UserSession.ActionAvatarUpdated += async () =>
                     {
-                        pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(user.UserId);
+                        pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
                     };
                     panel.Controls.Add(pictureBoxAvatar);
 
@@ -893,6 +1035,10 @@ namespace QLUSER
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
                         Left = pictureBoxAvatar.Right + 10
+                    };
+                    UserSession.ActionUpdategdpname += async () =>
+                    {
+                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
                     };
                     panel.Controls.Add(lblUsername);
                     Button xoa = new Button
@@ -912,6 +1058,16 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
     }

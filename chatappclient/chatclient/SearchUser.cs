@@ -21,16 +21,21 @@ namespace QLUSER
 {
     public partial class SearchUser : Form
     {
+        GiaoDien _gd;
         private string _displayname;
-        public SearchUser(string displayname)
+        private string _userid;
+        User _user = new User();
+        public SearchUser(string displayname, GiaoDien gd)
         {
             InitializeComponent();
             _displayname = displayname;
+            _gd = gd;
         }
 
         private Panel UserRow(string displayname)
         {
-            Panel userRow = new Panel {
+            Panel userRow = new Panel
+            {
                 Height = 30,
                 Width = 360,
                 Dock = DockStyle.Top
@@ -44,28 +49,68 @@ namespace QLUSER
 
             username.DoubleClick += new EventHandler(async (obj, args) =>
             {
-                var requestInfo = new SendFriendRequestDTO 
-                {
-                    sender = _displayname,
-                    receiver = displayname
-                };
-                var json = JsonConvert.SerializeObject(requestInfo);
-                var content = new StringContent(json, Encoding.Unicode, "application/json");
                 HttpClient client = new HttpClient();
-                var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "Friend/Request", content);
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                    var message = responseData.message.ToString();
-                    MessageBox.Show(message);
+                    string serverUrl = ConfigurationManager.AppSettings["ServerUrl"];
+                    var senderData = new { displayname = _displayname };
+                    var senderJson = JsonConvert.SerializeObject(senderData);
+                    var senderContent = new StringContent(senderJson, Encoding.UTF8, "application/json");
+
+                    var findSenderResponse = await client.PostAsync(serverUrl + "User/FindUserID", senderContent);
+
+                    var receiverData = new { displayname = displayname };
+                    var receiverJson = JsonConvert.SerializeObject(receiverData);
+                    var receiverContent = new StringContent(receiverJson, Encoding.UTF8, "application/json");
+
+                    var findReceiverResponse = await client.PostAsync(serverUrl + "User/FindUserID", receiverContent);
+                    if (!findSenderResponse.IsSuccessStatusCode || !findReceiverResponse.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Không tìm thấy người dùng.");
+                        return;
+                    }
+                    var senderResponseContent = await findSenderResponse.Content.ReadAsStringAsync();
+                    var senderResponse = JsonConvert.DeserializeObject<dynamic>(senderResponseContent);
+
+                    var receiverResponseContent = await findReceiverResponse.Content.ReadAsStringAsync();
+                    var receiverResponse = JsonConvert.DeserializeObject<dynamic>(receiverResponseContent);
+
+                    int senderID = senderResponse.userid;
+                    int receiverID = receiverResponse.userid;
+
+                    if (senderID == receiverID)
+                    {
+                        MessageBox.Show("Không thể gửi yêu cầu kết bạn cho chính mình.");
+                        return;
+                    }
+
+                    var requestInfo = new SendFriendRequestDTO
+                    {
+                        senderID = senderID,
+                        receiverID = receiverID
+                    };
+
+                    var json = JsonConvert.SerializeObject(requestInfo);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync(serverUrl + "Friend/Request", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        _gd.SendUpdate("UpdateFriendRequest");
+                        MessageBox.Show(responseData.message.ToString());
+                    }
+                    else
+                    {
+                        var errorMessage = await response.Content.ReadAsStringAsync();
+                        var errorData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                        MessageBox.Show(errorData.message.ToString());
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    var errorMessage = await response.Content.ReadAsStringAsync();
-                    var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
-                    string message = responseData.message.ToString();
-                    MessageBox.Show(message);
+                    MessageBox.Show($"Error: {ex.Message}");
                 }
             });
 
@@ -75,6 +120,7 @@ namespace QLUSER
 
         private async void btnSearch_ClickAsync(object sender, EventArgs e)
         {
+            panelList.Controls.Clear();
             var Username = new InforuserDTO
             {
                 displayname = txtUser.Text ?? "",
@@ -101,9 +147,13 @@ namespace QLUSER
 
         }
 
-        private void SearchUser_Load(object sender, EventArgs e)
+        private async void SearchUser_Load(object sender, EventArgs e)
         {
-            UserSession.AvatarGroupCreated += () => {
+            _userid = await _user.finduserid(_displayname);
+            UserSession.ActionUpdatedpname += async () => {
+                _displayname = await _user.FindDisplayname(_userid);
+            };
+            UserSession.ActionUpdateGroup += () => {
                 if (this != null && !this.IsDisposed)
                 {
                     this.Close();

@@ -368,6 +368,12 @@
     <Compile Include="CaiDatMayChu.Designer.cs">
       <DependentUpon>CaiDatMayChu.cs</DependentUpon>
     </Compile>
+    <Compile Include="CaiDatNguoiDung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaiDatNguoiDung.Designer.cs">
+      <DependentUpon>CaiDatNguoiDung.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dangky.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,8 +404,12 @@
     <Compile Include="DTOs\GroupMember\OneUserRoleDTO.cs" />
     <Compile Include="DTOs\GroupMember\RenamegroupDisplaynameDTO.cs" />
     <Compile Include="DTOs\GroupMember\RenameRoleDTO.cs" />
+    <Compile Include="DTOs\Group\RemoveMemberFromGroupDTO.cs" />
     <Compile Include="DTOs\Group\DeleteGroupRequestDTO.cs" />
     <Compile Include="DTOs\Group\DKGroupDTO.cs" />
+    <Compile Include="DTOs\Group\FindGroupDTO.cs" />
+    <Compile Include="DTOs\Group\FindGroupIDDTO.cs" />
+    <Compile Include="DTOs\Group\FindMaLoiMoiDTO.cs" />
     <Compile Include="DTOs\Group\GroupnameDTO.cs" />
     <Compile Include="DTOs\Group\OneGroupNameDTO.cs" />
     <Compile Include="DTOs\Group\RenameGroupRequestDTO.cs" />
@@ -417,20 +427,19 @@
     <Compile Include="DTOs\User\DangNhapDTO.cs" />
     <Compile Include="DTOs\User\DeleteUserRequestDTO.cs" />
     <Compile Include="DTOs\User\FindCreatetimeDTO.cs" />
+    <Compile Include="DTOs\User\FindUsernameDTO.cs" />
     <Compile Include="DTOs\User\FindDisplaynameDTO.cs" />
     <Compile Include="DTOs\User\FindUserDTO.cs" />
     <Compile Include="DTOs\User\FindUserIDDTO.cs" />
     <Compile Include="DTOs\User\InforuserDTO.cs" />
     <Compile Include="DTOs\User\RenameDisplaynameDTO.cs" />
+    <Compile Include="DTOs\User\RenameEmailDTO.cs" />
+    <Compile Include="DTOs\User\RenameNgaySinhDTO.cs" />
+    <Compile Include="DTOs\User\RenameTenDTO.cs" />
+    <Compile Include="DTOs\User\RenameUsernameDTO.cs" />
     <Compile Include="DTOs\User\TDDangNhapDTO.cs" />
     <Compile Include="DTOs\User\TokenDTO.cs" />
     <Compile Include="DTOs\User\UploadAvataDTO.cs" />
-    <Compile Include="Formuser.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Formuser.Designer.cs">
-      <DependentUpon>Formuser.cs</DependentUpon>
-    </Compile>
     <Compile Include="GiaoDien.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -486,14 +495,14 @@
     <EmbeddedResource Include="CaiDatMayChu.resx">
       <DependentUpon>CaiDatMayChu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CaiDatNguoiDung.resx">
+      <DependentUpon>CaiDatNguoiDung.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dangky.resx">
       <DependentUpon>Dangky.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dangnhap.resx">
       <DependentUpon>Dangnhap.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Formuser.resx">
-      <DependentUpon>Formuser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GiaoDien.resx">
       <DependentUpon>GiaoDien.cs</DependentUpon>
@@ -562,6 +571,7 @@
     <None Include="Resources\add-icon-png-14.jpg" />
     <None Include="Resources\group-1824145_1280.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.2903.40\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

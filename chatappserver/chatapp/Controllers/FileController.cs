@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 [ApiController]
 public class FileController : ControllerBase
 {
-    private readonly string _connectionString = "DefaultEndpointsProtocol=https;AccountName=dbfilechat;AccountKey=2Ryv6N7JC8mZsBmXtyngkK+P3rNYuBjHLA7oyQDoTUrPykpS9urkknY9ZvQczMi1fxxNFrYLEahQ+AStJC6xCA==;EndpointSuffix=core.windows.net"; // Thay bằng connection string của bạn
+    private readonly string _connectionString = "DefaultEndpointsProtocol=https;AccountName=chatappstorageweb;AccountKey=MrzogoQ8DINJM1IPuVY+tBZS8zVxYqQgOfqTnqQ0bb3WmYN9APF9f9sy5neaFjxT18u0sgJ5glPH+AStromTGQ==;EndpointSuffix=core.windows.net"; // Thay bằng connection string của bạn
     private readonly string _containerName = "dbfile";
     private readonly ChatAppContext _context;
     private readonly savefileinfo _savefileinfo;

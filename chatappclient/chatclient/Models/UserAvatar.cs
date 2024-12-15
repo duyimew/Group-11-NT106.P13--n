@@ -131,6 +131,37 @@ namespace QLUSER.Models
                 return null;
             }
         }
+        public async Task<string> LoadUserUrlAsync(string userid)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string fullUrl = $"{ConfigurationManager.AppSettings["ServerUrl"] + "File/get-avatar"}?userid={Uri.EscapeDataString(userid)}";
+                    var response = await client.GetAsync(new Uri(fullUrl));
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                        string avatarUrl = responseData.avatarUrl;
+                        return avatarUrl;
+                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to load avatar: " + response.ReasonPhrase);
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading avatar: " + ex.Message);
+                return null;
+            }
+        }
         public async Task<Image> LoadAvatarGroupAsync(string groupid)
         {
             try

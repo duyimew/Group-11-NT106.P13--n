@@ -192,6 +192,12 @@ namespace chatserver.Migrations
                     b.Property<string>("GroupName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Isprivate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MaLoiMoi")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("GroupId");
 
                     b.ToTable("Groups");

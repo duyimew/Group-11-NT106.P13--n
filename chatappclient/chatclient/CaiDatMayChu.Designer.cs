@@ -37,6 +37,7 @@ namespace QLUSER
             this.label4 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
+            this.circularPicture1 = new QLUSER.Models.CircularPicture();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -83,9 +84,9 @@ namespace QLUSER
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.circularPicture1 = new QLUSER.Models.CircularPicture();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.circularPicture1)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -93,7 +94,6 @@ namespace QLUSER
             this.panel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.circularPicture1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -180,6 +180,18 @@ namespace QLUSER
             this.button6.Text = "Tải lên hình ảnh";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // circularPicture1
+            // 
+            this.circularPicture1.filepath = "";
+            this.circularPicture1.Location = new System.Drawing.Point(25, 90);
+            this.circularPicture1.Name = "circularPicture1";
+            this.circularPicture1.Size = new System.Drawing.Size(100, 100);
+            this.circularPicture1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.circularPicture1.TabIndex = 1;
+            this.circularPicture1.TabStop = false;
+            this.circularPicture1.TextColor = System.Drawing.Color.Black;
+            this.circularPicture1.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
             // 
             // label3
             // 
@@ -322,6 +334,7 @@ namespace QLUSER
             this.label8.Size = new System.Drawing.Size(57, 16);
             this.label8.TabIndex = 10;
             this.label8.Text = "Member";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // label11
             // 
@@ -602,6 +615,7 @@ namespace QLUSER
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(107, 20);
             this.label1.TabIndex = 0;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -653,17 +667,6 @@ namespace QLUSER
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
-            // circularPicture1
-            // 
-            this.circularPicture1.Location = new System.Drawing.Point(25, 90);
-            this.circularPicture1.Name = "circularPicture1";
-            this.circularPicture1.Size = new System.Drawing.Size(100, 100);
-            this.circularPicture1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.circularPicture1.TabIndex = 1;
-            this.circularPicture1.TabStop = false;
-            this.circularPicture1.TextColor = System.Drawing.Color.Black;
-            this.circularPicture1.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
-            // 
             // CaiDatMayChu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -682,6 +685,7 @@ namespace QLUSER
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.circularPicture1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
@@ -694,7 +698,6 @@ namespace QLUSER
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.circularPicture1)).EndInit();
             this.ResumeLayout(false);
 
         }

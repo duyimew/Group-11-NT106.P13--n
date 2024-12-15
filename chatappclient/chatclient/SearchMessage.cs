@@ -18,11 +18,13 @@ namespace QLUSER
 {
     public partial class SearchMessage : Form
     {
+        GiaoDien _gd;
         public string[] message;
         private string channelid1;
-        public SearchMessage(string channelid)
+        public SearchMessage(string channelid,GiaoDien gd)
         {
             InitializeComponent();
+            _gd= gd;
             channelid1 = channelid;
         }
 
@@ -124,7 +126,7 @@ namespace QLUSER
 
         private void SearchMessage_Load(object sender, EventArgs e)
         {
-            UserSession.AvatarGroupCreated += () => {
+            UserSession.ActionUpdateGroup += () => {
                 if (this != null && !this.IsDisposed)
                 {
                     this.Close();

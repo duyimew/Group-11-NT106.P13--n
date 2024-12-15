@@ -31,135 +31,141 @@ namespace QLUSER
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.cp_Menu = new QLUSER.Models.CircularPicture();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
+            this.P_Group_Friend = new System.Windows.Forms.Panel();
+            this.cp_MenuFriend = new QLUSER.Models.CircularPicture();
+            this.flp_Group = new System.Windows.Forms.FlowLayoutPanel();
+            this.P_Kenh_DanhMuc_User = new System.Windows.Forms.Panel();
+            this.P_TTinUser = new System.Windows.Forms.Panel();
             this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
-            this.button4 = new System.Windows.Forms.Button();
-            this.ServerOrFriend = new System.Windows.Forms.TabControl();
-            this.FriendsTab = new System.Windows.Forms.TabPage();
-            this.ServerTab = new System.Windows.Forms.TabPage();
-            this.panel12 = new System.Windows.Forms.Panel();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.label4 = new System.Windows.Forms.Label();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.panel11 = new System.Windows.Forms.Panel();
-            this.panel10 = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.button7 = new System.Windows.Forms.Button();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
-            this.chonanh = new System.Windows.Forms.Button();
-            this.panel9 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.chonfile = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.button8 = new System.Windows.Forms.Button();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.button6 = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel13 = new System.Windows.Forms.Panel();
-            this.flpFriends = new System.Windows.Forms.FlowLayoutPanel();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_CDuser = new System.Windows.Forms.Button();
+            this.TC_ServerOrFriend = new System.Windows.Forms.TabControl();
+            this.TP_FriendsTab = new System.Windows.Forms.TabPage();
+            this.flp_TinNhanTT = new System.Windows.Forms.FlowLayoutPanel();
+            this.lb_TinNhanTT = new System.Windows.Forms.Label();
+            this.btn_AddGroupPrivate = new System.Windows.Forms.Button();
+            this.btn_Banbe = new System.Windows.Forms.Button();
+            this.TP_ServerTab = new System.Windows.Forms.TabPage();
+            this.P_Kenh_DanhMuc = new System.Windows.Forms.Panel();
+            this.tv_Kenh_DanhMuc = new System.Windows.Forms.TreeView();
+            this.P_TenGroup = new System.Windows.Forms.Panel();
+            this.lb_TenGroup = new System.Windows.Forms.Label();
+            this.btn_MenuGroup = new System.Windows.Forms.Button();
+            this.TP_ServerTab1 = new System.Windows.Forms.TabPage();
+            this.P_Kenh_DanhMuc1 = new System.Windows.Forms.Panel();
+            this.P_TenGroup1 = new System.Windows.Forms.Panel();
+            this.lb_TenGroup1 = new System.Windows.Forms.Label();
+            this.btn_MenuGroup1 = new System.Windows.Forms.Button();
+            this.P_GuiMessage = new System.Windows.Forms.Panel();
+            this.btn_Emoji = new System.Windows.Forms.Button();
+            this.P_Gui = new System.Windows.Forms.Panel();
+            this.btn_Gui = new System.Windows.Forms.Button();
+            this.btn_ChonAnh = new System.Windows.Forms.Button();
+            this.P_Message = new System.Windows.Forms.Panel();
+            this.tb_Message = new System.Windows.Forms.TextBox();
+            this.btn_ChonFile = new System.Windows.Forms.Button();
+            this.lb_File_Anh = new System.Windows.Forms.Label();
+            this.flp_Message = new System.Windows.Forms.FlowLayoutPanel();
+            this.lb_TenKenh = new System.Windows.Forms.Label();
+            this.P_TenKenh = new System.Windows.Forms.Panel();
+            this.btn_SearchMessage = new System.Windows.Forms.Button();
+            this.P_Thoat = new System.Windows.Forms.Panel();
+            this.btn_Thoat = new System.Windows.Forms.Button();
+            this.TC_Chat = new System.Windows.Forms.TabControl();
+            this.TP_ChattingView = new System.Windows.Forms.TabPage();
+            this.TP_FriendRequestView = new System.Windows.Forms.TabPage();
+            this.btn_XemListFriend = new System.Windows.Forms.Button();
+            this.P_Friend = new System.Windows.Forms.Panel();
+            this.flp_Friends = new System.Windows.Forms.FlowLayoutPanel();
+            this.btn_XemLoiMoi = new System.Windows.Forms.Button();
             this.btn_Ketban = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).BeginInit();
-            this.panel2.SuspendLayout();
-            this.panel5.SuspendLayout();
+            this.P_Group_Friend.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).BeginInit();
+            this.P_Kenh_DanhMuc_User.SuspendLayout();
+            this.P_TTinUser.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
-            this.ServerOrFriend.SuspendLayout();
-            this.ServerTab.SuspendLayout();
-            this.panel12.SuspendLayout();
-            this.panel6.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            this.panel10.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel8.SuspendLayout();
-            this.panel9.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel7.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.panel13.SuspendLayout();
+            this.TC_ServerOrFriend.SuspendLayout();
+            this.TP_FriendsTab.SuspendLayout();
+            this.TP_ServerTab.SuspendLayout();
+            this.P_Kenh_DanhMuc.SuspendLayout();
+            this.P_TenGroup.SuspendLayout();
+            this.TP_ServerTab1.SuspendLayout();
+            this.P_TenGroup1.SuspendLayout();
+            this.P_GuiMessage.SuspendLayout();
+            this.P_Gui.SuspendLayout();
+            this.P_Message.SuspendLayout();
+            this.P_TenKenh.SuspendLayout();
+            this.P_Thoat.SuspendLayout();
+            this.TC_Chat.SuspendLayout();
+            this.TP_ChattingView.SuspendLayout();
+            this.TP_FriendRequestView.SuspendLayout();
+            this.P_Friend.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // P_Group_Friend
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
-            this.panel1.Controls.Add(this.cp_Menu);
-            this.panel1.Controls.Add(this.flowLayoutPanel2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(93, 474);
-            this.panel1.TabIndex = 0;
+            this.P_Group_Friend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(33)))), ((int)(((byte)(36)))));
+            this.P_Group_Friend.Controls.Add(this.cp_MenuFriend);
+            this.P_Group_Friend.Controls.Add(this.flp_Group);
+            this.P_Group_Friend.Dock = System.Windows.Forms.DockStyle.Left;
+            this.P_Group_Friend.Location = new System.Drawing.Point(0, 0);
+            this.P_Group_Friend.Name = "P_Group_Friend";
+            this.P_Group_Friend.Size = new System.Drawing.Size(93, 474);
+            this.P_Group_Friend.TabIndex = 0;
             // 
-            // cp_Menu
+            // cp_MenuFriend
             // 
-            this.cp_Menu.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
-            this.cp_Menu.Location = new System.Drawing.Point(23, 5);
-            this.cp_Menu.Margin = new System.Windows.Forms.Padding(2);
-            this.cp_Menu.Name = "cp_Menu";
-            this.cp_Menu.Size = new System.Drawing.Size(51, 53);
-            this.cp_Menu.TabIndex = 0;
-            this.cp_Menu.TabStop = false;
-            this.cp_Menu.TextColor = System.Drawing.Color.Black;
-            this.cp_Menu.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
-            this.cp_Menu.Click += new System.EventHandler(this.cp_Menu_Click);
+            this.cp_MenuFriend.filepath = "";
+            this.cp_MenuFriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
+            this.cp_MenuFriend.Location = new System.Drawing.Point(23, 5);
+            this.cp_MenuFriend.Margin = new System.Windows.Forms.Padding(2);
+            this.cp_MenuFriend.Name = "cp_MenuFriend";
+            this.cp_MenuFriend.Size = new System.Drawing.Size(51, 53);
+            this.cp_MenuFriend.TabIndex = 0;
+            this.cp_MenuFriend.TabStop = false;
+            this.cp_MenuFriend.TextColor = System.Drawing.Color.Black;
+            this.cp_MenuFriend.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
+            this.cp_MenuFriend.Click += new System.EventHandler(this.cp_Menu_Click);
             // 
-            // flowLayoutPanel2
+            // flp_Group
             // 
-            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.flp_Group.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.flowLayoutPanel2.AutoScroll = true;
-            this.flowLayoutPanel2.AutoScrollMinSize = new System.Drawing.Size(1, 1);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 63);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(93, 410);
-            this.flowLayoutPanel2.TabIndex = 7;
+            this.flp_Group.AutoScroll = true;
+            this.flp_Group.AutoScrollMinSize = new System.Drawing.Size(1, 1);
+            this.flp_Group.Location = new System.Drawing.Point(0, 63);
+            this.flp_Group.Name = "flp_Group";
+            this.flp_Group.Size = new System.Drawing.Size(93, 410);
+            this.flp_Group.TabIndex = 7;
             // 
-            // panel2
+            // P_Kenh_DanhMuc_User
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.P_Kenh_DanhMuc_User.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.panel2.Controls.Add(this.panel5);
-            this.panel2.Controls.Add(this.ServerOrFriend);
-            this.panel2.Location = new System.Drawing.Point(93, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(190, 474);
-            this.panel2.TabIndex = 6;
+            this.P_Kenh_DanhMuc_User.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
+            this.P_Kenh_DanhMuc_User.Controls.Add(this.P_TTinUser);
+            this.P_Kenh_DanhMuc_User.Controls.Add(this.TC_ServerOrFriend);
+            this.P_Kenh_DanhMuc_User.Location = new System.Drawing.Point(93, 0);
+            this.P_Kenh_DanhMuc_User.Name = "P_Kenh_DanhMuc_User";
+            this.P_Kenh_DanhMuc_User.Size = new System.Drawing.Size(190, 474);
+            this.P_Kenh_DanhMuc_User.TabIndex = 6;
             // 
-            // panel5
+            // P_TTinUser
             // 
-            this.panel5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.panel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.panel5.Controls.Add(this.cp_ProfilePic);
-            this.panel5.Controls.Add(this.button4);
-            this.panel5.Location = new System.Drawing.Point(0, 409);
-            this.panel5.Margin = new System.Windows.Forms.Padding(2);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(190, 65);
-            this.panel5.TabIndex = 9;
+            this.P_TTinUser.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.P_TTinUser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.P_TTinUser.Controls.Add(this.cp_ProfilePic);
+            this.P_TTinUser.Controls.Add(this.btn_CDuser);
+            this.P_TTinUser.Location = new System.Drawing.Point(0, 409);
+            this.P_TTinUser.Margin = new System.Windows.Forms.Padding(2);
+            this.P_TTinUser.Name = "P_TTinUser";
+            this.P_TTinUser.Size = new System.Drawing.Size(190, 65);
+            this.P_TTinUser.TabIndex = 9;
             // 
             // cp_ProfilePic
             // 
             this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
             this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cp_ProfilePic.filepath = "";
             this.cp_ProfilePic.ImageLocation = "";
             this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
             this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
@@ -170,466 +176,497 @@ namespace QLUSER
             this.cp_ProfilePic.TabStop = false;
             this.cp_ProfilePic.TextColor = System.Drawing.Color.Black;
             this.cp_ProfilePic.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
-            this.cp_ProfilePic.Click += new System.EventHandler(this.cp_ProfilePic_Click);
             // 
-            // button4
+            // btn_CDuser
             // 
-            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.button4.BackgroundImage = global::QLUSER.Properties.Resources.settings_24dp_5F6368_FILL0_wght400_GRAD0_opsz24;
-            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
-            this.button4.FlatAppearance.BorderSize = 0;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Location = new System.Drawing.Point(148, 18);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(35, 37);
-            this.button4.TabIndex = 5;
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.btn_CDuser.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.btn_CDuser.BackgroundImage = global::QLUSER.Properties.Resources.settings_24dp_5F6368_FILL0_wght400_GRAD0_opsz24;
+            this.btn_CDuser.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_CDuser.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_CDuser.FlatAppearance.BorderColor = System.Drawing.Color.IndianRed;
+            this.btn_CDuser.FlatAppearance.BorderSize = 0;
+            this.btn_CDuser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_CDuser.Location = new System.Drawing.Point(148, 18);
+            this.btn_CDuser.Name = "btn_CDuser";
+            this.btn_CDuser.Size = new System.Drawing.Size(35, 37);
+            this.btn_CDuser.TabIndex = 5;
+            this.btn_CDuser.UseVisualStyleBackColor = true;
+            this.btn_CDuser.Click += new System.EventHandler(this.button4_Click);
             // 
-            // ServerOrFriend
+            // TC_ServerOrFriend
             // 
-            this.ServerOrFriend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.TC_ServerOrFriend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.ServerOrFriend.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.ServerOrFriend.Controls.Add(this.FriendsTab);
-            this.ServerOrFriend.Controls.Add(this.ServerTab);
-            this.ServerOrFriend.Controls.Add(this.tabPage3);
-            this.ServerOrFriend.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.ServerOrFriend.ItemSize = new System.Drawing.Size(0, 1);
-            this.ServerOrFriend.Location = new System.Drawing.Point(-7, -7);
-            this.ServerOrFriend.Margin = new System.Windows.Forms.Padding(2);
-            this.ServerOrFriend.Name = "ServerOrFriend";
-            this.ServerOrFriend.SelectedIndex = 0;
-            this.ServerOrFriend.Size = new System.Drawing.Size(202, 428);
-            this.ServerOrFriend.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.ServerOrFriend.TabIndex = 0;
+            this.TC_ServerOrFriend.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.TC_ServerOrFriend.Controls.Add(this.TP_FriendsTab);
+            this.TC_ServerOrFriend.Controls.Add(this.TP_ServerTab);
+            this.TC_ServerOrFriend.Controls.Add(this.TP_ServerTab1);
+            this.TC_ServerOrFriend.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.TC_ServerOrFriend.ItemSize = new System.Drawing.Size(0, 1);
+            this.TC_ServerOrFriend.Location = new System.Drawing.Point(-7, -7);
+            this.TC_ServerOrFriend.Margin = new System.Windows.Forms.Padding(2);
+            this.TC_ServerOrFriend.Name = "TC_ServerOrFriend";
+            this.TC_ServerOrFriend.SelectedIndex = 0;
+            this.TC_ServerOrFriend.Size = new System.Drawing.Size(202, 428);
+            this.TC_ServerOrFriend.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.TC_ServerOrFriend.TabIndex = 0;
             // 
-            // FriendsTab
+            // TP_FriendsTab
             // 
-            this.FriendsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.FriendsTab.Location = new System.Drawing.Point(4, 5);
-            this.FriendsTab.Margin = new System.Windows.Forms.Padding(2);
-            this.FriendsTab.Name = "FriendsTab";
-            this.FriendsTab.Padding = new System.Windows.Forms.Padding(2);
-            this.FriendsTab.Size = new System.Drawing.Size(194, 419);
-            this.FriendsTab.TabIndex = 1;
-            this.FriendsTab.Text = "tabPage4";
+            this.TP_FriendsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
+            this.TP_FriendsTab.Controls.Add(this.flp_TinNhanTT);
+            this.TP_FriendsTab.Controls.Add(this.lb_TinNhanTT);
+            this.TP_FriendsTab.Controls.Add(this.btn_AddGroupPrivate);
+            this.TP_FriendsTab.Controls.Add(this.btn_Banbe);
+            this.TP_FriendsTab.Location = new System.Drawing.Point(4, 5);
+            this.TP_FriendsTab.Margin = new System.Windows.Forms.Padding(2);
+            this.TP_FriendsTab.Name = "TP_FriendsTab";
+            this.TP_FriendsTab.Padding = new System.Windows.Forms.Padding(2);
+            this.TP_FriendsTab.Size = new System.Drawing.Size(194, 419);
+            this.TP_FriendsTab.TabIndex = 1;
+            this.TP_FriendsTab.Text = "tabPage4";
             // 
-            // ServerTab
+            // flp_TinNhanTT
             // 
-            this.ServerTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.ServerTab.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ServerTab.Controls.Add(this.panel12);
-            this.ServerTab.Controls.Add(this.label4);
-            this.ServerTab.Controls.Add(this.panel6);
-            this.ServerTab.Controls.Add(this.label5);
-            this.ServerTab.Location = new System.Drawing.Point(4, 5);
-            this.ServerTab.Margin = new System.Windows.Forms.Padding(2);
-            this.ServerTab.Name = "ServerTab";
-            this.ServerTab.Padding = new System.Windows.Forms.Padding(2);
-            this.ServerTab.Size = new System.Drawing.Size(194, 419);
-            this.ServerTab.TabIndex = 0;
-            this.ServerTab.Click += new System.EventHandler(this.ServerTab_Click);
+            this.flp_TinNhanTT.AutoScroll = true;
+            this.flp_TinNhanTT.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flp_TinNhanTT.Location = new System.Drawing.Point(9, 113);
+            this.flp_TinNhanTT.Name = "flp_TinNhanTT";
+            this.flp_TinNhanTT.Padding = new System.Windows.Forms.Padding(10, 0, 0, 10);
+            this.flp_TinNhanTT.Size = new System.Drawing.Size(174, 285);
+            this.flp_TinNhanTT.TabIndex = 2;
+            this.flp_TinNhanTT.WrapContents = false;
+            this.flp_TinNhanTT.Paint += new System.Windows.Forms.PaintEventHandler(this.flp_TinNhanTT_Paint);
             // 
-            // panel12
+            // lb_TinNhanTT
             // 
-            this.panel12.Controls.Add(this.treeView1);
-            this.panel12.Location = new System.Drawing.Point(8, 53);
-            this.panel12.Margin = new System.Windows.Forms.Padding(2);
-            this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(179, 355);
-            this.panel12.TabIndex = 11;
+            this.lb_TinNhanTT.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_TinNhanTT.ForeColor = System.Drawing.Color.Transparent;
+            this.lb_TinNhanTT.Location = new System.Drawing.Point(17, 82);
+            this.lb_TinNhanTT.Name = "lb_TinNhanTT";
+            this.lb_TinNhanTT.Size = new System.Drawing.Size(135, 25);
+            this.lb_TinNhanTT.TabIndex = 1;
+            this.lb_TinNhanTT.Text = "Tin nhắn trực tiếp";
+            this.lb_TinNhanTT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // treeView1
+            // btn_AddGroupPrivate
             // 
-            this.treeView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.treeView1.ForeColor = System.Drawing.Color.White;
-            this.treeView1.Location = new System.Drawing.Point(2, 3);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(168, 324);
-            this.treeView1.TabIndex = 0;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.btn_AddGroupPrivate.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_AddGroupPrivate.Location = new System.Drawing.Point(158, 82);
+            this.btn_AddGroupPrivate.Name = "btn_AddGroupPrivate";
+            this.btn_AddGroupPrivate.Size = new System.Drawing.Size(25, 25);
+            this.btn_AddGroupPrivate.TabIndex = 0;
+            this.btn_AddGroupPrivate.Text = "+";
+            this.btn_AddGroupPrivate.UseVisualStyleBackColor = true;
+            this.btn_AddGroupPrivate.Click += new System.EventHandler(this.button10_Click_1);
             // 
-            // label4
+            // btn_Banbe
             // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(164, 53);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(13, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "+";
-            this.label4.Visible = false;
-            this.label4.Click += new System.EventHandler(this.label4_Click);
+            this.btn_Banbe.Location = new System.Drawing.Point(37, 26);
+            this.btn_Banbe.Name = "btn_Banbe";
+            this.btn_Banbe.Size = new System.Drawing.Size(120, 25);
+            this.btn_Banbe.TabIndex = 0;
+            this.btn_Banbe.Text = "Bạn bè";
+            this.btn_Banbe.UseVisualStyleBackColor = true;
+            this.btn_Banbe.Click += new System.EventHandler(this.btn_Banbe_Click);
             // 
-            // panel6
+            // TP_ServerTab
             // 
-            this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.panel6.Controls.Add(this.label1);
-            this.panel6.Controls.Add(this.button5);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(2, 2);
-            this.panel6.Margin = new System.Windows.Forms.Padding(2);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(190, 45);
-            this.panel6.TabIndex = 10;
+            this.TP_ServerTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
+            this.TP_ServerTab.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.TP_ServerTab.Controls.Add(this.P_Kenh_DanhMuc);
+            this.TP_ServerTab.Controls.Add(this.P_TenGroup);
+            this.TP_ServerTab.Location = new System.Drawing.Point(4, 5);
+            this.TP_ServerTab.Margin = new System.Windows.Forms.Padding(2);
+            this.TP_ServerTab.Name = "TP_ServerTab";
+            this.TP_ServerTab.Padding = new System.Windows.Forms.Padding(2);
+            this.TP_ServerTab.Size = new System.Drawing.Size(194, 419);
+            this.TP_ServerTab.TabIndex = 0;
             // 
-            // label1
+            // P_Kenh_DanhMuc
             // 
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(10, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(147, 23);
-            this.label1.TabIndex = 4;
+            this.P_Kenh_DanhMuc.Controls.Add(this.tv_Kenh_DanhMuc);
+            this.P_Kenh_DanhMuc.Location = new System.Drawing.Point(8, 53);
+            this.P_Kenh_DanhMuc.Margin = new System.Windows.Forms.Padding(2);
+            this.P_Kenh_DanhMuc.Name = "P_Kenh_DanhMuc";
+            this.P_Kenh_DanhMuc.Size = new System.Drawing.Size(179, 355);
+            this.P_Kenh_DanhMuc.TabIndex = 11;
             // 
-            // button5
+            // tv_Kenh_DanhMuc
             // 
-            this.button5.Location = new System.Drawing.Point(164, 9);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(25, 23);
-            this.button5.TabIndex = 11;
-            this.button5.Text = "v";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            this.tv_Kenh_DanhMuc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.tv_Kenh_DanhMuc.ForeColor = System.Drawing.Color.White;
+            this.tv_Kenh_DanhMuc.Location = new System.Drawing.Point(2, 3);
+            this.tv_Kenh_DanhMuc.Name = "tv_Kenh_DanhMuc";
+            this.tv_Kenh_DanhMuc.Size = new System.Drawing.Size(168, 324);
+            this.tv_Kenh_DanhMuc.TabIndex = 0;
+            this.tv_Kenh_DanhMuc.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
-            // label5
+            // P_TenGroup
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(164, 78);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(13, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "+";
-            this.label5.Visible = false;
+            this.P_TenGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.P_TenGroup.Controls.Add(this.lb_TenGroup);
+            this.P_TenGroup.Controls.Add(this.btn_MenuGroup);
+            this.P_TenGroup.Dock = System.Windows.Forms.DockStyle.Top;
+            this.P_TenGroup.Location = new System.Drawing.Point(2, 2);
+            this.P_TenGroup.Margin = new System.Windows.Forms.Padding(2);
+            this.P_TenGroup.Name = "P_TenGroup";
+            this.P_TenGroup.Size = new System.Drawing.Size(190, 45);
+            this.P_TenGroup.TabIndex = 10;
             // 
-            // tabPage3
+            // lb_TenGroup
             // 
-            this.tabPage3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.tabPage3.Controls.Add(this.panel11);
-            this.tabPage3.Controls.Add(this.panel10);
-            this.tabPage3.Location = new System.Drawing.Point(4, 5);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage3.Size = new System.Drawing.Size(194, 419);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
+            this.lb_TenGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.lb_TenGroup.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.lb_TenGroup.ForeColor = System.Drawing.Color.White;
+            this.lb_TenGroup.Location = new System.Drawing.Point(10, 9);
+            this.lb_TenGroup.Name = "lb_TenGroup";
+            this.lb_TenGroup.Size = new System.Drawing.Size(147, 23);
+            this.lb_TenGroup.TabIndex = 4;
             // 
-            // panel11
+            // btn_MenuGroup
             // 
-            this.panel11.Location = new System.Drawing.Point(6, 51);
-            this.panel11.Margin = new System.Windows.Forms.Padding(2);
-            this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(184, 357);
-            this.panel11.TabIndex = 12;
+            this.btn_MenuGroup.Location = new System.Drawing.Point(164, 9);
+            this.btn_MenuGroup.Name = "btn_MenuGroup";
+            this.btn_MenuGroup.Size = new System.Drawing.Size(25, 23);
+            this.btn_MenuGroup.TabIndex = 11;
+            this.btn_MenuGroup.Text = "v";
+            this.btn_MenuGroup.UseVisualStyleBackColor = true;
+            this.btn_MenuGroup.Click += new System.EventHandler(this.button5_Click_1);
             // 
-            // panel10
+            // TP_ServerTab1
             // 
-            this.panel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.panel10.Controls.Add(this.label6);
-            this.panel10.Controls.Add(this.button1);
-            this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel10.Location = new System.Drawing.Point(2, 2);
-            this.panel10.Margin = new System.Windows.Forms.Padding(2);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(190, 45);
-            this.panel10.TabIndex = 11;
+            this.TP_ServerTab1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
+            this.TP_ServerTab1.Controls.Add(this.P_Kenh_DanhMuc1);
+            this.TP_ServerTab1.Controls.Add(this.P_TenGroup1);
+            this.TP_ServerTab1.Location = new System.Drawing.Point(4, 5);
+            this.TP_ServerTab1.Margin = new System.Windows.Forms.Padding(2);
+            this.TP_ServerTab1.Name = "TP_ServerTab1";
+            this.TP_ServerTab1.Padding = new System.Windows.Forms.Padding(2);
+            this.TP_ServerTab1.Size = new System.Drawing.Size(194, 419);
+            this.TP_ServerTab1.TabIndex = 2;
+            this.TP_ServerTab1.Text = "tabPage3";
             // 
-            // label6
+            // P_Kenh_DanhMuc1
             // 
-            this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(10, 9);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(147, 23);
-            this.label6.TabIndex = 4;
+            this.P_Kenh_DanhMuc1.Location = new System.Drawing.Point(6, 51);
+            this.P_Kenh_DanhMuc1.Margin = new System.Windows.Forms.Padding(2);
+            this.P_Kenh_DanhMuc1.Name = "P_Kenh_DanhMuc1";
+            this.P_Kenh_DanhMuc1.Size = new System.Drawing.Size(184, 357);
+            this.P_Kenh_DanhMuc1.TabIndex = 12;
             // 
-            // button1
+            // P_TenGroup1
             // 
-            this.button1.Location = new System.Drawing.Point(164, 9);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(25, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "v";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.P_TenGroup1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.P_TenGroup1.Controls.Add(this.lb_TenGroup1);
+            this.P_TenGroup1.Controls.Add(this.btn_MenuGroup1);
+            this.P_TenGroup1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.P_TenGroup1.Location = new System.Drawing.Point(2, 2);
+            this.P_TenGroup1.Margin = new System.Windows.Forms.Padding(2);
+            this.P_TenGroup1.Name = "P_TenGroup1";
+            this.P_TenGroup1.Size = new System.Drawing.Size(190, 45);
+            this.P_TenGroup1.TabIndex = 11;
             // 
-            // panel3
+            // lb_TenGroup1
             // 
-            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
-            this.panel3.Controls.Add(this.button7);
-            this.panel3.Controls.Add(this.panel8);
-            this.panel3.Controls.Add(this.chonanh);
-            this.panel3.Controls.Add(this.panel9);
-            this.panel3.Controls.Add(this.chonfile);
-            this.panel3.Controls.Add(this.label3);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(2, 407);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(637, 75);
-            this.panel3.TabIndex = 8;
+            this.lb_TenGroup1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.lb_TenGroup1.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.lb_TenGroup1.ForeColor = System.Drawing.Color.White;
+            this.lb_TenGroup1.Location = new System.Drawing.Point(10, 9);
+            this.lb_TenGroup1.Name = "lb_TenGroup1";
+            this.lb_TenGroup1.Size = new System.Drawing.Size(147, 23);
+            this.lb_TenGroup1.TabIndex = 4;
             // 
-            // button7
+            // btn_MenuGroup1
             // 
-            this.button7.BackColor = System.Drawing.Color.Transparent;
-            this.button7.BackgroundImage = global::QLUSER.Properties.Resources._1F60A_color;
-            this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button7.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button7.FlatAppearance.BorderSize = 0;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Location = new System.Drawing.Point(496, 37);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(32, 30);
-            this.button7.TabIndex = 7;
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.btn_MenuGroup1.Location = new System.Drawing.Point(164, 9);
+            this.btn_MenuGroup1.Name = "btn_MenuGroup1";
+            this.btn_MenuGroup1.Size = new System.Drawing.Size(25, 23);
+            this.btn_MenuGroup1.TabIndex = 11;
+            this.btn_MenuGroup1.Text = "v";
+            this.btn_MenuGroup1.UseVisualStyleBackColor = true;
+            this.btn_MenuGroup1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // panel8
+            // P_GuiMessage
             // 
-            this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel8.Controls.Add(this.button3);
-            this.panel8.Location = new System.Drawing.Point(531, 37);
-            this.panel8.Margin = new System.Windows.Forms.Padding(2);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(104, 34);
-            this.panel8.TabIndex = 5;
+            this.P_GuiMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.P_GuiMessage.Controls.Add(this.btn_Emoji);
+            this.P_GuiMessage.Controls.Add(this.P_Gui);
+            this.P_GuiMessage.Controls.Add(this.btn_ChonAnh);
+            this.P_GuiMessage.Controls.Add(this.P_Message);
+            this.P_GuiMessage.Controls.Add(this.btn_ChonFile);
+            this.P_GuiMessage.Controls.Add(this.lb_File_Anh);
+            this.P_GuiMessage.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.P_GuiMessage.Location = new System.Drawing.Point(2, 407);
+            this.P_GuiMessage.Name = "P_GuiMessage";
+            this.P_GuiMessage.Size = new System.Drawing.Size(637, 75);
+            this.P_GuiMessage.TabIndex = 8;
             // 
-            // button3
+            // btn_Emoji
             // 
-            this.button3.BackColor = System.Drawing.Color.Gray;
-            this.button3.Location = new System.Drawing.Point(3, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(97, 30);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Gửi";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.bt_guitinnhan_Click);
+            this.btn_Emoji.BackColor = System.Drawing.Color.Transparent;
+            this.btn_Emoji.BackgroundImage = global::QLUSER.Properties.Resources._1F60A_color;
+            this.btn_Emoji.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Emoji.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_Emoji.FlatAppearance.BorderSize = 0;
+            this.btn_Emoji.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Emoji.Location = new System.Drawing.Point(496, 37);
+            this.btn_Emoji.Name = "btn_Emoji";
+            this.btn_Emoji.Size = new System.Drawing.Size(32, 30);
+            this.btn_Emoji.TabIndex = 7;
+            this.btn_Emoji.UseVisualStyleBackColor = false;
+            this.btn_Emoji.Click += new System.EventHandler(this.button7_Click);
             // 
-            // chonanh
+            // P_Gui
             // 
-            this.chonanh.BackColor = System.Drawing.Color.Transparent;
-            this.chonanh.BackgroundImage = global::QLUSER.Properties.Resources.photo_library_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24;
-            this.chonanh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.chonanh.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chonanh.FlatAppearance.BorderSize = 0;
-            this.chonanh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chonanh.Location = new System.Drawing.Point(18, 6);
-            this.chonanh.Name = "chonanh";
-            this.chonanh.Size = new System.Drawing.Size(32, 30);
-            this.chonanh.TabIndex = 4;
-            this.chonanh.UseVisualStyleBackColor = false;
-            this.chonanh.Click += new System.EventHandler(this.buttonchonanh_Click);
+            this.P_Gui.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.P_Gui.Controls.Add(this.btn_Gui);
+            this.P_Gui.Location = new System.Drawing.Point(531, 37);
+            this.P_Gui.Margin = new System.Windows.Forms.Padding(2);
+            this.P_Gui.Name = "P_Gui";
+            this.P_Gui.Size = new System.Drawing.Size(104, 34);
+            this.P_Gui.TabIndex = 5;
             // 
-            // panel9
+            // btn_Gui
             // 
-            this.panel9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btn_Gui.BackColor = System.Drawing.Color.Gray;
+            this.btn_Gui.Location = new System.Drawing.Point(3, 3);
+            this.btn_Gui.Name = "btn_Gui";
+            this.btn_Gui.Size = new System.Drawing.Size(97, 30);
+            this.btn_Gui.TabIndex = 1;
+            this.btn_Gui.Text = "Gửi";
+            this.btn_Gui.UseVisualStyleBackColor = false;
+            this.btn_Gui.Click += new System.EventHandler(this.bt_guitinnhan_Click);
+            // 
+            // btn_ChonAnh
+            // 
+            this.btn_ChonAnh.BackColor = System.Drawing.Color.Transparent;
+            this.btn_ChonAnh.BackgroundImage = global::QLUSER.Properties.Resources.photo_library_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24;
+            this.btn_ChonAnh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_ChonAnh.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_ChonAnh.FlatAppearance.BorderSize = 0;
+            this.btn_ChonAnh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ChonAnh.Location = new System.Drawing.Point(18, 6);
+            this.btn_ChonAnh.Name = "btn_ChonAnh";
+            this.btn_ChonAnh.Size = new System.Drawing.Size(32, 30);
+            this.btn_ChonAnh.TabIndex = 4;
+            this.btn_ChonAnh.UseVisualStyleBackColor = false;
+            this.btn_ChonAnh.Click += new System.EventHandler(this.buttonchonanh_Click);
+            // 
+            // P_Message
+            // 
+            this.P_Message.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel9.Controls.Add(this.textBox1);
-            this.panel9.Location = new System.Drawing.Point(58, 36);
-            this.panel9.Margin = new System.Windows.Forms.Padding(2);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(436, 32);
-            this.panel9.TabIndex = 6;
+            this.P_Message.Controls.Add(this.tb_Message);
+            this.P_Message.Location = new System.Drawing.Point(58, 36);
+            this.P_Message.Margin = new System.Windows.Forms.Padding(2);
+            this.P_Message.Name = "P_Message";
+            this.P_Message.Size = new System.Drawing.Size(436, 32);
+            this.P_Message.TabIndex = 6;
             // 
-            // textBox1
+            // tb_Message
             // 
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Font = new System.Drawing.Font("Segoe UI Emoji", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.Color.White;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.textBox1.Size = new System.Drawing.Size(436, 32);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.tb_Message.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
+            this.tb_Message.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tb_Message.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tb_Message.Font = new System.Drawing.Font("Segoe UI Emoji", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_Message.ForeColor = System.Drawing.Color.White;
+            this.tb_Message.Location = new System.Drawing.Point(0, 0);
+            this.tb_Message.Multiline = true;
+            this.tb_Message.Name = "tb_Message";
+            this.tb_Message.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.tb_Message.Size = new System.Drawing.Size(436, 32);
+            this.tb_Message.TabIndex = 0;
+            this.tb_Message.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
-            // chonfile
+            // btn_ChonFile
             // 
-            this.chonfile.BackColor = System.Drawing.Color.Transparent;
-            this.chonfile.BackgroundImage = global::QLUSER.Properties.Resources.attach_file_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24;
-            this.chonfile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.chonfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chonfile.FlatAppearance.BorderSize = 0;
-            this.chonfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chonfile.Location = new System.Drawing.Point(18, 41);
-            this.chonfile.Name = "chonfile";
-            this.chonfile.Size = new System.Drawing.Size(32, 30);
-            this.chonfile.TabIndex = 3;
-            this.chonfile.UseVisualStyleBackColor = false;
-            this.chonfile.Click += new System.EventHandler(this.buttonchonfile_Click);
+            this.btn_ChonFile.BackColor = System.Drawing.Color.Transparent;
+            this.btn_ChonFile.BackgroundImage = global::QLUSER.Properties.Resources.attach_file_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24;
+            this.btn_ChonFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_ChonFile.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_ChonFile.FlatAppearance.BorderSize = 0;
+            this.btn_ChonFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ChonFile.Location = new System.Drawing.Point(18, 41);
+            this.btn_ChonFile.Name = "btn_ChonFile";
+            this.btn_ChonFile.Size = new System.Drawing.Size(32, 30);
+            this.btn_ChonFile.TabIndex = 3;
+            this.btn_ChonFile.UseVisualStyleBackColor = false;
+            this.btn_ChonFile.Click += new System.EventHandler(this.buttonchonfile_Click);
             // 
-            // label3
+            // lb_File_Anh
             // 
-            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
-            this.label3.Location = new System.Drawing.Point(56, 6);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(408, 29);
-            this.label3.TabIndex = 2;
+            this.lb_File_Anh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.lb_File_Anh.Location = new System.Drawing.Point(56, 6);
+            this.lb_File_Anh.Name = "lb_File_Anh";
+            this.lb_File_Anh.Size = new System.Drawing.Size(408, 29);
+            this.lb_File_Anh.TabIndex = 2;
             // 
-            // flowLayoutPanel1
+            // flp_Message
             // 
-            this.flowLayoutPanel1.AutoScroll = true;
-            this.flowLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(2, 53);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 10);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(637, 357);
-            this.flowLayoutPanel1.TabIndex = 7;
-            this.flowLayoutPanel1.WrapContents = false;
+            this.flp_Message.AutoScroll = true;
+            this.flp_Message.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.flp_Message.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flp_Message.Location = new System.Drawing.Point(2, 53);
+            this.flp_Message.Name = "flp_Message";
+            this.flp_Message.Padding = new System.Windows.Forms.Padding(10, 0, 10, 10);
+            this.flp_Message.Size = new System.Drawing.Size(637, 357);
+            this.flp_Message.TabIndex = 7;
+            this.flp_Message.WrapContents = false;
             // 
-            // label2
+            // lb_TenKenh
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(82, 10);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(400, 30);
-            this.label2.TabIndex = 3;
+            this.lb_TenKenh.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_TenKenh.ForeColor = System.Drawing.Color.White;
+            this.lb_TenKenh.Location = new System.Drawing.Point(82, 10);
+            this.lb_TenKenh.Name = "lb_TenKenh";
+            this.lb_TenKenh.Size = new System.Drawing.Size(400, 30);
+            this.lb_TenKenh.TabIndex = 3;
             // 
-            // panel4
+            // P_TenKenh
             // 
-            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
-            this.panel4.Controls.Add(this.button8);
-            this.panel4.Controls.Add(this.panel7);
-            this.panel4.Controls.Add(this.label2);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(2, 2);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(637, 51);
-            this.panel4.TabIndex = 0;
+            this.P_TenKenh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.P_TenKenh.Controls.Add(this.btn_SearchMessage);
+            this.P_TenKenh.Controls.Add(this.P_Thoat);
+            this.P_TenKenh.Controls.Add(this.lb_TenKenh);
+            this.P_TenKenh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.P_TenKenh.Location = new System.Drawing.Point(2, 2);
+            this.P_TenKenh.Name = "P_TenKenh";
+            this.P_TenKenh.Size = new System.Drawing.Size(637, 51);
+            this.P_TenKenh.TabIndex = 0;
             // 
-            // button8
+            // btn_SearchMessage
             // 
-            this.button8.BackColor = System.Drawing.Color.Transparent;
-            this.button8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button8.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.button8.Location = new System.Drawing.Point(483, 10);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(32, 30);
-            this.button8.TabIndex = 8;
-            this.button8.Text = "🔎";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.btn_SearchMessage.BackColor = System.Drawing.Color.Transparent;
+            this.btn_SearchMessage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_SearchMessage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_SearchMessage.FlatAppearance.BorderSize = 0;
+            this.btn_SearchMessage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_SearchMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_SearchMessage.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_SearchMessage.Location = new System.Drawing.Point(483, 10);
+            this.btn_SearchMessage.Name = "btn_SearchMessage";
+            this.btn_SearchMessage.Size = new System.Drawing.Size(32, 30);
+            this.btn_SearchMessage.TabIndex = 8;
+            this.btn_SearchMessage.Text = "🔎";
+            this.btn_SearchMessage.UseVisualStyleBackColor = false;
+            this.btn_SearchMessage.Click += new System.EventHandler(this.button8_Click);
             // 
-            // panel7
+            // P_Thoat
             // 
-            this.panel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel7.Controls.Add(this.button6);
-            this.panel7.Location = new System.Drawing.Point(520, 10);
-            this.panel7.Margin = new System.Windows.Forms.Padding(2);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(107, 30);
-            this.panel7.TabIndex = 11;
+            this.P_Thoat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.P_Thoat.Controls.Add(this.btn_Thoat);
+            this.P_Thoat.Location = new System.Drawing.Point(520, 10);
+            this.P_Thoat.Margin = new System.Windows.Forms.Padding(2);
+            this.P_Thoat.Name = "P_Thoat";
+            this.P_Thoat.Size = new System.Drawing.Size(107, 30);
+            this.P_Thoat.TabIndex = 11;
             // 
-            // button6
+            // btn_Thoat
             // 
-            this.button6.BackColor = System.Drawing.Color.Gray;
-            this.button6.Location = new System.Drawing.Point(3, 0);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(97, 30);
-            this.button6.TabIndex = 4;
-            this.button6.Text = "Thoát";
-            this.button6.UseVisualStyleBackColor = false;
-            this.button6.Click += new System.EventHandler(this.bt_thoat_Click);
+            this.btn_Thoat.BackColor = System.Drawing.Color.Gray;
+            this.btn_Thoat.Location = new System.Drawing.Point(3, 0);
+            this.btn_Thoat.Name = "btn_Thoat";
+            this.btn_Thoat.Size = new System.Drawing.Size(97, 30);
+            this.btn_Thoat.TabIndex = 4;
+            this.btn_Thoat.Text = "Thoát";
+            this.btn_Thoat.UseVisualStyleBackColor = false;
+            this.btn_Thoat.Click += new System.EventHandler(this.bt_thoat_Click);
             // 
-            // tabControl1
+            // TC_Chat
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.TC_Chat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.ItemSize = new System.Drawing.Size(0, 1);
-            this.tabControl1.Location = new System.Drawing.Point(278, -11);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(649, 493);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 0;
+            this.TC_Chat.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.TC_Chat.Controls.Add(this.TP_ChattingView);
+            this.TC_Chat.Controls.Add(this.TP_FriendRequestView);
+            this.TC_Chat.ItemSize = new System.Drawing.Size(0, 1);
+            this.TC_Chat.Location = new System.Drawing.Point(278, -11);
+            this.TC_Chat.Margin = new System.Windows.Forms.Padding(2);
+            this.TC_Chat.Name = "TC_Chat";
+            this.TC_Chat.SelectedIndex = 0;
+            this.TC_Chat.Size = new System.Drawing.Size(649, 493);
+            this.TC_Chat.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.TC_Chat.TabIndex = 0;
             // 
-            // tabPage1
+            // TP_ChattingView
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
-            this.tabPage1.Controls.Add(this.panel3);
-            this.tabPage1.Controls.Add(this.panel4);
-            this.tabPage1.Controls.Add(this.flowLayoutPanel1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 5);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(641, 484);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.TP_ChattingView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.TP_ChattingView.Controls.Add(this.P_GuiMessage);
+            this.TP_ChattingView.Controls.Add(this.P_TenKenh);
+            this.TP_ChattingView.Controls.Add(this.flp_Message);
+            this.TP_ChattingView.Location = new System.Drawing.Point(4, 5);
+            this.TP_ChattingView.Margin = new System.Windows.Forms.Padding(2);
+            this.TP_ChattingView.Name = "TP_ChattingView";
+            this.TP_ChattingView.Padding = new System.Windows.Forms.Padding(2);
+            this.TP_ChattingView.Size = new System.Drawing.Size(641, 484);
+            this.TP_ChattingView.TabIndex = 0;
+            this.TP_ChattingView.Text = "tabPage1";
             // 
-            // tabPage2
+            // TP_FriendRequestView
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
-            this.tabPage2.Controls.Add(this.panel13);
-            this.tabPage2.Controls.Add(this.button2);
-            this.tabPage2.Controls.Add(this.btn_Ketban);
-            this.tabPage2.Location = new System.Drawing.Point(4, 5);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(641, 484);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.TP_FriendRequestView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.TP_FriendRequestView.Controls.Add(this.btn_XemListFriend);
+            this.TP_FriendRequestView.Controls.Add(this.P_Friend);
+            this.TP_FriendRequestView.Controls.Add(this.btn_XemLoiMoi);
+            this.TP_FriendRequestView.Controls.Add(this.btn_Ketban);
+            this.TP_FriendRequestView.Location = new System.Drawing.Point(4, 5);
+            this.TP_FriendRequestView.Margin = new System.Windows.Forms.Padding(2);
+            this.TP_FriendRequestView.Name = "TP_FriendRequestView";
+            this.TP_FriendRequestView.Padding = new System.Windows.Forms.Padding(2);
+            this.TP_FriendRequestView.Size = new System.Drawing.Size(641, 484);
+            this.TP_FriendRequestView.TabIndex = 1;
+            this.TP_FriendRequestView.Text = "tabPage2";
             // 
-            // panel13
+            // btn_XemListFriend
             // 
-            this.panel13.Controls.Add(this.flpFriends);
-            this.panel13.Location = new System.Drawing.Point(25, 54);
-            this.panel13.Margin = new System.Windows.Forms.Padding(2);
-            this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(546, 411);
-            this.panel13.TabIndex = 3;
+            this.btn_XemListFriend.Location = new System.Drawing.Point(281, 17);
+            this.btn_XemListFriend.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_XemListFriend.Name = "btn_XemListFriend";
+            this.btn_XemListFriend.Size = new System.Drawing.Size(146, 19);
+            this.btn_XemListFriend.TabIndex = 5;
+            this.btn_XemListFriend.Text = "Xem danh sách bạn bè";
+            this.btn_XemListFriend.UseVisualStyleBackColor = true;
+            this.btn_XemListFriend.Click += new System.EventHandler(this.btn_XemListFriend_Click);
             // 
-            // flpFriends
+            // P_Friend
             // 
-            this.flpFriends.AutoScroll = true;
-            this.flpFriends.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flpFriends.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpFriends.Location = new System.Drawing.Point(0, 0);
-            this.flpFriends.Margin = new System.Windows.Forms.Padding(2);
-            this.flpFriends.Name = "flpFriends";
-            this.flpFriends.Size = new System.Drawing.Size(546, 411);
-            this.flpFriends.TabIndex = 0;
+            this.P_Friend.Controls.Add(this.flp_Friends);
+            this.P_Friend.Location = new System.Drawing.Point(6, 62);
+            this.P_Friend.Margin = new System.Windows.Forms.Padding(2);
+            this.P_Friend.Name = "P_Friend";
+            this.P_Friend.Size = new System.Drawing.Size(610, 393);
+            this.P_Friend.TabIndex = 3;
             // 
-            // button2
+            // flp_Friends
             // 
-            this.button2.Location = new System.Drawing.Point(135, 17);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(56, 19);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Xem lời mời kết bạn";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.flp_Friends.AutoScroll = true;
+            this.flp_Friends.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flp_Friends.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flp_Friends.Location = new System.Drawing.Point(0, 0);
+            this.flp_Friends.Margin = new System.Windows.Forms.Padding(2);
+            this.flp_Friends.Name = "flp_Friends";
+            this.flp_Friends.Size = new System.Drawing.Size(610, 393);
+            this.flp_Friends.TabIndex = 0;
+            // 
+            // btn_XemLoiMoi
+            // 
+            this.btn_XemLoiMoi.Location = new System.Drawing.Point(135, 17);
+            this.btn_XemLoiMoi.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_XemLoiMoi.Name = "btn_XemLoiMoi";
+            this.btn_XemLoiMoi.Size = new System.Drawing.Size(128, 19);
+            this.btn_XemLoiMoi.TabIndex = 1;
+            this.btn_XemLoiMoi.Text = "Xem lời mời kết bạn";
+            this.btn_XemLoiMoi.UseVisualStyleBackColor = true;
+            this.btn_XemLoiMoi.Click += new System.EventHandler(this.button2_Click);
             // 
             // btn_Ketban
             // 
             this.btn_Ketban.Location = new System.Drawing.Point(12, 17);
             this.btn_Ketban.Margin = new System.Windows.Forms.Padding(2);
             this.btn_Ketban.Name = "btn_Ketban";
-            this.btn_Ketban.Size = new System.Drawing.Size(56, 19);
+            this.btn_Ketban.Size = new System.Drawing.Size(102, 19);
             this.btn_Ketban.TabIndex = 0;
             this.btn_Ketban.Text = "Kết bạn";
             this.btn_Ketban.UseVisualStyleBackColor = true;
@@ -640,84 +677,87 @@ namespace QLUSER
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(920, 474);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.P_Kenh_DanhMuc_User);
+            this.Controls.Add(this.P_Group_Friend);
+            this.Controls.Add(this.TC_Chat);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "GiaoDien";
             this.Text = "GiaoDien";
             this.Load += new System.EventHandler(this.GiaoDien_Load);
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cp_Menu)).EndInit();
-            this.panel2.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
+            this.P_Group_Friend.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).EndInit();
+            this.P_Kenh_DanhMuc_User.ResumeLayout(false);
+            this.P_TTinUser.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
-            this.ServerOrFriend.ResumeLayout(false);
-            this.ServerTab.ResumeLayout(false);
-            this.ServerTab.PerformLayout();
-            this.panel12.ResumeLayout(false);
-            this.panel6.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
-            this.panel10.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel8.ResumeLayout(false);
-            this.panel9.ResumeLayout(false);
-            this.panel9.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel7.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.panel13.ResumeLayout(false);
+            this.TC_ServerOrFriend.ResumeLayout(false);
+            this.TP_FriendsTab.ResumeLayout(false);
+            this.TP_ServerTab.ResumeLayout(false);
+            this.P_Kenh_DanhMuc.ResumeLayout(false);
+            this.P_TenGroup.ResumeLayout(false);
+            this.TP_ServerTab1.ResumeLayout(false);
+            this.P_TenGroup1.ResumeLayout(false);
+            this.P_GuiMessage.ResumeLayout(false);
+            this.P_Gui.ResumeLayout(false);
+            this.P_Message.ResumeLayout(false);
+            this.P_Message.PerformLayout();
+            this.P_TenKenh.ResumeLayout(false);
+            this.P_Thoat.ResumeLayout(false);
+            this.TC_Chat.ResumeLayout(false);
+            this.TP_ChattingView.ResumeLayout(false);
+            this.TP_FriendRequestView.ResumeLayout(false);
+            this.P_Friend.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private Label label1;
-        private Panel panel3;
-        private Button button3;
-        private TextBox textBox1;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private Label label2;
-        private Panel panel4;
-        private Button button6;
-        private Label label3;
-        private Button chonfile;
-        private Button chonanh;
-        private Button button4;
+        private System.Windows.Forms.Panel P_Group_Friend;
+        private System.Windows.Forms.Panel P_Kenh_DanhMuc_User;
+        private Label lb_TenGroup;
+        private Panel P_GuiMessage;
+        private Button btn_Gui;
+        private TextBox tb_Message;
+        private FlowLayoutPanel flp_Message;
+        private Label lb_TenKenh;
+        private Panel P_TenKenh;
+        private Button btn_Thoat;
+        private Label lb_File_Anh;
+        private Button btn_ChonFile;
+        private Button btn_ChonAnh;
+        private Button btn_CDuser;
         private Models.CircularPicture cp_ProfilePic;
-        private Panel panel5;
-        private TreeView treeView1;
-        private Label label4;
-        private Label label5;
-        private Button button5;
-        private Panel panel6;
-        private FlowLayoutPanel flowLayoutPanel2;
-        private Models.CircularPicture cp_Menu;
-        private Panel panel7;
-        private Panel panel8;
-        private Panel panel9;
-        private TabControl tabControl1;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
-        private TabControl ServerOrFriend;
-        private TabPage ServerTab;
-        private TabPage FriendsTab;
-        private TabPage tabPage3;
-        private Panel panel10;
-        private Label label6;
-        private Button button1;
-        private Panel panel11;
-        private Panel panel12;
+        private Panel P_TTinUser;
+        private TreeView tv_Kenh_DanhMuc;
+        private Button btn_MenuGroup;
+        private Panel P_TenGroup;
+        private FlowLayoutPanel flp_Group;
+        private Models.CircularPicture cp_MenuFriend;
+        private Panel P_Thoat;
+        private Panel P_Gui;
+        private Panel P_Message;
+        private TabControl TC_Chat;
+        private TabPage TP_ChattingView;
+        private TabPage TP_FriendRequestView;
+        private TabControl TC_ServerOrFriend;
+        private TabPage TP_ServerTab;
+        private TabPage TP_FriendsTab;
+        private TabPage TP_ServerTab1;
+        private Panel P_TenGroup1;
+        private Label lb_TenGroup1;
+        private Button btn_MenuGroup1;
+        private Panel P_Kenh_DanhMuc1;
+        private Panel P_Kenh_DanhMuc;
         private Button btn_Ketban;
-        private Button button2;
-        private Panel panel13;
-        private FlowLayoutPanel flpFriends;
-        private Button button7;
-        private Button button8;
+        private Button btn_XemLoiMoi;
+        private Button btn_Emoji;
+        private Button btn_SearchMessage;
+        private FlowLayoutPanel flp_TinNhanTT;
+        private Label lb_TinNhanTT;
+        private Button btn_AddGroupPrivate;
+        private Button btn_Banbe;
+        private Button btn_XemListFriend;
+        private Panel P_Friend;
+        private FlowLayoutPanel flp_Friends;
     }
 }

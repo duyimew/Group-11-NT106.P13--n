@@ -15,6 +15,7 @@ namespace QLUSER
 {
     public partial class GroupUser : Form
     {
+        GiaoDien _gd;
         UserAvatar avatar = new UserAvatar();
         Group group =new Group();
         GroupMember member = new GroupMember();
@@ -24,9 +25,10 @@ namespace QLUSER
         string gdpnametk1;
         string _groupid;
         User user = new User();
-        public GroupUser(string gdpname,string gdpnametk,string groupid)
+        public GroupUser(string gdpname,string gdpnametk,string groupid,GiaoDien gd)
         {
             InitializeComponent();
+            _gd = gd;
             gdpname1 = gdpname;
             _groupid=groupid;
             gdpnametk1 = gdpnametk;
@@ -35,6 +37,10 @@ namespace QLUSER
                 label3.Visible = true;
                 label4.Visible = true;
             }
+            UserSession.ActionDeleteuser += () =>
+            {
+                this.Close();
+            };
         }
 
         private async void GroupUser_Load(object sender, EventArgs e)
@@ -42,11 +48,17 @@ namespace QLUSER
             gdpid = await member.FindGroupDisplayID(_groupid,gdpname1);
             gdpidtk = await member.FindGroupDisplayID(_groupid, gdpnametk1);
             circularPicture1.Image = await avatar.LoadAvatarAsync(gdpid);
-            UserSession.AvatarUpdated += UpdateAvatarDisplay;    
+            UserSession.ActionAvatarUpdated += UpdateAvatarDisplay;    
             circularPicture1.SizeMode = PictureBoxSizeMode.Zoom;
             circularPicture1.Anchor = AnchorStyles.None;
             label1.Text= gdpname1;
-            UserSession.AvatarGroupCreated += () => {
+            UserSession.ActionUpdategdpname += async () =>
+            {
+                gdpname1 = await member.FindGroupDisplayname(gdpid, _groupid);
+                gdpnametk1 = await member.FindGroupDisplayname(gdpidtk, _groupid);
+                label1.Text = gdpname1;
+            };
+            UserSession.ActionUpdateGroup += () => {
                 if (this != null && !this.IsDisposed)
                 {
                     this.Close();
@@ -79,8 +91,8 @@ namespace QLUSER
         private async void label4_Click(object sender, EventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
-            var result = await group.RequestGroupName(gdpid);
-            var result1 = await group.RequestGroupName(gdpidtk);
+            var result = await group.RequestGroupName(gdpid,0);
+            var result1 = await group.RequestGroupName(gdpidtk, 0);
             string[] commonGroupNames = result.groupidname.Intersect(result1.groupidname).ToArray();
 
             for (int i = 0; i < commonGroupNames.Length; i++)
@@ -93,7 +105,7 @@ namespace QLUSER
                     circulargroup.SizeMode = PictureBoxSizeMode.Zoom;
                     circulargroup.Name = commonGroupNames[i];
 
-                    UserSession.AvatarGroupUpdated += async () =>
+                    UserSession.ActionAvatarGroupUpdated += async () =>
                     {
                         circulargroup.Image = await avatar.LoadAvatarGroupAsync(groupid[0]);
                         circulargroup.Name = commonGroupNames[i];
@@ -112,7 +124,7 @@ namespace QLUSER
                 // Create label for group name
                 Label label = new Label();
                 label.Text = groupid[1];
-                UserSession.UpdateGroupname += async () =>
+                UserSession.ActionUpdateGroupname += async () =>
                 {
                     label.Text = await group.Groupname(groupid[0]);
                 };

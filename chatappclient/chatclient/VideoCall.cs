@@ -21,6 +21,8 @@ namespace QLUSER
 {
     public partial class VideoCall : Form
     {
+        GiaoDien _gd;
+        GroupMember _groupMember = new GroupMember();
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
         private HubConnection connection;
@@ -45,12 +47,20 @@ namespace QLUSER
         private bool picture = false;
         private bool isstop = false;
         private string callId;
-        public VideoCall(string groupdisplayname, string channelid)
+        public VideoCall(string groupdisplayname, string channelid,GiaoDien gd)
         {
             InitializeComponent();
+            _gd = gd;
             _groupdisplayname = groupdisplayname;
             pictureBoxes = new PictureBox[10];
             callId = channelid;
+            UserSession.ActionDeleteuser += () =>
+            {
+                if (this != null && !this.IsDisposed)
+                {
+                    this.Close();
+                }
+            };
         }
 
         private async void VideoCall_Load(object sender, EventArgs e)
@@ -58,7 +68,7 @@ namespace QLUSER
             InitializeSignalR();
             InitializeAudio();
             InitializeCamera();
-            UserSession.AvatarGroupCreated += () => {
+            UserSession.ActionUpdateGroup += () => {
                 if (this != null && !this.IsDisposed)
                 {
                     this.Close();

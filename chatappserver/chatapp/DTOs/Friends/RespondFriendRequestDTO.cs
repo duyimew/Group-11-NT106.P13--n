@@ -2,8 +2,8 @@
 {
     public class RespondFriendRequestDTO
     {
-        public string? senderUsername { get; set; }
-        public string? receiverUsername { get; set; }
+        public int senderId { get; set; }
+        public int receiverId { get; set; }
         public string? action { get; set; }
     }
 }

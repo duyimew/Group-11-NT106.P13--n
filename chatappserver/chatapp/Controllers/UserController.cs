@@ -91,6 +91,26 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
+        [HttpPost("FindUsername")]
+        public async Task<IActionResult> FindUsername([FromBody] FindDisplaynameDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                string username = user.Username;
+
+                return Ok(new { username = username });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
         [HttpPost("FindCreatetime")]
         public async Task<IActionResult> FindCreatetime([FromBody] FindCreatetimeDTO request)
         {
@@ -132,28 +152,140 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
-        [HttpDelete("DeleteUser")]
-        public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequestDTO request)
+        [HttpPost("RenameUsername")]
+        public async Task<IActionResult> RenameUsername([FromBody] RenameUsernameDTO request)
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(d => d.UserId == int.Parse(request.userid));
-
+                // Tìm user hiện tại dựa trên UserId
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
                 if (user == null)
                 {
-                    return NotFound(new { message = "user not found." });
+                    return NotFound(new { message = "User not found." });
                 }
 
-                _context.Users.Remove(user);
+                // Kiểm tra xem Username mới đã tồn tại chưa
+                var existingUser = await _context.Users.FirstOrDefaultAsync(g => g.Username == request.newusername);
+                if (existingUser != null)
+                {
+                    return BadRequest(new { message = "Username already exists. Please choose a different username." });
+                }
 
+                // Cập nhật Username
+                user.Username = request.newusername;
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "user deleted successfully." });
+                return Ok(new { message = "Rename username successfully!" });
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
+
+        [HttpPost("RenameEmail")]
+        public async Task<IActionResult> RenameEmail([FromBody] RenameEmailDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                user.Email = request.newemail;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Rename email successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+        [HttpPost("RenameTen")]
+        public async Task<IActionResult> RenameTen([FromBody] RenameTenDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
+                if (user == null)
+                {
+                    return NotFound(new { message = "user not found." });
+                }
+
+                user.FullName = request.newten;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Rename ten successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+        [HttpPost("RenameNgaySinh")]
+        public async Task<IActionResult> RenameNgaySinh([FromBody] RenameNgaySinhDTO request)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+
+                if (DateTime.TryParseExact(request.newngaysinh, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out var parsedDate))
+                {
+                    user.Birthday = parsedDate;
+                    await _context.SaveChangesAsync();
+
+                    return Ok(new { message = "Rename ngay sinh successfully!" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Invalid date format. Please use dd/MM/yyyy." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+
+        [HttpDelete("DeleteUser")]
+        public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequestDTO request)
+        {
+            try
+            {
+                var userId = int.Parse(request.userid);
+
+                // Lấy user cần xóa
+                var user = await _context.Users.FirstOrDefaultAsync(d => d.UserId == userId);
+
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+
+                // Xóa các bản ghi liên quan trong bảng Friends
+                var friends = _context.Friends.Where(f => f.UserId_1 == userId || f.UserId_2 == userId);
+                _context.Friends.RemoveRange(friends);
+                var friendrequests = _context.FriendRequests.Where(f => f.SenderId == userId || f.ReceiverId == userId);
+                _context.FriendRequests.RemoveRange(friendrequests);
+                // Xóa user
+                _context.Users.Remove(user);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "User deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error: {ex.Message}" });
+            }
+        }
+
     }
 }

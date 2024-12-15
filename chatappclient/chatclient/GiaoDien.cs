@@ -35,141 +35,573 @@ using Microsoft.VisualBasic.ApplicationServices;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using System.Runtime.ConstrainedExecution;
 
 namespace QLUSER
 {
     public partial class GiaoDien : Form
     {
-        string _username;
-        string _dpname="";
-        string _gdpname="";
-        string _userid;
-        string _userrole;
-
         Dangnhap DN;
-        Group group = new Group();
-        GroupMember _role = new GroupMember();
-        Channel channel = new Channel();
-        Models.Message message1 = new Models.Message();
+        private FlowLayoutPanel panelMenu;
+
+        Group _group = new Group();
+        Channel _channel = new Channel();
+        Models.Message _message = new Models.Message();
         Models.User _user = new Models.User();
-        file file1 = new file();
-        Token token = new Token();
-        Find find1 = new Find();
-        UserAvatar avatar = new UserAvatar();
-        DanhMuc danhmuc = new DanhMuc();
-        GroupMember groupMember= new GroupMember();
-        private HashSet<string> displayedMessages = new HashSet<string>();
-        private bool isReceivingMessages = true;
+        file _file = new file();
+        Token _token = new Token();
+        Find _find = new Find();
+        UserAvatar _avatar = new UserAvatar();
+        DanhMuc _danhmuc = new DanhMuc();
+        GroupMember _groupMember = new GroupMember();
+
+        string _username="";
+        string _dpname="";
+        string _userid = "";
+        string _gdpname="";
+        string _userrole="";
+        string _groupid = "";
+        string _groupname = "";
+        string _channelid = "";
+        string _channelname = "";
+        string _messageid = "";
+        string _danhmucid = "";
+
         private List<string> selectedFilePaths = new List<string>();
+        private HashSet<string> displayedMessages = new HashSet<string>();
+
+        private bool isReceivingMessages = true;
         public HubConnection connection = null;
         private bool isstop = false;
         private bool isRecevie = false;
-        private FlowLayoutPanel panelMenu;
         public GiaoDien(string username,string userid, Dangnhap dn)
         {
             InitializeComponent();
-            _username = username;
+            InitializeSignalR();
+            UserSession.InitializeSynchronizationContext();
+            _username = username; 
             _userid = userid;
             DN = dn;
-            UserSession.AvatarUpdated += UpdateAvatarDisplay;
-            UserSession.AvatarGroupCreated += UpdateGroupDislay;
-            tabControl1.SelectedIndex = 1;
-            InitializeSignalR();
+            UserSession.ActionUpdateusername += UpdateUsername;
+            UserSession.ActionAvatarUpdated += UpdateAvatarDisplay;
+            UserSession.ActionUpdateGroup += UpdateGroupDislay;
+            UserSession.ActionUpdateGroupPrivate += UpdateGroupPrivateDislay;
+            UserSession.ActionDeleteuser += UpdateGroupPrivateDislay;
+            /*UserSession.ActionAvatarUpdated += () => HandleUpdate("AvatarDisplay");
+            UserSession.ActionUpdateGroup += () => HandleUpdate("GroupDislay");
+            UserSession.ActionUpdateGroupPrivate += () => HandleUpdate("GroupPrivateDislay");
+            UserSession.ActionAvatarGroupUpdated += () => HandleUpdate("AvatarGroupUpdated");
+            UserSession.ActionDeleteuser += () => HandleUpdate("Deleteuser");
+            UserSession.ActionUpdateFriend += () => HandleUpdate("UpdateFriend");
+            UserSession.ActionUpdateFriendRequest += () => HandleUpdate("UpdateFriendRequest");
+            UserSession.ActionUpdategdpname += () => HandleUpdate("Updategdpname");
+            UserSession.ActionUpdateGroupMember += () => HandleUpdate("UpdateGroupMember");
+            UserSession.ActionUpdateChannel += () => HandleUpdate("UpdateChannel");
+            UserSession.ActionUpdateChannelname += () => HandleUpdate("UpdateChannelname");
+            UserSession.ActionUpdateDanhMuc += () => HandleUpdate("UpdateDanhMuc");
+            UserSession.ActionUpdatedanhmucname += () => HandleUpdate("Updatedanhmucname");
+            UserSession.ActionUpdateGroupMemberPrivate += () => HandleUpdate("UpdateGroupMemberPrivate");
+            UserSession.ActionUpdateGroupname += () => HandleUpdate("UpdateGroupname");
+            UserSession.ActionUpdateMessage += () => HandleUpdate("UpdateMessage");
+            UserSession.ActionUpdateMessageText += () => HandleUpdate("UpdateMessageText");
+            UserSession.ActionUpdateRole += () => HandleUpdate("UpdateRole");
+            UserSession.ActionUpdatedpname += () => HandleUpdate("dpname");*/
+            TC_Chat.SelectedIndex = 1;
         }
-
-        private async void UpdateAvatarDisplay()
+        private async void GiaoDien_Load(object sender, EventArgs e)
         {
-            cp_ProfilePic.Image = await avatar.LoadAvatarAsync(_userid);
+            _dpname = await _user.FindDisplayname(_userid);
+            UserSession.ActionUpdatedpname += Updatedpname;
+            UpdateGroupPrivateDislay();
+            UpdateGroupDislay();
+            UpdateAvatarDisplay();
+        }
+        public async void SendUpdate(string updateType)
+        {
             while (true)
             {
                 if (connection != null && connection.State == HubConnectionState.Connected)
                 {
-                    await connection.SendAsync("SendAvataUpdate", UserSession.AvatarUrl, label2.Name);
+                    await connection.SendAsync($"Send{updateType}", true);
                     break;
                 }
             }
         }
+
+        private async void UpdateUsername()
+        {
+            _username = await _user.FindUsername(_userid);
+        }
+        private async void Updatedpname()
+        {
+            _dpname = await _user.FindDisplayname(_userid);
+        }
+        
+        private async void UpdateAvatarDisplay()
+        {
+            UserSession.RunOnUIThread(new Action( async ()=> cp_ProfilePic.Image = await _avatar.LoadAvatarAsync(_userid)));
+        }
         private async void UpdateGroupDislay()
         {
-            flowLayoutPanel2.Controls.Clear();
-            flowLayoutPanel2.AutoScrollPosition = new Point(0, 0);
-            flowLayoutPanel2.AutoScroll = true;
-            var result = await group.RequestGroupName(_userid);
-            if (result.issuccess)
-                LoadGroup(result.groupidname);
-            flowLayoutPanel2.PerformLayout();
-            tabControl1.SelectedIndex = 1;
-            ServerOrFriend.SelectedIndex = 0;
+            UserSession.RunOnUIThread(new Action(async () =>
+            {
+                flp_Group.Controls.Clear();
+                flp_Group.AutoScrollPosition = new Point(0, 0);
+                flp_Group.AutoScroll = true;
+                var result = await _group.RequestGroupName(_userid, 0);
+                if (result.issuccess)
+                    LoadGroup(result.groupidname);
+                flp_Group.PerformLayout();
+                TC_Chat.SelectedIndex = 1;
+                TC_ServerOrFriend.SelectedIndex = 0;
+            }));
         }
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        private async void UpdateGroupPrivateDislay()
         {
+            UserSession.RunOnUIThread(new Action(async () =>
+            {
+                flp_TinNhanTT.Controls.Clear();
+                flp_TinNhanTT.AutoScrollPosition = new Point(0, 0);
+                flp_TinNhanTT.AutoScroll = true;
+                var result = await _group.RequestGroupName(_userid, 2);
+                if (result.issuccess)
+                    LoadGroupPrivate(result.groupidname, 2);
+                var result1 = await _group.RequestGroupName(_userid, 1);
+                if (result1.issuccess)
+                    LoadGroupPrivate(result1.groupidname, 1);
+                flp_TinNhanTT.PerformLayout();
+                TC_Chat.SelectedIndex = 1;
+                TC_ServerOrFriend.SelectedIndex = 0;
+            }));
+        }
+        protected override async void OnFormClosing(FormClosingEventArgs e)
+        {
+            UserSession.ActionUpdateusername -= UpdateUsername;
+            UserSession.ActionAvatarUpdated -= UpdateAvatarDisplay;
+            UserSession.ActionUpdateGroup -= UpdateGroupDislay;
+            UserSession.ActionUpdateGroupPrivate -= UpdateGroupPrivateDislay;
+            UserSession.ActionUpdatedpname -= Updatedpname;
             base.OnFormClosing(e);
-            UserSession.AvatarUpdated -= UpdateAvatarDisplay;
         }
 
         private async void bt_thoat_Click(object sender, EventArgs e)
         {
             if (connection != null)
                 await StopSignalR();
-            await token.GenerateToken(_username);
+            
+            await _token.GenerateToken(_username);
             DN.Close();
             Environment.Exit(0);
-            this.Close();
-
+            this.Close(); 
         }
-
-
-        private async void TreeView_AfterExpandCollapse(object sender, TreeViewEventArgs e)
+        private async void LoadGroupPrivate(string[] groupname, int privatenumber)
         {
-            await ChangeLabelLocation();
-        }
-        private async Task ChangeLabelLocation()
-        {
-            var matchedNodes = treeView1.Nodes
-            .Cast<TreeNode>()
-            .Where(node => node.Name.Contains("danhmuc"))
-            .ToList();
-            foreach (var node in matchedNodes)
+            if (groupname != null)
             {
-                if (node.Tag is Label label)
+                for (int i = 0; i < groupname.Length; i++)
                 {
-                    int x = treeView1.Location.X + treeView1.Size.Width - label.Size.Width - 1;
-                    int nodeY = node.Bounds.Location.Y;
-                    int y = treeView1.Location.Y + 1 + nodeY;
-                    label.Location = new Point(x, y);
+                    string[] group1 = groupname[i].Split('|');
+                    string[] groupmember = await _groupMember.FindUserRoleNameId(group1[0]);
+                    foreach (var member in groupmember)
+                    {
+                        Panel panel = new Panel();
+                        panel.Width = flp_TinNhanTT.Width;
+                        panel.Height = 50;
+                        panel.Margin = new Padding(10, 0, 0, 0);
+                        panel.Name = privatenumber.ToString();
+                        string[] user = member.Split('|');
+                        if (user[0] != _userid)
+                        {
+                            CircularPicture useravatar = new CircularPicture();
+                            if (privatenumber == 2)
+                            {
+                                try
+                                {
+                                    var loadedImage = await _avatar.LoadAvatarAsync(user[0]);
+                                    if (loadedImage != null)
+                                    {
+                                        useravatar.Image = loadedImage;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Không tải được ảnh, kiểm tra đường dẫn hoặc server.", "Lỗi");
+                                    }
+                                    useravatar.SizeMode = PictureBoxSizeMode.Zoom;
+                                    useravatar.Text = group1[1];
+                                    useravatar.Name = $"{group1[0]}";
+                                    UserSession.ActionAvatarUpdated += async () =>
+                                    {
+                                        useravatar.Image = await _avatar.LoadAvatarAsync(user[0]);
+                                    };
+                                    UserSession.ActionUpdateGroupname += async () =>
+                                    {
+                                        group1[1] = await _group.Groupname(group1[0]);
+                                        useravatar.Text = group1[1];
+                                    };
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Không thể tải ảnh: {ex.Message}");
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    var loadedImage = await _avatar.LoadAvatarGroupAsync(group1[0]);
+                                    if (loadedImage != null)
+                                    {
+                                        useravatar.Image = loadedImage;
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Không tải được ảnh, kiểm tra đường dẫn hoặc server.", "Lỗi");
+                                    }
+                                    useravatar.SizeMode = PictureBoxSizeMode.Zoom;
+                                    useravatar.Text = group1[1];
+                                    useravatar.Name = $"{group1[0]}";
+                                    UserSession.ActionAvatarGroupUpdated += async () =>
+                                    {
+                                        useravatar.Image = await _avatar.LoadAvatarGroupAsync(group1[0]);
+                                    };
+                                    UserSession.ActionUpdateGroupname += async () =>
+                                    {
+                                        group1[1] = await _group.Groupname(group1[0]);
+                                        useravatar.Text = group1[1];
+                                    };
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Không thể tải ảnh: {ex.Message}");
+                                    return;
+                                }
+                            }
+                            useravatar.Location = new Point(0, 10);
+                            useravatar.Size = new Size(25, 25);
+                            useravatar.Margin = new Padding(5);
+
+                            Label label = new Label();
+                            label.Text = $"{user[1]}";
+                            UserSession.ActionUpdategdpname += async () =>
+                            {
+                                user[1] = await _groupMember.FindGroupDisplayname(user[0], group1[0]);
+                                label.Text = user[1];
+                            };
+                            label.Name = $"{user[0]}";
+                            label.Font = new Font("Arial", 12, FontStyle.Bold);
+                            label.ForeColor = Color.White;
+                            label.Location = new Point(40, 15);
+                            label.AutoSize = true;
+                            label.TextAlign = ContentAlignment.MiddleCenter;
+                            Button deletegroup = new Button();
+                            deletegroup.Text = "X";
+                            deletegroup.Name = $"{user[0]}";
+                            deletegroup.Font = new Font("Arial", 10, FontStyle.Bold);
+                            deletegroup.ForeColor = Color.White;
+                            deletegroup.Size = new Size(25, 25);
+                            deletegroup.PerformLayout();
+                            deletegroup.Location = new Point(panel.Width - deletegroup.Width - 20, 10);
+                            deletegroup.TextAlign = ContentAlignment.MiddleCenter;
+                            deletegroup.Click += async (s, e) =>
+                            {
+                                var result = MessageBox.Show(
+            "Bạn có chắc chắn muốn rời nhóm này không?",
+            "Xác nhận rời nhóm",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning
+        );
+
+                                // Kiểm tra kết quả người dùng chọn
+                                if (result == DialogResult.Yes)
+                                {
+                                    // Thực hiện xóa nhóm
+
+                                    await _group.RemoveMemberFromGroup(useravatar.Name, _userid);
+                                    UserSession.UpdateGroup = (true, false);
+                                    SendUpdate("GroupPrivateDislay");
+                                    MessageBox.Show("Rời nhóm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                else
+                                {
+                                    // Hủy thao tác
+                                    MessageBox.Show("Thao tác rời nhóm đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                            };
+                            Button addmember = new Button();
+                            addmember.Text = "+";
+                            addmember.Name = $"{user[0]}";
+                            addmember.Font = new Font("Arial", 10, FontStyle.Bold);
+                            addmember.ForeColor = Color.White;
+                            addmember.Size = new Size(25, 25);
+                            addmember.PerformLayout();
+                            addmember.Location = new Point(panel.Width - deletegroup.Width - addmember.Width - 20, 10);
+                            addmember.TextAlign = ContentAlignment.MiddleCenter;
+                            addmember.Click += async (s, e) =>
+                            {
+                                bool canclose = true;
+                                Form form = new Form();
+                                form.Text = $"Chọn bạn bè";
+                                form.Size = new Size(500, 350);
+                                form.StartPosition = FormStartPosition.CenterParent;
+
+                                form.Deactivate += (s1, e1) =>
+                                {
+                                    if (canclose)
+                                        form.Close();
+                                };
+
+
+                                Label label1 = new Label();
+                                label1.Text = $"Chọn bạn bè";
+                                label1.Font = new Font("Arial", 12, FontStyle.Bold);
+                                label1.ForeColor = Color.Black;
+                                label1.AutoSize = true;
+                                label1.PerformLayout();
+                                int labelWidth1 = TextRenderer.MeasureText(label1.Text, label1.Font).Width;
+                                label1.Location = new Point(20, 20);
+                                label1.TextAlign = ContentAlignment.MiddleCenter;
+
+
+                                FlowLayoutPanel panel1 = new FlowLayoutPanel();
+                                panel1.Location = new Point(20, 100);
+                                panel1.Size = new Size(440, 100);
+                                panel1.FlowDirection = FlowDirection.TopDown;  // Arrange buttons vertically
+                                panel1.WrapContents = false;  // Don't wrap buttons to next row
+                                panel1.AutoScroll = true; // Enable scrolling if buttons overflow
+
+                                using (HttpClient _httpClient = new HttpClient())
+                                {
+                                    try
+                                    {
+
+                                        flp_Friends.Controls.Clear();
+
+                                        string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/{_userid}";
+
+                                        HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+
+                                        if (response.IsSuccessStatusCode)
+                                        {
+                                            string responseContent = await response.Content.ReadAsStringAsync();
+                                            var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                                            if (responseData != null && responseData.message != null)
+                                            {
+                                                foreach (string displayName in responseData.message)
+                                                {
+                                                    string userid = await _user.finduserid(displayName);
+                                                    string isjoined = await _groupMember.FindJointime(userid, useravatar.Name);
+                                                    if (isjoined != null) continue;
+                                                    Image avatarImage = await _avatar.LoadAvatarAsync(userid);
+                                                    Panel friendPanel = new Panel
+                                                    {
+                                                        Width = panel.Width - 20,
+                                                        Height = 30,
+                                                        BorderStyle = BorderStyle.FixedSingle,
+                                                        AutoSize = true,
+                                                    };
+                                                    CheckBox usernamebox = new CheckBox
+                                                    {
+                                                        Checked = false,
+                                                        Text = displayName,
+                                                        Name = userid,
+                                                        AutoSize = true,
+                                                        Location = new Point(45, 10),
+                                                        ForeColor = Color.Black,
+                                                        TextAlign = ContentAlignment.MiddleCenter,
+                                                        CheckAlign = ContentAlignment.MiddleRight,
+                                                    };
+                                                    UserSession.ActionUpdatedpname += async () =>
+                                                    {
+
+                                                        usernamebox.Text = await _user.FindDisplayname(userid);
+                                                    };
+                                                    usernamebox.PerformLayout();
+                                                    PictureBox avatarBox = new PictureBox
+                                                    {
+                                                        Image = avatarImage,
+                                                        Width = 25,
+                                                        Height = 25,
+                                                        SizeMode = PictureBoxSizeMode.Zoom,
+                                                        Location = new Point(5, 5)
+                                                    };
+                                                    UserSession.ActionAvatarUpdated += async () =>
+                                                    {
+                                                        avatarBox.Image = await _avatar.LoadAvatarAsync(userid);
+                                                    };
+
+                                                    friendPanel.Controls.Add(usernamebox);
+                                                    friendPanel.Controls.Add(avatarBox);
+                                                    // Thêm Panel vào FlowLayoutPanel
+                                                    panel1.Controls.Add(friendPanel);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Không có dữ liệu bạn bè trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // Hiển thị lỗi từ server nếu có
+                                            string errorContent = await response.Content.ReadAsStringAsync();
+                                            MessageBox.Show($"Lỗi từ server: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        // Xử lý lỗi trong quá trình gửi request hoặc hiển thị danh sách
+                                        MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                }
+
+
+                                Button thongtin = new Button();
+                                thongtin.Text = "Thêm người dùng";
+                                thongtin.Location = new Point(20, 250);
+                                thongtin.Size = new Size(440, 30);
+                                thongtin.Click += async (s1, e1) =>
+                                {
+                                    canclose = false;
+                                    List<CheckBox> list = new List<CheckBox>();
+                                    foreach (Control control in panel1.Controls)
+                                    {
+                                        if (control is Panel friendPanel)
+                                        {
+                                            foreach (Control subControl in friendPanel.Controls)
+                                            {
+                                                if (subControl is CheckBox checkBox && checkBox.Checked)
+                                                {
+                                                    list.Add(checkBox);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    var result3 = await _groupMember.FindUserRoleNameId(useravatar.Name);
+                                    if (list.Count <= 10 - result3.Length && list.Count > 0)
+                                    {
+                                        foreach (var user1 in list)
+                                        {
+                                            var result2 = await _groupMember.AddMembersToGroup(user1.Name, useravatar.Name, user1.Text, "Owner");
+                                        }
+                                        form.Dispose();
+                                        form.Close();
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show($"Nhóm tối đa 10 người. Xin vui lòng chọn dưới {10 - result3.Length} người");
+                                    }
+                                    canclose = true;
+                                };
+
+                                form.Controls.Add(label1);
+
+                                form.Controls.Add(panel1);
+                                form.Controls.Add(thongtin);
+
+
+                                form.ShowDialog();
+                            };
+
+                            panel.Click += async (s, e) =>
+                            {
+                                TC_Chat.SelectedIndex = 0;
+                                while (true)
+                                {
+                                    if (connection != null && connection.State == HubConnectionState.Connected)
+                                    {
+                                        await connection.SendAsync("LeaveGroup",_channelid, _gdpname);
+                                        break;
+                                    }
+                                }
+                                displayedMessages.Clear();
+                                flp_Message.Controls.Clear();
+                                flp_Message.AutoScrollPosition = new Point(0, 0);
+                                flp_Message.PerformLayout();
+                                _groupid = group1[0];
+                                _groupname = group1[1];
+                                _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+                                UserSession.ActionUpdateRole += async () =>
+                                {
+                                    _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+                                };
+                                _gdpname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
+                                UserSession.ActionUpdategdpname += async () =>
+                                {
+                                    _gdpname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
+                                };
+                                var channel1 = await _channel.RequestChannelName(_groupid);
+                                string[] channelid = channel1.channelidname[0].Split('|');
+                                _channelid = channelid[0];
+                                _channelname = channelid[1];
+                                UserSession.ActionUpdateChannelname += async () =>
+                                {
+                                    var channel = await _channel.RequestoneChannelName(_channelid);
+                                    _channelname = channel.channelname;
+                                };
+                                lb_TenGroup.Text = group1[1];
+                                UserSession.ActionUpdateGroupname += async () =>
+                                {
+                                    _groupname= await _group.Groupname(_groupid);
+                                    lb_TenGroup.Text = _groupname;
+                                };
+                                lb_TenGroup.Name = _groupid;
+                             
+                                lb_TenKenh.Text = user[1];
+                                UserSession.ActionUpdategdpname += async () =>
+                                {
+                                    lb_TenKenh.Text = await _groupMember.FindGroupDisplayname(user[0], _groupid);
+                                };
+                                
+                                lb_TenKenh.Name = _channelid;
+                                var result = await _message.ReceiveMessage(_channelid);
+                                if (result.issuccess)
+                                {
+                                    for (int j = result.messagetext.Length - 1; j > 0; j -= 4)
+                                    {
+                                        if (j - 3 < result.messagetext.Length)
+                                        {
+                                            string messageid = result.messagetext[j - 3];
+                                            string gdpname = result.messagetext[j - 2];
+                                            string message = result.messagetext[j - 1];
+                                            string filename = result.messagetext[j];
+                                            string combinedKey = messageid;
+                                            if (!displayedMessages.Contains(combinedKey))
+                                            {
+                                                if (displayedMessages.Count >= 100)
+                                                {
+                                                    displayedMessages.Remove(displayedMessages.First());
+                                                }
+                                                displayedMessages.Add(combinedKey);
+                                                string[] filenames = filename.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+                                                await AddMessageToChat(messageid, gdpname, message, filenames);
+                                            }
+                                        }
+                                    }
+                                }
+                                while (true)
+                                {
+                                    if (connection != null && connection.State == HubConnectionState.Connected)
+                                    {
+                                        await connection.SendAsync("JoinGroup",_channelid, _gdpname);
+                                        break;
+                                    }
+                                }
+                            };
+                            panel.Controls.Add(useravatar); // Thêm avatar trước
+                            panel.Controls.Add(label);      // Thêm label sau
+                            panel.Controls.Add(deletegroup);
+                            if (privatenumber == 1) panel.Controls.Add(addmember);
+                            flp_TinNhanTT.Controls.Add(panel);
+                            break;
+                        }
+
+                    }
                 }
             }
         }
-        private async Task CloseLabel()
-        {
-            var matchedNodes = treeView1.Nodes
-            .Cast<TreeNode>()
-            .Where(node => node.Name.Contains("danhmuc"))
-            .ToList();
-            foreach (var node in matchedNodes)
-            {
-                if (node.Tag is Label label)
-                {
-                    label.Parent?.Controls.Remove(label);
-                    label.Dispose();
-                    node.Tag = null;
-                }
-            }
-        }
-        private async void GiaoDien_Load(object sender, EventArgs e)
-        {
-            _dpname = await _user.FindDisplayname(_userid);
-            var result = await group.RequestGroupName(_userid);
-            if (result.issuccess)
-                LoadGroup(result.groupidname);
-            UserAvatar userAvatar = new UserAvatar();
-            Image avatarImage = await userAvatar.LoadAvatarAsync(_userid);
 
-            if (avatarImage != null)
-            {
-                cp_ProfilePic.Image = avatarImage;
-            }
-        }
         private async void LoadGroup(string[] groupname)
         {
             if (groupname != null)
@@ -180,18 +612,18 @@ namespace QLUSER
                     CircularPicture circulargroup = new CircularPicture();
                     try
                     {
-                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(group1[0]);
+                        circulargroup.Image = await _avatar.LoadAvatarGroupAsync(group1[0]);
                         circulargroup.SizeMode = PictureBoxSizeMode.Zoom;
                         circulargroup.Text = group1[1];
-                        UserSession.UpdateGroupname += async () =>
+                        UserSession.ActionUpdateGroupname += async () =>
                         {
-                            string[] groupid = circulargroup.Name.Split('|');
-                            circulargroup.Text = await group.Groupname(groupid[1]);
+                            group1[1]= await _group.Groupname(group1[0]);
+                            circulargroup.Text = group1[1];
                         };
-                        circulargroup.Name = $"group|{group1[0]}";
-                        UserSession.AvatarGroupUpdated += async () =>
+                        circulargroup.Name = group1[0];
+                        UserSession.ActionAvatarGroupUpdated += async () =>
                         {
-                            circulargroup.Image = await avatar.LoadAvatarGroupAsync(group1[0]);
+                            circulargroup.Image = await _avatar.LoadAvatarGroupAsync(group1[0]);
                         };
                     }
                     catch (Exception ex)
@@ -205,98 +637,63 @@ namespace QLUSER
                     circulargroup.Click += async (s, e) =>
                     {
 
-                        tabControl1.SelectedIndex = 0;
-                        ServerOrFriend.SelectedIndex = 1;
+                        TC_Chat.SelectedIndex = 0;
+                        TC_ServerOrFriend.SelectedIndex = 1;
                         while (true)
                         {
                             if (connection != null && connection.State == HubConnectionState.Connected)
                             {
-                                await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
+                                await connection.SendAsync("LeaveGroup", _channelid, _gdpname);
                                 break;
                             }
                         }
                         CloseLabel();
-                        treeView1.Nodes.Clear();
-                        flowLayoutPanel1.Controls.Clear();
-                        flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
-                        flowLayoutPanel1.PerformLayout();
-                        label2.Text = "";
-                        label2.Name = "";
+                        tv_Kenh_DanhMuc.Nodes.Clear();
+                        flp_Message.Controls.Clear();
+                        flp_Message.AutoScrollPosition = new Point(0, 0);
+                        flp_Message.PerformLayout();
+                        _groupid = group1[0];
+                        _groupname = group1[1];
+                        _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+                        _gdpname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
+                        lb_TenKenh.Text = "";
+                        lb_TenKenh.Name = "";
                         string selectedGroupName = circulargroup.Text;
-                        label1.Text = selectedGroupName;
-                        UserSession.UpdateGroupname += async () =>
-                        {
-                            string[] groupid1 = circulargroup.Name.Split('|');
-                            label1.Text = await group.Groupname(groupid1[1]);
-                            label6.Text = await group.Groupname(groupid1[1]);
-                        };
-                        string[] groupid = circulargroup.Name.Split('|');
-                        label1.Name = groupid[1];
-                        _userrole = await groupMember.FindOneUserRole(label1.Name, _userid);
-                        UserSession.UpdateRole += async () =>
-                        {
-                            _userrole = await groupMember.FindOneUserRole(label1.Name, _userid);
-                        };
-                        _gdpname = await groupMember.FindGroupDisplayname(_userid, label1.Name);
-                        label6.Text = selectedGroupName;
-                        label6.Name = groupid[1];
-                        var result = await danhmuc.RequestDanhMucName(label1.Name);
-                        if (result.issuccess)
-                        {
-                            for (int ib = 0; ib < result.danhmucidname.Length; ib++)
-                            {
-                                string[] danhmuc = result.danhmucidname[ib].Split('|');
-                                TreeNode node = treeView1.Nodes.Add($"danhmuc|{danhmuc[0]}", danhmuc[1]);
-                                createlabel(node);
-                            }
-                        }
-                        var result1 = await channel.RequestChannelName(label1.Name);
-                        if (result1.issuccess)
-                        {
-                            for (int ia = 0; ia < result1.channelidname.Length; ia++)
-                            {
+                        lb_TenGroup.Text = selectedGroupName;
+                        lb_TenGroup1.Text = selectedGroupName;
+                        lb_TenGroup1.Name = group1[0];
+                        lb_TenGroup.Name = group1[0];
 
-                                string[] channel = result1.channelidname[ia].Split('|');
-                                if (channel[3] == "True")
-                                {
-                                    if (!string.IsNullOrEmpty(channel[2]))
-                                    {
-                                        TreeNode[] nodes = treeView1.Nodes.Find($"danhmuc|{channel[2]}", false);
-                                        if (nodes != null)
-                                        {
-                                            TreeNode node = nodes[0].Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TreeNode node = treeView1.Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
-                                    }
-                                }
-                                else if (channel[3] == "False")
-                                {
-                                    if (!string.IsNullOrEmpty(channel[2]))
-                                    {
-                                        TreeNode[] nodes = treeView1.Nodes.Find($"danhmuc|{channel[2]}", false);
-                                        if (nodes != null)
-                                        {
-                                            TreeNode node = nodes[0].Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TreeNode node = treeView1.Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
-                                    }
-                                }
-                            }
-                        }
-                        treeView1.AfterExpand += TreeView_AfterExpandCollapse;
-                        treeView1.AfterCollapse += TreeView_AfterExpandCollapse;
+                        UserSession.ActionUpdateGroupname += async () =>
+                        {
+                            _groupname = await _group.Groupname(group1[0]);
+                            lb_TenGroup.Text = _groupname;
+                            lb_TenGroup1.Text = _groupname;
+                        };
+
+                        UserSession.ActionUpdateRole += async () =>
+                        {
+                            _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+                        };
+                        UserSession.ActionUpdategdpname += async () =>
+                        {
+                            _gdpname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
+                        };
+                        kenh();
 
                     };
-                    flowLayoutPanel2.Controls.Add(circulargroup);
+                    flp_Group.Controls.Add(circulargroup);
+                    UserSession.ActionUpdateChannel += () =>
+                    {
+                        kenh();
+                    };
+                    UserSession.ActionUpdateDanhMuc += () =>
+                    {
+                        kenh();
+                    };
                 }
             }
-
+            
             CircularPicture circularadd = new CircularPicture();
 
             try
@@ -316,34 +713,129 @@ namespace QLUSER
             {
                 circularadd_Click();
             };
-            flowLayoutPanel2.Controls.Add(circularadd);
+            flp_Group.Controls.Add(circularadd);
 
-            flowLayoutPanel2.FlowDirection = FlowDirection.LeftToRight;
-            flowLayoutPanel2.WrapContents = true;
-            flowLayoutPanel2.AutoScroll = false;
-            flowLayoutPanel2.MouseWheel += FlowLayoutPanel2_MouseWheel;
+            flp_Group.FlowDirection = FlowDirection.LeftToRight;
+            flp_Group.WrapContents = true;
+            flp_Group.AutoScroll = false;
+            flp_Group.MouseWheel += FlowLayoutPanel2_MouseWheel;
 
-            flowLayoutPanel2.Padding = new Padding((flowLayoutPanel2.ClientSize.Width - 50) / 2, 0, 0, 10);
+            flp_Group.Padding = new Padding((flp_Group.ClientSize.Width - 50) / 2, 0, 0, 10);
         }
         void FlowLayoutPanel2_MouseWheel(object sender, MouseEventArgs e)
         {
             int delta = e.Delta > 0 ? -20 : 20;
-            int currentY = -flowLayoutPanel2.AutoScrollPosition.Y;
+            int currentY = -flp_Group.AutoScrollPosition.Y;
             int newScrollY = currentY + delta;
-            flowLayoutPanel2.AutoScrollPosition = new Point(0, newScrollY);
+            flp_Group.AutoScrollPosition = new Point(0, newScrollY);
         }
+        private async void kenh()
+        {
+            var result = await _danhmuc.RequestDanhMucName(_groupid);
+            if (result.issuccess)
+            {
+                for (int ib = 0; ib < result.danhmucidname.Length; ib++)
+                {
+                    string[] danhmuc = result.danhmucidname[ib].Split('|');
+                    TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"danhmuc|{danhmuc[0]}", danhmuc[1]);
+                    createlabel(node);
+                }
+            }
+            var result1 = await _channel.RequestChannelName(_groupid);
+            if (result1.issuccess)
+            {
+                for (int ia = 0; ia < result1.channelidname.Length; ia++)
+                {
+
+                    string[] channel = result1.channelidname[ia].Split('|');
+                    if (channel[3] == "True")
+                    {
+                        if (!string.IsNullOrEmpty(channel[2]))
+                        {
+                            TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
+                            if (nodes != null)
+                            {
+                                TreeNode node = nodes[0].Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
+                            }
+                        }
+                        else
+                        {
+                            TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
+                        }
+                    }
+                    else if (channel[3] == "False")
+                    {
+                        if (!string.IsNullOrEmpty(channel[2]))
+                        {
+                            TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
+                            if (nodes != null)
+                            {
+                                TreeNode node = nodes[0].Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                            }
+                        }
+                        else
+                        {
+                            TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                        }
+                    }
+                }
+            }
+            tv_Kenh_DanhMuc.AfterExpand += TreeView_AfterExpandCollapse;
+            tv_Kenh_DanhMuc.AfterCollapse += TreeView_AfterExpandCollapse;
+        }
+        private async void TreeView_AfterExpandCollapse(object sender, TreeViewEventArgs e)
+        {
+            await ChangeLabelLocation();
+        }
+        private async Task ChangeLabelLocation()
+        {
+            var matchedNodes = tv_Kenh_DanhMuc.Nodes
+            .Cast<TreeNode>()
+            .Where(node => node.Name.Contains("danhmuc"))
+            .ToList();
+            foreach (var node in matchedNodes)
+            {
+                if (node.Tag is Label label)
+                {
+                    int x = tv_Kenh_DanhMuc.Location.X + tv_Kenh_DanhMuc.Size.Width - label.Size.Width - 1;
+                    int nodeY = node.Bounds.Location.Y;
+                    int y = tv_Kenh_DanhMuc.Location.Y + 1 + nodeY;
+                    label.Location = new Point(x, y);
+                }
+            }
+        }
+        private async Task CloseLabel()
+        {
+            var matchedNodes = tv_Kenh_DanhMuc.Nodes
+            .Cast<TreeNode>()
+            .Where(node => node.Name.Contains("danhmuc"))
+            .ToList();
+            foreach (var node in matchedNodes)
+            {
+                if (node.Tag is Label label)
+                {
+                    label.Parent?.Controls.Remove(label);
+                    label.Dispose();
+                    node.Tag = null;
+                }
+            }
+        }
+        
+            
+
+            
 
         private async void bt_guitinnhan_Click(object sender, EventArgs e)
         {
-            if (label2.Text == "") MessageBox.Show("Gửi tin nhắn thất bại");
+            if (lb_TenKenh.Text == "") MessageBox.Show("Gửi tin nhắn thất bại");
             else
             {
-                string message = textBox1.Text;
-                if (!string.IsNullOrEmpty(label3.Text))
+                string message = tb_Message.Text;
+                if (!string.IsNullOrEmpty(lb_File_Anh.Text))
                 {
-                    textBox1.Clear();
+                    tb_Message.Clear();
                     string[] filenames = selectedFilePaths.Select(Path.GetFileName).ToArray();
-                    var result = await file1.SendFileToServer(_userid, label2.Name, message, selectedFilePaths);
+                    var result = await _file.SendFileToServer(_userid, _channelid, message, selectedFilePaths);
                     if (result.issuccess)
                     {
                         string[] messageid = result.messatid.Split('|');
@@ -351,24 +843,24 @@ namespace QLUSER
                         {
                             if (connection != null && connection.State == HubConnectionState.Connected)
                             {
-                                await connection.SendAsync("SendMessage", messageid[0], _gdpname, label2.Name, message, filenames);
+                                await connection.SendAsync("SendMessage", messageid[0], _gdpname, _channelid, message, filenames);
                                 break;
                             }
                         }
-                        label3.Text = string.Empty;
+                        lb_File_Anh.Text = string.Empty;
                     }
                 }
                 else if (!string.IsNullOrWhiteSpace(message))
                 {
-                    textBox1.Clear();
-                    var result = await message1.SendMessage(label2.Name, _userid, message);
+                    tb_Message.Clear();
+                    var result = await _message.SendMessage(_channelid, _userid, message);
                     if (result.issuccess)
                     {
                         while (true)
                         {
                             if (connection != null && connection.State == HubConnectionState.Connected)
                             {
-                                await connection.SendAsync("SendMessage", result.messageid, _gdpname, label2.Name, message, null);
+                                await connection.SendAsync("SendMessage", result.messageid, _gdpname, _channelid, message, null);
                                 break;
                             }
                         }
@@ -380,10 +872,10 @@ namespace QLUSER
 
         private async Task AddMessageToChat(string messageid, string gdpname, string messageContent, string[] filename)
         {
-            string gdpid= await groupMember.FindGroupDisplayID(label1.Name,gdpname);
+            string gdpid= await _groupMember.FindGroupDisplayID(_groupid,gdpname);
             Panel panelMessage = new Panel
             {
-                Width = flowLayoutPanel1.Width + 40,
+                Width = flp_Message.Width,
                 BackColor = Color.FromArgb(66, 69, 73),
                 Padding = new Padding(5),
                 AutoSize = true,
@@ -396,7 +888,7 @@ namespace QLUSER
                 SizeMode = PictureBoxSizeMode.Zoom,
                 Width = 40,
                 Height = 40,
-                Image = await avatar.LoadAvatarAsync(gdpid),
+                Image = await _avatar.LoadAvatarAsync(gdpid),
                 Margin = new Padding(0, 0, 10, 0)
             };
             pictureBoxAvatar.Click += (s, e) =>
@@ -404,9 +896,9 @@ namespace QLUSER
 
                 USERINFOR(gdpname);
             };
-            UserSession.AvatarUpdated += async () =>
+            UserSession.ActionAvatarUpdated += async () =>
             {
-                pictureBoxAvatar.Image = await avatar.LoadAvatarAsync(gdpid);
+                pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(gdpid);
             };
             panelMessage.Controls.Add(pictureBoxAvatar);
 
@@ -419,7 +911,9 @@ namespace QLUSER
                 Top = 5,
                 Left = pictureBoxAvatar.Right + 10
             };
-
+            UserSession.ActionUpdategdpname += async () => { 
+            lblUsername.Text = await _groupMember.FindGroupDisplayname(gdpid,_groupid);
+            };
 
             panelMessage.Controls.Add(lblUsername);
             if (!string.IsNullOrEmpty(messageContent))
@@ -432,7 +926,10 @@ namespace QLUSER
                     AutoSize = true,
                     Top = lblUsername.Bottom + 5,
                     Left = pictureBoxAvatar.Right + 10,
-
+                };
+                UserSession.ActionUpdateMessageText += async () =>
+                {
+                    lblMessage.Text = await _message.Onemessage(messageid);
                 };
                 panelMessage.Controls.Add(lblMessage);
             }
@@ -448,7 +945,7 @@ namespace QLUSER
                     if (fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".png" ||
                         fileExtension == ".bmp" || fileExtension == ".gif")
                     {
-                        string filepath = await file1.GetFileUrlAsync(Filename);
+                        string filepath = await _file.GetFileUrlAsync(Filename);
                         PictureBox pictureBox = new PictureBox
                         {
                             SizeMode = PictureBoxSizeMode.Zoom,
@@ -477,7 +974,7 @@ namespace QLUSER
                             if (MessageBox.Show("Bạn có muốn tải xuống hình ảnh này không?", "Download Image", MessageBoxButtons.YesNo) == DialogResult.Yes)
                             {
                                 isReceivingMessages = false;
-                                file1.DownloadFile(Filename);
+                                _file.DownloadFile(Filename);
                                 isReceivingMessages = true;
                             }
                         };
@@ -520,7 +1017,7 @@ namespace QLUSER
                     if (MessageBox.Show("Bạn có muốn tải xuống tệp này không?", "Download File", MessageBoxButtons.OKCancel) == DialogResult.OK)
                     {
                         isReceivingMessages = false;
-                        file1.DownloadFile(selectedFileName);
+                        _file.DownloadFile(selectedFileName);
                         isReceivingMessages = true;
                     }
                 };
@@ -529,8 +1026,8 @@ namespace QLUSER
                 panelMessage.Height += listViewFiles.Height + 10;
             }
 
-            flowLayoutPanel1.Controls.Add(panelMessage);
-            flowLayoutPanel1.ScrollControlIntoView(panelMessage);
+            flp_Message.Controls.Add(panelMessage);
+            flp_Message.ScrollControlIntoView(panelMessage);
         }
         private void buttonchonfile_Click(object sender, EventArgs e)
         {
@@ -558,7 +1055,7 @@ namespace QLUSER
                         {
                             selectedFilePaths.Clear();
                             selectedFilePaths.AddRange(selectedFiles);
-                            label3.Text = string.Join(", ", openFileDialog.SafeFileNames);
+                            lb_File_Anh.Text = string.Join(", ", openFileDialog.SafeFileNames);
                         }));
                     }
                 }
@@ -583,7 +1080,7 @@ namespace QLUSER
                     {
                         selectedFilePaths.Clear();
                         selectedFilePaths.Add(selectedFile);
-                        label3.Text = openFileDialog.SafeFileName;
+                        lb_File_Anh.Text = openFileDialog.SafeFileName;
                     }));
                 }
             });
@@ -593,8 +1090,8 @@ namespace QLUSER
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Formuser formuser = new Formuser(_dpname, DN, this);
-            formuser.Show();
+            CaiDatNguoiDung formuser = new CaiDatNguoiDung(_dpname,DN,this,_username);
+            formuser.ShowDialog();
         }
 
 
@@ -603,7 +1100,7 @@ namespace QLUSER
         {
             if (e.KeyCode == Keys.Enter)
             {
-                button3.PerformClick();
+                btn_Gui.PerformClick();
                 e.Handled = true;
                 e.SuppressKeyPress = true;
             }
@@ -635,10 +1132,85 @@ namespace QLUSER
                 { MessageBox.Show(ex.Message); }
 
             });
-            connection.On<bool>("ReceiveAvataUpdate", async (url) =>
+
+            connection.On<bool>("ReceiveAvatarDisplay", async (update) =>
             {
-                UserSession.AvatarUrl = url;
+                UserSession.AvatarUrl = update;
             });
+            connection.On<bool>("ReceiveGroupDislay", async (update) =>
+            {
+                UserSession.UpdateGroup = (update,true);
+            });
+            connection.On<bool>("ReceiveGroupPrivateDislay", async (update) =>
+            {
+                UserSession.UpdateGroup = (update,false);
+            });
+            connection.On<bool>("Receivedpname", async (update) =>
+            {
+                UserSession.Renamedpname = update;
+            });
+            connection.On<bool>("ReceiveAvatarGroupUpdated", async (update) =>
+            {
+                UserSession.AvatarGroupUrl = update;
+            });
+            connection.On<bool>("ReceiveDeleteuser", async (update) =>
+            {
+                UserSession.DeleteUser = update;
+            });
+            connection.On<bool>("ReceiveUpdateFriend", async (update) =>
+            {
+                UserSession.UpdateFriend = update;
+            });
+            connection.On<bool>("ReceiveUpdateFriendRequest", async (update) =>
+            {
+                UserSession.UpdateFriendRequest = update;
+            });
+            connection.On<bool>("ReceiveUpdategdpname", async (update) =>
+            {
+                UserSession.Renamegdpname = (update,update);
+            });
+            connection.On<bool>("ReceiveUpdateGroupMember", async (update) =>
+            {
+                UserSession.UpdateGroupMember = (update,true);
+            });
+            connection.On<bool>("ReceiveUpdateChannel", async (update) =>
+            {
+                UserSession.UpdateChannel = update;
+            });
+            connection.On<bool>("ReceiveUpdateChannelname", async (update) =>
+            {
+                UserSession.Renamechannelname = update;
+            });
+            connection.On<bool>("ReceiveUpdateDanhMuc", async (update) =>
+            {
+                UserSession.UpdateDanhMuc = update;
+            });
+            connection.On<bool>("ReceiveUpdatedanhmucname", async (update) =>
+            {
+                UserSession.Renamedanhmucname = update;
+            });
+            connection.On<bool>("ReceiveUpdateGroupMemberPrivate", async (update) =>
+            {
+                UserSession.UpdateGroupMember = (update,false);
+            });
+            connection.On<bool>("ReceiveUpdateGroupname", async (update) =>
+            {
+                UserSession.RenameGroupname = update;
+            });
+            connection.On<bool>("ReceiveUpdateMessage", async (update) =>
+            {
+                UserSession.UpdateMessage = update;
+            });
+            connection.On<bool>("ReceiveUpdateMessageText", async (update) =>
+            {
+                UserSession.RenameMessageText = update;
+            });
+            connection.On<bool>("ReceiveUpdateRole", async (update) =>
+            {
+                UserSession.UpdateUserRole = (update,update);
+            });
+
+
             connection.Closed += async (exception) =>
             {
                 while (true)
@@ -664,7 +1236,7 @@ namespace QLUSER
                 if (connection.State != HubConnectionState.Connected)
                 {
                     await connection.StartAsync();
-                    await connection.SendAsync("JoinGroup", label2.Name, _gdpname);
+                    await connection.SendAsync("JoinGroup", _channelid, _gdpname);
                 }
             }
             catch (Exception ex)
@@ -678,7 +1250,7 @@ namespace QLUSER
             {
                 try
                 {
-                    await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
+                    await connection.SendAsync("LeaveGroup", _channelid, _gdpname);
                 }
                 catch (Exception ex)
                 {
@@ -714,48 +1286,32 @@ namespace QLUSER
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
+                            await connection.SendAsync("LeaveGroup", _channelid, _gdpname);
                             break;
                         }
                     }
                     displayedMessages.Clear();
-                    flowLayoutPanel1.Controls.Clear();
-                    flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
-                    flowLayoutPanel1.PerformLayout();
+                    flp_Message.Controls.Clear();
+                    flp_Message.AutoScrollPosition = new Point(0, 0);
+                    flp_Message.PerformLayout();
                     string selectedKenhName = selectedNode.Text;
-                    label2.Text = selectedKenhName;
+                    lb_TenKenh.Text = selectedKenhName;
                     string[] channelid = selectedNode.Name.Split('|');
-                    label2.Name = channelid[1];
-                    var result = await message1.ReceiveMessage(label2.Name);
-                    if (result.issuccess)
+                    lb_TenKenh.Name = channelid[1];
+                    _channelid = channelid[1];
+                    _channelname = selectedKenhName;
+                    UserSession.ActionUpdateChannelname += async () =>
                     {
-                        for (int i = result.messagetext.Length - 1; i > 0; i -= 4)
-                        {
-                            if (i - 3 < result.messagetext.Length)
-                            {
-                                string messageid = result.messagetext[i - 3];
-                                string gdpname = result.messagetext[i - 2];
-                                string message = result.messagetext[i - 1];
-                                string filename = result.messagetext[i];
-                                string combinedKey = messageid;
-                                if (!displayedMessages.Contains(combinedKey))
-                                {
-                                    if (displayedMessages.Count >= 100)
-                                    {
-                                        displayedMessages.Remove(displayedMessages.First());
-                                    }
-                                    displayedMessages.Add(combinedKey);
-                                    string[] filenames = filename.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
-                                    await AddMessageToChat(messageid, gdpname, message, filenames);
-                                }
-                            }
-                        }
-                    }
+                        var channel = await _channel.RequestoneChannelName(_channelid);
+                        lb_TenKenh.Text = channel.channelname;
+                        _channelname = channel.channelname;
+                    };
+                    message();
                     while (true)
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("JoinGroup", label2.Name, _gdpname);
+                            await connection.SendAsync("JoinGroup", _channelid, _gdpname);
                             break;
                         }
                     }
@@ -766,54 +1322,46 @@ namespace QLUSER
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("LeaveGroup", label2.Name, _gdpname);
+                            await connection.SendAsync("LeaveGroup", _channelid, _gdpname);
                             break;
                         }
                     }
-                    VideoCall vc = new VideoCall(_gdpname, label2.Name);
+                    VideoCall vc = new VideoCall(_gdpname, _channelid,this);
                     vc.Show();
                     displayedMessages.Clear();
-                    flowLayoutPanel1.Controls.Clear();
-                    flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
-                    flowLayoutPanel1.PerformLayout();
+                    flp_Message.Controls.Clear();
+                    flp_Message.AutoScrollPosition = new Point(0, 0);
+                    flp_Message.PerformLayout();
                     string selectedKenhName = selectedNode.Text;
-                    label2.Text = selectedKenhName;
+                    lb_TenKenh.Text = selectedKenhName;
                     string[] channelid = selectedNode.Name.Split('|');
-                    label2.Name = channelid[1];
-                    var result = await message1.ReceiveMessage(label2.Name);
-                    if (result.issuccess)
+                    lb_TenKenh.Name = channelid[1];
+                    _channelid = channelid[1];
+                    _channelname = selectedKenhName;
+                    UserSession.ActionUpdateChannelname += async () =>
                     {
-                        for (int i = result.messagetext.Length - 1; i > 0; i -= 4)
-                        {
-                            if (i - 3 < result.messagetext.Length)
-                            {
-                                string messageid = result.messagetext[i - 3];
-                                string gdpname = result.messagetext[i - 2];
-                                string message = result.messagetext[i - 1];
-                                string filename = result.messagetext[i];
-                                string combinedKey = messageid;
-                                if (!displayedMessages.Contains(combinedKey))
-                                {
-                                    if (displayedMessages.Count >= 100)
-                                    {
-                                        displayedMessages.Remove(displayedMessages.First());
-                                    }
-                                    displayedMessages.Add(combinedKey);
-                                    string[] filenames = filename.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
-                                    await AddMessageToChat(messageid, gdpname, message, filenames);
-                                }
-                            }
-                        }
-                    }
+                        var channel = await _channel.RequestoneChannelName(_channelid);
+                        lb_TenKenh.Text = channel.channelname;
+                        _channelname = channel.channelname;
+                    };
+                    message();
                     while (true)
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
                         {
-                            await connection.SendAsync("JoinGroup", label2.Name, _gdpname);
+                            await connection.SendAsync("JoinGroup", _channelid, _gdpname);
                             break;
                         }
                     }
                 }
+                UserSession.ActionUpdateMessage += () =>
+                {
+                    message();
+                };
+                UserSession.ActionDeleteuser += () =>
+                {
+                    message();
+                };
             }
         }
         private void CreateMenu()
@@ -827,7 +1375,7 @@ namespace QLUSER
                 panelMenu.WrapContents = false;
                 panelMenu.AutoScroll = true;
 
-                panel11.Controls.Add(panelMenu);
+                P_Kenh_DanhMuc1.Controls.Add(panelMenu);
                 AddMenuItem(panelMenu, "Mời Mọi Người");
                 AddMenuItem(panelMenu, "Cài đặt máy chủ");
                 AddMenuItem(panelMenu, "Tạo kênh");
@@ -836,7 +1384,34 @@ namespace QLUSER
             }
 
         }
-
+        private async void message()
+        {
+            var result = await _message.ReceiveMessage(_channelid);
+            if (result.issuccess)
+            {
+                for (int i = result.messagetext.Length - 1; i > 0; i -= 4)
+                {
+                    if (i - 3 < result.messagetext.Length)
+                    {
+                        string messageid = result.messagetext[i - 3];
+                        string gdpname = result.messagetext[i - 2];
+                        string message = result.messagetext[i - 1];
+                        string filename = result.messagetext[i];
+                        string combinedKey = messageid;
+                        if (!displayedMessages.Contains(combinedKey))
+                        {
+                            if (displayedMessages.Count >= 100)
+                            {
+                                displayedMessages.Remove(displayedMessages.First());
+                            }
+                            displayedMessages.Add(combinedKey);
+                            string[] filenames = filename.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+                            await AddMessageToChat(messageid, gdpname, message, filenames);
+                        }
+                    }
+                }
+            }
+        }
 
         private void AddMenuItem(FlowLayoutPanel parentPanel, string text)
         {
@@ -856,8 +1431,8 @@ namespace QLUSER
             {
                 switch (text)
                 {
-                    case "Mời Mọi Người": MoiMoiNguoi(label1.Name); break;
-                    case "Cài đặt máy chủ": Caidatmaychu(label1.Text,label1.Name); break;
+                    case "Mời Mọi Người": MoiMoiNguoi(_groupname,_groupid); break;
+                    case "Cài đặt máy chủ": Caidatmaychu(_groupname,_groupid); break;
                     case "Tạo kênh": TaoKenh(null, null); break;
                     case "Tạo Danh Mục": TaoDanhMuc(); break;
                 }
@@ -869,35 +1444,44 @@ namespace QLUSER
 
         private void button5_Click_1(object sender, EventArgs e)
         {
-            ServerOrFriend.SelectedIndex = 2;
+            TC_ServerOrFriend.SelectedIndex = 2;
             CreateMenu();
 
 
         }
         private void Caidatmaychu(string groupname,string groupid)
         {
-            CaiDatMayChu maychu = new CaiDatMayChu(groupname, groupid,_gdpname);
-            maychu.Show();
+            CaiDatMayChu maychu = new CaiDatMayChu(groupname, groupid,_gdpname,this);
+            maychu.ShowDialog();
         }
-        private void MoiMoiNguoi(string group)
+        private async void MoiMoiNguoi(string groupname,string groupid)
         {
+
             Form form = new Form();
-            form.Text = $"Mời bạn bè vào {group}";
+            form.Text = $"Mời bạn bè vào {groupname}";
             form.Size = new Size(400, 200);
             form.StartPosition = FormStartPosition.CenterParent;
 
             Label label = new Label();
-            label.Text = $"Mời bạn bè vào nhóm: {group}";
+            label.Text = $"Mời bạn bè vào nhóm: {groupname}";
             label.Font = new Font("Arial", 12, FontStyle.Bold);
             label.ForeColor = Color.Black;
             label.AutoSize = true;
             label.Location = new Point(20, 20);
+            UserSession.ActionUpdateGroupname += async () =>
+            {
+                groupname = await _group.Groupname(_groupid);
+                form.Text = $"Mời bạn bè vào {groupname}";
+                label.Text = $"Mời bạn bè vào nhóm: {groupname}";
+            };
+            string maloimoi = await _group.FindMaLoiMoi(_groupid);
 
             TextBox textbox = new TextBox();
-            textbox.Text = $"{group}";
+            textbox.Text = $"{maloimoi}";
             textbox.Width = 340;
             textbox.Location = new Point(20, 60);
             textbox.ReadOnly = true;
+
 
             Button btnCopy = new Button();
             btnCopy.Text = "Sao chép";
@@ -992,12 +1576,12 @@ namespace QLUSER
             form.Controls.Add(btnClose);
             form.Controls.Add(label1);
             form.Controls.Add(btnjoin);
-            form.Show();
+            form.ShowDialog();
         }
         private async Task creategroup(Form form1)
         {
             Image image = global::QLUSER.Properties.Resources.group_1824145_1280;
-            string imagepath = find1.find("group-1824145_1280.png");
+            string imagepath = _find.find("group-1824145_1280.png");
             Form form = new Form();
             form.Text = $"Tùy chỉnh máy chủ của bạn";
             form.Size = new Size(600, 400);
@@ -1059,7 +1643,10 @@ namespace QLUSER
             ten.Font = new Font("Arial", 12, FontStyle.Bold);
             ten.ForeColor = Color.Black;
             ten.Size = new Size(540, 30);
-
+            UserSession.ActionUpdatedpname += () =>
+            {
+                ten.Text = $"máy chủ của {_dpname}";
+            };
             ten.PerformLayout();
             ten.Location = new Point(20, 250);
 
@@ -1071,26 +1658,27 @@ namespace QLUSER
             {
                 if (!string.IsNullOrEmpty(ten.Text))
                 {
-                    var result = await group.SaveGroupToDatabase(ten.Text);
+                    var result = await _group.SaveGroupToDatabase(ten.Text,0);
                     if (result.issuccess)
                     {
-                        var result1 = await _role.AddMembersToGroup(_userid, result.groupid,_dpname,"Owner");
+                        var result1 = await _groupMember.AddMembersToGroup(_userid, result.groupid,_dpname,"Owner");
                         if (result1)
                         {
-                            var result2 = await danhmuc.SaveDanhMucToDatabase(result.groupid, "Chat");
+                            var result2 = await _danhmuc.SaveDanhMucToDatabase(result.groupid, "Chat");
                             if (result2.issuccess)
                             {
-                                await channel.SaveKenhToDatabase(result.groupid, "ChatChung", true, result2.danhmucID);
+                                await _channel.SaveKenhToDatabase(result.groupid, "ChatChung", true, result2.danhmucID);
                             }
-                            result2 = await danhmuc.SaveDanhMucToDatabase(result.groupid, "Video");
+                            result2 = await _danhmuc.SaveDanhMucToDatabase(result.groupid, "Video");
                             if (result2.issuccess)
                             {
-                                await channel.SaveKenhToDatabase(result.groupid, "Videochung", false, result2.danhmucID);
+                                await _channel.SaveKenhToDatabase(result.groupid, "Videochung", false, result2.danhmucID);
                             }
-                            string avatargroupUrl = await avatar.UploadAvatarGroupAsync(imagepath, result.groupid);
+                            string avatargroupUrl = await _avatar.UploadAvatarGroupAsync(imagepath, result.groupid);
                             if (avatargroupUrl != null)
                             {
-                                UserSession.AvatarGroupUrl = (true, true);
+                                UserSession.UpdateGroup = (true, true);
+                                SendUpdate("GroupDislay");
                                 MessageBox.Show("Avatar group uploaded successfully!");
                             }
                             else
@@ -1120,7 +1708,7 @@ namespace QLUSER
             form.Controls.Add(grouppicture);
             form.Controls.Add(btnClose);
             form.Controls.Add(btncreate);
-            form.Show();
+            form.ShowDialog();
 
         }
         private async Task joingroup(Form form1)
@@ -1174,16 +1762,21 @@ namespace QLUSER
 
                     if (!string.IsNullOrEmpty(_dpname))
                     {
-                        bool add = await _role.AddMembersToGroup(_userid, ten.Text,_dpname,"Member");
-                        if (add)
+                        string groupid = await _group.FindGroupID(ten.Text);
+                        if (groupid != null)
                         {
-                            string avatargroupUrl = await avatar.LoadGroupUrlAsync(ten.Text);
-                            if (avatargroupUrl != null)
+                            bool add = await _groupMember.AddMembersToGroup(_userid, groupid, _dpname, "Member");
+                            if (add)
                             {
-                                UserSession.AvatarGroupUrl = (true, true);
+                                string avatargroupUrl = await _avatar.LoadGroupUrlAsync(groupid);
+                                if (avatargroupUrl != null)
+                                {
+                                    UserSession.UpdateGroup = (true, true);
+                                    SendUpdate("GroupDislay");
+                                }
+                                form.Close();
+                                form1.Close();
                             }
-                            form.Close();
-                            form1.Close();
                         }
                     }
                 }
@@ -1202,7 +1795,7 @@ namespace QLUSER
             form.Controls.Add(tenmaychu);
             form.Controls.Add(ten);
             form.Controls.Add(btnjoin);
-            form.Show();
+            form.ShowDialog();
 
         }
         private async Task<Dictionary<Image, string>> doianh()
@@ -1312,14 +1905,14 @@ namespace QLUSER
             btncreate.Location = new Point(560 - btncreate.Width, 280);
             btncreate.Click += async (s, e) =>
             {
-                if (!string.IsNullOrEmpty(ten.Text) && label1.Text != "")
+                if (!string.IsNullOrEmpty(ten.Text) && lb_TenGroup.Text != "")
                 {
 
                     if (!string.IsNullOrEmpty(_dpname))
                     {
                         if (vanban.Checked == true)
                         {
-                            var result = await channel.SaveKenhToDatabase(label1.Name, ten.Text, true, danhmucid);
+                            var result = await _channel.SaveKenhToDatabase(_groupid, ten.Text, true, danhmucid);
                             if (result.issuccess)
                             {
 
@@ -1327,21 +1920,21 @@ namespace QLUSER
                                 {
                                     node.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
                                 }
-                                else treeView1.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
+                                else tv_Kenh_DanhMuc.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
                                 ChangeLabelLocation();
                                 form.Close();
                             }
                         }
                         else
                         {
-                            var result = await channel.SaveKenhToDatabase(label1.Name, ten.Text, false, danhmucid);
+                            var result = await _channel.SaveKenhToDatabase(_groupid, ten.Text, false, danhmucid);
                             if (result.issuccess)
                             {
                                 if (node != null)
                                 {
                                     node.Nodes.Add($"CuocGoiVideo|{result.channelID}", ten.Text);
                                 }
-                                else treeView1.Nodes.Add($"CuoiGoiVideo|{result.channelID}", ten.Text);
+                                else tv_Kenh_DanhMuc.Nodes.Add($"CuoiGoiVideo|{result.channelID}", ten.Text);
                                 ChangeLabelLocation();
                                 form.Close();
                             }
@@ -1353,7 +1946,7 @@ namespace QLUSER
                 {
                     MessageBox.Show("Vui lòng nhập tên kênh.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                else if (label1.Text == "") MessageBox.Show("Tạo kênh thất bại");
+                else if (lb_TenGroup.Text == "") MessageBox.Show("Tạo kênh thất bại");
             };
             Button btnClose = new Button();
             btnClose.Text = "Hủy bỏ";
@@ -1371,7 +1964,7 @@ namespace QLUSER
             form.Controls.Add(ten);
             form.Controls.Add(Tenkenh);
             form.Controls.Add(btncreate);
-            form.Show();
+            form.ShowDialog();
 
         }
         private void TaoDanhMuc()
@@ -1415,13 +2008,13 @@ namespace QLUSER
             btncreate.Location = new Point(360 - btncreate.Width, 130);
             btncreate.Click += async (s, e) =>
             {
-                if (!string.IsNullOrEmpty(ten.Text) && label1.Text != "")
+                if (!string.IsNullOrEmpty(ten.Text) && lb_TenGroup.Text != "")
                 {
 
-                    var result = await danhmuc.SaveDanhMucToDatabase(label1.Name, ten.Text);
+                    var result = await _danhmuc.SaveDanhMucToDatabase(_groupid, ten.Text);
                     if (result.issuccess)
                     {
-                        TreeNode node = treeView1.Nodes.Add($"danhmuc|{result.danhmucID}", ten.Text);
+                        TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"danhmuc|{result.danhmucID}", ten.Text);
                         await createlabel(node);
                         form.Close();
                     }
@@ -1430,7 +2023,7 @@ namespace QLUSER
                 {
                     MessageBox.Show("Vui lòng nhập tên danh mục.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                else if (label1.Text == "") MessageBox.Show("Tạo danh mục thất bại");
+                else if (lb_TenGroup.Text == "") MessageBox.Show("Tạo danh mục thất bại");
             };
             Button btnClose = new Button();
             btnClose.Text = "Hủy bỏ";
@@ -1446,7 +2039,7 @@ namespace QLUSER
             form.Controls.Add(ten);
             form.Controls.Add(Tendanhmuc);
             form.Controls.Add(btncreate);
-            form.Show();
+            form.ShowDialog();
 
         }
         private async Task createlabel(TreeNode node)
@@ -1460,8 +2053,8 @@ namespace QLUSER
             label.Text = "+";
             int videoY = node.Bounds.Location.Y;
             //Point point = label4.Location;
-            int x = treeView1.Location.X + treeView1.Size.Width - label.Size.Width - 1;
-            int y = treeView1.Location.Y + 1 + videoY;
+            int x = tv_Kenh_DanhMuc.Location.X + tv_Kenh_DanhMuc.Size.Width - label.Size.Width - 1;
+            int y = tv_Kenh_DanhMuc.Location.Y + 1 + videoY;
             label.Location = new Point(x, y);
             label.Click += (s, e) =>
             {
@@ -1469,7 +2062,7 @@ namespace QLUSER
                 TaoKenh(danhmucid[1], node);
 
             };
-            panel12.Controls.Add(label);
+            P_Kenh_DanhMuc.Controls.Add(label);
             label.BringToFront();
             node.Tag = label;
             if (panelMenu != null) panelMenu.BringToFront();
@@ -1478,38 +2071,42 @@ namespace QLUSER
 
         private void cp_Menu_Click(object sender, EventArgs e)
         {
-            tabControl1.SelectedIndex = 1; // 1 là menu k có chat
-            ServerOrFriend.SelectedIndex = 0; //0 là menu hiện danh sách bạn bè
+            TC_Chat.SelectedIndex = 1; // 1 là menu k có chat
+            TC_ServerOrFriend.SelectedIndex = 0; //0 là menu hiện danh sách bạn bè
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ServerOrFriend.SelectedIndex = 1;
+            TC_ServerOrFriend.SelectedIndex = 1;
         }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ServerTab_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btn_Ketban_Click(object sender, EventArgs e)
         {
-            SearchUser friend = new SearchUser(_dpname);
-            friend.Show();
+            SearchUser friend = new SearchUser(_dpname,this);
+            friend.ShowDialog();
         }
 
         private async void button2_Click(object sender, EventArgs e)
+        {
+            showfriendrequest();
+            UserSession.ActionUpdateFriend -= ShowFriendHandler;
+            UserSession.ActionUpdateFriendRequest += ShowFriendRequestHandler;
+        }
+        private void ShowFriendHandler()
+        {
+            UserSession.RunOnUIThread(showfriend);
+        }
+
+        private void ShowFriendRequestHandler()
+        {
+            UserSession.RunOnUIThread(showfriendrequest);
+        }
+        private async void showfriendrequest()
         {
             using (HttpClient _httpClient = new HttpClient())
             {
                 try
                 {
-                    flpFriends.Controls.Clear();
+                    flp_Friends.Controls.Clear();
                     string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Request/{_userid}";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
@@ -1524,11 +2121,11 @@ namespace QLUSER
                             foreach (string Displayname in responseData.message)
                             {
                                 string userid = await _user.finduserid(Displayname);
-                                Image avatarImage = await avatar.LoadAvatarAsync(userid);
+                                Image avatarImage = await _avatar.LoadAvatarAsync(userid);
 
                                 Panel userPanel = new Panel
                                 {
-                                    Width = flpFriends.Width,
+                                    Width = flp_Friends.Width,
                                     Height = 60,
                                     BorderStyle = BorderStyle.FixedSingle
                                 };
@@ -1541,65 +2138,142 @@ namespace QLUSER
                                     SizeMode = PictureBoxSizeMode.Zoom,
                                     Location = new Point(5, 5)
                                 };
-                                UserSession.AvatarUpdated += async () =>
+                                UserSession.ActionAvatarUpdated += async () =>
                                 {
-                                    avatarBox.Image = await avatar.LoadAvatarAsync(userid);
+                                    avatarBox.Image = await _avatar.LoadAvatarAsync(userid);
                                 };
                                 Label usernameLabel = new Label
                                 {
                                     Text = Displayname,
                                     AutoSize = true,
-                                    Location = new Point(65, 20)
+                                    Location = new Point(65, 20),
+                                    ForeColor = Color.White
                                 };
-
+                                UserSession.ActionUpdatedpname += async () =>
+                                {
+                                    usernameLabel.Text = await _user.FindDisplayname(userid);
+                                };
                                 Button acceptButton = new Button
                                 {
                                     Text = "Chấp nhận",
                                     Tag = Displayname,
-                                    Location = new Point(userPanel.Width - 100, 15),
-                                    Width = 90
+                                    Location = new Point(userPanel.Width - 190, 15),
+                                    Width = 90,
+                                    ForeColor = Color.White
                                 };
 
                                 acceptButton.Click += async (s, ev) =>
                                 {
                                     await AcceptFriendRequest(Displayname);
                                 };
+
+                                Button rejectButton = new Button
+                                {
+                                    Text = "Từ chối",
+                                    Tag = Displayname,
+                                    Location = new Point(userPanel.Width - 100, 15),
+                                    Width = 90,
+                                    ForeColor = Color.White
+                                };
+
+                                rejectButton.Click += async (s, ev) =>
+                                {
+                                    await RejectFriendRequest(Displayname);
+                                };
+
                                 userPanel.Controls.Add(avatarBox);
                                 userPanel.Controls.Add(usernameLabel);
                                 userPanel.Controls.Add(acceptButton);
-                                flpFriends.Controls.Add(userPanel);
+                                userPanel.Controls.Add(rejectButton);
+                                flp_Friends.Controls.Add(userPanel);
                             }
+                            UserSession.ActionDeleteuser += () =>
+                            {
+                                showfriend();
+                            };
                         }
                         else
                         {
                             MessageBox.Show("Không có dữ liệu trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
-                    else
-                    {
-                        string errorContent = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show($"Lỗi từ server: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Lỗi hiện friend request: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-        private async Task AcceptFriendRequest(string Displayname)
+        private async Task RejectFriendRequest(string displayname)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string userid = await _user.finduserid(Displayname);
-                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Respond/Accept/{userid}";
-                    HttpResponseMessage response = await client.PostAsync(requestUrl, null);
+                    string senderId = await _user.finduserid(displayname);
+
+                    int receiverId = int.Parse(_userid);
+
+                    var requestBody = new
+                    {
+                        senderId = int.Parse(senderId),
+                        receiverId = receiverId,
+                        action = "Decline"
+                    };
+
+                    string jsonContent = JsonConvert.SerializeObject(requestBody);
+                    StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Respond";
+                    HttpResponseMessage response = await client.PostAsync(requestUrl, content);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        MessageBox.Show($"Đã chấp nhận lời mời kết bạn từ {Displayname}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        UserSession.UpdateFriendRequest = true;
+                        SendUpdate("UpdateFriendRequest");
+                        MessageBox.Show($"Đã từ chối lời mời kết bạn từ {displayname}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Lỗi từ server khi từ chối lời mời: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi từ chối lời mời: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async Task AcceptFriendRequest(string displayname)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string senderId = await _user.finduserid(displayname);
+
+                    int receiverId = int.Parse(_userid);
+
+                    var requestBody = new
+                    {
+                        senderId = int.Parse(senderId),
+                        receiverId = receiverId,
+                        action = "Accept"
+                    };
+
+                    string jsonContent = JsonConvert.SerializeObject(requestBody);
+                    StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Respond";
+                    HttpResponseMessage response = await client.PostAsync(requestUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        UserSession.UpdateFriendRequest = true;
+                        SendUpdate("UpdateFriendRequest");
+                        MessageBox.Show($"Đã chấp nhận lời mời kết bạn từ {displayname}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -1629,11 +2303,18 @@ namespace QLUSER
                     form.Close();
 
             };
-            string gdpid = await groupMember.FindGroupDisplayID(label1.Name,gdpname);
+            UserSession.ActionDeleteuser += () =>
+            {
+                if (form != null && !form.IsDisposed)
+                {
+                    form.Close();
+                }
+            };
+            string gdpid = await _groupMember.FindGroupDisplayID(_groupid,gdpname);
             CircularPicture userpicture = new CircularPicture();
             try
             {
-                userpicture.Image = await avatar.LoadAvatarAsync(gdpid);
+                userpicture.Image = await _avatar.LoadAvatarAsync(gdpid);
             }
             catch (Exception ex)
             {
@@ -1646,16 +2327,20 @@ namespace QLUSER
             userpicture.Anchor = AnchorStyles.None;
             userpicture.Click += async (s, e) =>
             {
-                GroupUser user = new GroupUser(gdpname, _gdpname,label1.Name);
-                user.Show();
+                GroupUser user = new GroupUser(gdpname, _gdpname,_groupid,this);
+                user.ShowDialog();
             };
-            UserSession.AvatarUpdated += async () =>
+            UserSession.ActionAvatarUpdated += async () =>
             {
-                userpicture.Image = await avatar.LoadAvatarAsync(gdpid);
+                userpicture.Image = await _avatar.LoadAvatarAsync(gdpid);
             };
 
             Label label = new Label();
             label.Text = $"{gdpname}";
+            UserSession.ActionUpdategdpname += async () =>
+            {
+                label.Text = await _groupMember.FindGroupDisplayname(gdpid, _groupid);
+            };
             label.Font = new Font("Arial", 12, FontStyle.Bold);
             label.ForeColor = Color.Black;
             label.AutoSize = true;
@@ -1664,8 +2349,8 @@ namespace QLUSER
             label.Location = new Point(20, 120);
             label.TextAlign = ContentAlignment.MiddleCenter;
 
-            var result = await group.RequestGroupName(gdpid);
-            var result1 = await group.RequestGroupName(_userid);
+            var result = await _group.RequestGroupName(gdpid,0);
+            var result1 = await _group.RequestGroupName(_userid,0);
             string[] commongroupnames = result.groupidname.Intersect(result1.groupidname).ToArray();
             string[] commonGroupNames = commongroupnames.Take(3).ToArray();
             for (int i = 0; i < commonGroupNames.Length; i++)
@@ -1674,13 +2359,17 @@ namespace QLUSER
                 try
                 {
                     string[] group = commonGroupNames[i].Split('|');
-                    circulargroup.Image = await avatar.LoadAvatarGroupAsync(group[0]);
+                    circulargroup.Image = await _avatar.LoadAvatarGroupAsync(group[0]);
                     circulargroup.SizeMode = PictureBoxSizeMode.Zoom;
                     circulargroup.Text = group[1];
                     circulargroup.Name = $"group|{group[0]}";
-                    UserSession.AvatarGroupUpdated += async () =>
+                    UserSession.ActionAvatarGroupUpdated += async () =>
                     {
-                        circulargroup.Image = await avatar.LoadAvatarGroupAsync(group[0]);
+                        circulargroup.Image = await _avatar.LoadAvatarGroupAsync(group[0]);
+                    };
+                    UserSession.ActionUpdateGroupname += async () =>
+                    {
+                        circulargroup.Text = await _group.Groupname(group[0]);
                     };
                 }
                 catch (Exception ex)
@@ -1693,8 +2382,8 @@ namespace QLUSER
                 circulargroup.Anchor = AnchorStyles.None;
                 circulargroup.Click += async (s, e) =>
                 {
-                    GroupUser user = new GroupUser(gdpname, _gdpname,label1.Name);
-                    user.Show();
+                    GroupUser user = new GroupUser(gdpname, _gdpname,_groupid,this);
+                    user.ShowDialog();
                 };
                 form.Controls.Add(circulargroup);
             }
@@ -1715,6 +2404,15 @@ namespace QLUSER
             nhantin.Size = new Size(440, 30);
             nhantin.PerformLayout();
             nhantin.Location = new Point(20, 200);
+            nhantin.KeyDown += async (s, e) =>
+            {
+                if (!string.IsNullOrEmpty(nhantin.Text))
+                {
+                    on = true;
+                    nhantin_KeyDown(s, e, gdpid, nhantin);
+                    on = false;
+                }
+            };
 
             Button thongtin = new Button();
             thongtin.Text = "...";
@@ -1744,8 +2442,8 @@ namespace QLUSER
             banbe.AutoSize = AutoSize;
             banbe.Click += (s, e) =>
             {
-                SearchUser user = new SearchUser(_dpname);
-                user.Show();
+                SearchUser user = new SearchUser(_dpname,this);
+                user.ShowDialog();
             };
 
             form.Controls.Add(userpicture);
@@ -1759,6 +2457,61 @@ namespace QLUSER
             }
             form.Show();
         }
+        private async void nhantin_KeyDown(object sender, KeyEventArgs e,string gdpid,TextBox nhantin)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string message = nhantin.Text;
+                var groupidname = await _group.FindGroup(_userid, gdpid);
+                var result = await _user.FindDisplayname(gdpid);
+                string channelid="";
+                if (string.IsNullOrEmpty(groupidname))
+                { 
+                    var result1 = await Createnhantinrieng(result, gdpid);
+                    channelid = result1.channelid;
+                    
+                }
+                else
+                {
+                    string[] groupid1 = groupidname.Split('|');
+                    var result1 = await _channel.RequestChannelName(groupid1[0]);
+                    if(result1.issuccess)
+                    {
+                        string[] channelid1 = result1.channelidname[0].Split('|');
+                        channelid = channelid1[0];
+                    }
+                }
+                var result2 = await _message.SendMessage(channelid, _userid, message);
+                nhantin.Text = "";
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+
+        }
+
+        private async Task<(string groupid, string channelid)> Createnhantinrieng(string dpname, string userid)
+        {
+            var result = await _group.SaveGroupToDatabase("Chathainguoi", 2);
+            if (result.issuccess)
+            {
+                var result1 = await _groupMember.AddMembersToGroup(_userid, result.groupid, _dpname, "Owner");
+                var result2 = await _groupMember.AddMembersToGroup(userid, result.groupid, dpname, "Owner");
+                if (result1 && result2)
+                {
+                    var result3 = await _channel.SaveKenhToDatabase(result.groupid, "ChatRieng", true, null);
+                    if (result3.issuccess)
+                    {
+                        UserSession.UpdateGroup = (true, false);
+                        SendUpdate("GroupPrivateDislay");
+                        return (result.groupid, result3.channelID);
+                    }
+                }
+            }
+            return (null, null);
+        }
+
+
         Form form1;
         private void TrangChu(string gdpname, string gdpid)
         {
@@ -1785,7 +2538,7 @@ namespace QLUSER
             button.Location = new Point(20, 20);
             button.Click += (s1, e1) =>
             {
-                GroupUser user = new GroupUser(gdpname, _gdpname,label1.Name);
+                GroupUser user = new GroupUser(gdpname, _gdpname,_groupid,this);
                 user.Show();
             };
             Button moivaomaychu = new Button();
@@ -1808,7 +2561,7 @@ namespace QLUSER
 
             form1.Controls.Add(button);
             form1.Controls.Add(moivaomaychu);
-            form1.Show();
+            form1.ShowDialog();
         }
         Form form2;
         private async void moivaogroup(string gdpid)
@@ -1829,7 +2582,7 @@ namespace QLUSER
             form2.Controls.Add(flowLayoutPanel1);
 
             // Get group names from the server
-            var result = await group.RequestGroupName(_userid);
+            var result = await _group.RequestGroupName(_userid,0);
             if (result.issuccess)
             {
                 for (int i = 0; i < result.groupidname.Length; i++)
@@ -1838,28 +2591,28 @@ namespace QLUSER
                     Button moivaogroup = new Button();
                     moivaogroup.Name = $"group|{group1[0]}";
                     moivaogroup.Text = group1[1];
-                    UserSession.UpdateGroupname += async () =>
+                    UserSession.ActionUpdateGroupname += async () =>
                     {
-                        moivaogroup.Text = await group.Groupname(group1[0]); 
+                        moivaogroup.Text = await _group.Groupname(group1[0]); 
                     };
                     moivaogroup.Size = new Size(120, 30);  // Adjust the size of the buttons
                     moivaogroup.Click += async (s2, e2) =>
                     {
                         string displayname = await _user.FindDisplayname(gdpid);
-                        await _role.AddMembersToGroup(gdpid, group1[0],displayname,"Member");
+                        await _groupMember.AddMembersToGroup(gdpid, group1[0],displayname,"Member");
                     };
 
                     // Add the button to the FlowLayoutPanel
                     flowLayoutPanel1.Controls.Add(moivaogroup);
                 }
             }
-            form2.Show();
+            form2.ShowDialog();
 
         }
 
         private async void button7_Click(object sender, EventArgs e)
         {
-            var existingEmojiPanel = tabPage1.Controls.OfType<Panel>().FirstOrDefault(p => p.Name == "emojiPanel");
+            var existingEmojiPanel = TP_ChattingView.Controls.OfType<Panel>().FirstOrDefault(p => p.Name == "emojiPanel");
 
             if (existingEmojiPanel != null)
             {
@@ -1908,28 +2661,28 @@ namespace QLUSER
                     }
                 }
             }
-            tabPage1.Controls.Add(emojiPanel);
+            TP_ChattingView.Controls.Add(emojiPanel);
             emojiPanel.BringToFront();
         }
 
         private void AddEmojiToTextBox(Emoji emoji)
         {
-            textBox1.Text += emoji.character;
+            tb_Message.Text += emoji.character;
         }
 
         private async void button8_Click(object sender, EventArgs e)
         {
 
-            if (label2.Text == "")
+            if (lb_TenKenh.Text == "")
             {
                 MessageBox.Show("Tìm kiếm thất bại");
                 return;
             }
-            flowLayoutPanel1.Controls.Clear();
-            flowLayoutPanel1.AutoScrollPosition = new Point(0, 0);
-            flowLayoutPanel1.PerformLayout();
+            flp_Message.Controls.Clear();
+            flp_Message.AutoScrollPosition = new Point(0, 0);
+            flp_Message.PerformLayout();
 
-            SearchMessage searchMessage = new SearchMessage(label2.Name);
+            SearchMessage searchMessage = new SearchMessage(_channelid,this);
             if (searchMessage.ShowDialog() == DialogResult.OK) 
             {
                 string[] messages = searchMessage.message;
@@ -1949,7 +2702,292 @@ namespace QLUSER
             }
         }
 
-        private void cp_ProfilePic_Click(object sender, EventArgs e)
+        private void tabControl2_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            Pen p = new Pen(Color.Blue, 4);
+            g.DrawRectangle(p, this.TP_ChattingView.Bounds);
+        }
+        private async void btn_XemListFriend_Click(object sender, EventArgs e)
+        {
+            showfriend();
+            UserSession.ActionUpdateFriend += ShowFriendHandler;
+            UserSession.ActionUpdateFriendRequest -= ShowFriendRequestHandler;
+
+        }
+        private async void showfriend()
+        {
+            using (HttpClient _httpClient = new HttpClient())
+            {
+                try
+                {
+
+                    flp_Friends.Controls.Clear();
+
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/{_userid}";
+
+                    HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                        if (responseData != null && responseData.message != null)
+                        {
+                            foreach (string displayName in responseData.message)
+                            {
+                                string userid = await _user.finduserid(displayName);
+                                Image avatarImage = await _avatar.LoadAvatarAsync(userid);
+                                Panel friendPanel = new Panel
+                                {
+                                    Width = flp_Friends.Width - 20,
+                                    Height = 60,
+                                    BorderStyle = BorderStyle.FixedSingle
+                                };
+                                Label usernameLabel = new Label
+                                {
+                                    Text = displayName,
+                                    AutoSize = true,
+                                    Location = new Point(65, 20),
+                                    ForeColor = Color.White
+                                };
+                                UserSession.ActionUpdatedpname += async () =>
+                                {
+                                    usernameLabel.Text = await _user.FindDisplayname(userid);
+                                };
+                                PictureBox avatarBox = new PictureBox
+                                {
+                                    Image = avatarImage,
+                                    Width = 50,
+                                    Height = 50,
+                                    SizeMode = PictureBoxSizeMode.Zoom,
+                                    Location = new Point(5, 5)
+                                };
+                                UserSession.ActionAvatarUpdated += async () =>
+                                {
+                                    avatarBox.Image = await _avatar.LoadAvatarAsync(userid);
+                                };
+
+                                // Thêm các điều khiển vào Panel
+                                friendPanel.Controls.Add(usernameLabel);
+                                friendPanel.Controls.Add(avatarBox);
+                                // Thêm Panel vào FlowLayoutPanel
+                                flp_Friends.Controls.Add(friendPanel);
+                            }
+                            UserSession.ActionDeleteuser += () =>
+                            {
+                                showfriend();
+                            };
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không có dữ liệu bạn bè trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        // Hiển thị lỗi từ server nếu có
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Lỗi từ server: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi trong quá trình gửi request hoặc hiển thị danh sách
+                    MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        
+        private async void button10_Click_1(object sender, EventArgs e)
+        {
+            bool canclose=true;
+            Form form = new Form();
+            form.Text = $"Chọn bạn bè";
+            form.Size = new Size(500, 350);
+            form.StartPosition = FormStartPosition.CenterParent;
+
+            form.Deactivate += (s1, e1) =>
+            {
+                if(canclose)
+                form.Close();
+            };
+
+
+            Label label = new Label();
+            label.Text = $"Chọn bạn bè";
+            label.Font = new Font("Arial", 12, FontStyle.Bold);
+            label.ForeColor = Color.Black;
+            label.AutoSize = true;
+            label.PerformLayout();
+            int labelWidth = TextRenderer.MeasureText(label.Text, label.Font).Width;
+            label.Location = new Point(20, 20);
+            label.TextAlign = ContentAlignment.MiddleCenter;
+
+
+            FlowLayoutPanel panel = new FlowLayoutPanel();
+            panel.Location = new Point(20, 100);
+            panel.Size = new Size(440, 100);
+            panel.FlowDirection = FlowDirection.TopDown;  // Arrange buttons vertically
+            panel.WrapContents = false;  // Don't wrap buttons to next row
+            panel.AutoScroll = true; // Enable scrolling if buttons overflow
+
+            using (HttpClient _httpClient = new HttpClient())
+            {
+                try
+                {
+
+                    flp_Friends.Controls.Clear();
+
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/{_userid}";
+
+                    HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                        if (responseData != null && responseData.message != null)
+                        {
+                            foreach (string displayName in responseData.message)
+                            {
+                                string userid = await _user.finduserid(displayName);
+                                Image avatarImage = await _avatar.LoadAvatarAsync(userid);
+                                Panel friendPanel = new Panel
+                                {
+                                    Width = panel.Width - 20,
+                                    Height = 30,
+                                    BorderStyle = BorderStyle.FixedSingle,
+                                    AutoSize=true,
+                                };
+                                CheckBox usernamebox = new CheckBox
+                                {
+                                    Checked = false,
+                                    Text = displayName,
+                                    Name = userid,
+                                    AutoSize = true,
+                                    Location = new Point(45, 10),
+                                    ForeColor = Color.Black,
+                                    TextAlign = ContentAlignment.MiddleCenter,
+                                    CheckAlign = ContentAlignment.MiddleRight, 
+                                };
+                                UserSession.ActionUpdatedpname += async () =>
+                                {
+                                    usernamebox.Text = await _user.FindDisplayname(userid);
+                                };
+                                usernamebox.PerformLayout();
+                                PictureBox avatarBox = new PictureBox
+                                {
+                                    Image = avatarImage,
+                                    Width = 25,
+                                    Height = 25,
+                                    SizeMode = PictureBoxSizeMode.Zoom,
+                                    Location = new Point(5, 5)
+                                };
+                                UserSession.ActionAvatarUpdated += async () =>
+                                {
+                                    avatarBox.Image = await _avatar.LoadAvatarAsync(userid);
+                                };
+
+                                friendPanel.Controls.Add(usernamebox);
+                                friendPanel.Controls.Add(avatarBox);
+                                // Thêm Panel vào FlowLayoutPanel
+                                panel.Controls.Add(friendPanel);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không có dữ liệu bạn bè trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        // Hiển thị lỗi từ server nếu có
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Lỗi từ server: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi trong quá trình gửi request hoặc hiển thị danh sách
+                    MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+
+            Button thongtin = new Button();
+            thongtin.Text = "Tạo Group";
+            thongtin.Location = new Point(20, 250);
+            thongtin.Size = new Size(440, 30);
+            thongtin.Click += async (s1, e1) =>
+            {
+                canclose = false;
+                List<CheckBox> list = new List<CheckBox>();
+                foreach (Control control in panel.Controls)
+                {
+                    if (control is Panel friendPanel)
+                    {
+                        foreach (Control subControl in friendPanel.Controls)
+                        {
+                            if (subControl is CheckBox checkBox && checkBox.Checked)
+                            {
+                                list.Add(checkBox);
+                            }
+                        }
+                    }
+                }
+                if (list.Count < 10&&list.Count>0)
+                {
+                    string imagepath = _find.find("group-1824145_1280.png");
+                    var result = await _group.SaveGroupToDatabase("ChatRieng", 1);
+                    if (result.issuccess)
+                    {
+                        var result1 = await _groupMember.AddMembersToGroup(_userid, result.groupid, _dpname, "Owner");
+                        foreach (var user in list)
+                        {
+                            var result2 = await _groupMember.AddMembersToGroup(user.Name, result.groupid, user.Text, "Owner");
+                        }
+
+                        await _channel.SaveKenhToDatabase(result.groupid, "ChatRieng", true, null);
+                        string avatargroupUrl = await _avatar.UploadAvatarGroupAsync(imagepath, result.groupid);
+                        if (avatargroupUrl != null)
+                        {
+                            UserSession.UpdateGroup = (true, false);
+                            SendUpdate("GroupPrivateDislay");
+                            MessageBox.Show("Avatar group uploaded successfully!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to upload avatar.");
+                        }
+                        form.Dispose();
+                        form.Close();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Nhóm tối đa 10 người.Xin vui lòng chọn dưới 10 người");
+                }
+                canclose = true;
+            };
+
+            form.Controls.Add(label);
+
+            form.Controls.Add(panel);
+            form.Controls.Add(thongtin);
+
+
+            form.ShowDialog();
+        }
+
+        private void btn_Banbe_Click(object sender, EventArgs e)
+        {
+            TC_Chat.SelectedIndex = 1;
+        }
+
+        private void flp_TinNhanTT_Paint(object sender, PaintEventArgs e)
         {
 
         }

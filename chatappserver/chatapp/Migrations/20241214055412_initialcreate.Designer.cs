@@ -12,8 +12,8 @@ using chatapp.Data;
 namespace chatserver.Migrations
 {
     [DbContext(typeof(ChatAppContext))]
-    [Migration("20241209125540_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241214055412_initialcreate")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,6 +193,12 @@ namespace chatserver.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Isprivate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MaLoiMoi")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GroupId");

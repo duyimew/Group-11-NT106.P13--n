@@ -16,7 +16,7 @@ namespace chatapp.Controllers
         public FriendController(ChatAppContext context, Friend friend)
         {
             _context = context;
-            _friend= friend;
+            _friend = friend;
         }
 
         [HttpGet("{userid}")]
@@ -72,6 +72,36 @@ namespace chatapp.Controllers
             else
             {
                 return BadRequest(new { message = result[0] });
+            }
+        }
+
+        [HttpPost("DeleteRequest")]
+        public async Task<IActionResult> DeleteRequest([FromBody] DeleteFriendRequestDTO request)
+        {
+            if (request == null || request.SenderId <= 0 || request.ReceiverId <= 0)
+            {
+                return BadRequest(new { message = "Dữ liệu không hợp lệ." });
+            }
+
+            try
+            {
+                var friendRequest = await _context.FriendRequests
+                    .FirstOrDefaultAsync(fr => (fr.SenderId == request.SenderId && fr.ReceiverId == request.ReceiverId) ||
+                                               (fr.SenderId == request.ReceiverId && fr.ReceiverId == request.SenderId));
+
+                if (friendRequest == null)
+                {
+                    return NotFound(new { message = "Lời mời kết bạn không tồn tại." });
+                }
+
+                _context.FriendRequests.Remove(friendRequest);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Lời mời kết bạn đã được xóa thành công." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Đã xảy ra lỗi: {ex.Message}" });
             }
         }
 

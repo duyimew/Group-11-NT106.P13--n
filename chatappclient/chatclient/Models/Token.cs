@@ -87,8 +87,9 @@ namespace QLUSER.Models
                     Environment.Exit(0);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show("Lỗi trong file token.cs"+ex.Message);
                 Dangnhap dangnhap = new Dangnhap();
                 Application.Run(dangnhap);
                 Environment.Exit(0);

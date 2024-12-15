@@ -4,14 +4,14 @@ using System.Data;
 
 namespace chatapp.DataAccess
 {
-    public class Groupname
+    public class FindGroup
     {
         private readonly ConnectDB _connectDB;
-        public Groupname(ConnectDB connectDB)
+        public FindGroup(ConnectDB connectDB)
         {
             _connectDB = connectDB;
         }
-        public async Task<string[]> GroupNameAsync(string[] userInfo)
+        public async Task<string[]> FindGroupAsync(string[] userInfo)
         {
             string[] result = new string[1];
             result[0] = "0";
@@ -24,12 +24,18 @@ namespace chatapp.DataAccess
                         result[0] = "Kết nối tới database thất bại";
                         return result;
                     }
-                    string strQuery = "SELECT gr.GroupId,gr.GroupName " +
-                        "FROM Groups gr,GroupMembers gm " +
-                        "WHERE gm.UserId=@userid and gr.Isprivate =@isprivate and gm.GroupId=gr.GroupId";
+                    string strQuery = @"SELECT gr.GroupId, gr.GroupName
+FROM Groups gr
+JOIN GroupMembers gm1 ON gr.GroupId = gm1.GroupId AND gm1.UserId = @userid1
+JOIN GroupMembers gm2 ON gr.GroupId = gm2.GroupId AND gm2.UserId = @userid2
+WHERE gr.IsPrivate = 2
+  AND (SELECT COUNT(*) 
+       FROM GroupMembers gm 
+       WHERE gm.GroupId = gr.GroupId) = 2;
+";
                     SqlCommand command = new SqlCommand(strQuery, connectionDB);
-                    command.Parameters.AddWithValue("@userid", int.Parse(userInfo[1]));
-                    command.Parameters.AddWithValue("@isprivate", int.Parse(userInfo[2]));
+                    command.Parameters.AddWithValue("@userid1", int.Parse(userInfo[1]));
+                    command.Parameters.AddWithValue("@userid2", int.Parse(userInfo[2]));
                     DataTable dataTable = new DataTable();
                     using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {

@@ -22,6 +22,17 @@ namespace QLUSER.Models
                 Invalidate();
             }
         }
+        private string _filepath = string.Empty;
+
+        public string filepath
+        {
+            get => _filepath;
+            set
+            {
+                _filepath = value;
+                Invalidate();
+            }
+        }
 
         public Font TextFont { get; set; } = new Font("Arial", 10, FontStyle.Bold);
         public Color TextColor { get; set; } = Color.Black;
