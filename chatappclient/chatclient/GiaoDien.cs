@@ -110,93 +110,188 @@ namespace QLUSER
         }
         private async void GiaoDien_Load(object sender, EventArgs e)
         {
-            _dpname = await _user.FindDisplayname(_userid);
-            UserSession.ActionUpdatedpname += Updatedpname;
-            UpdateGroupPrivateDislay();
-            UpdateGroupDislay();
-            UpdateAvatarDisplay();
+            try
+            {
+                _dpname = await _user.FindDisplayname(_userid);
+                UserSession.ActionUpdatedpname += Updatedpname;
+                UpdateGroupPrivateDislay();
+                UpdateGroupDislay();
+                UpdateAvatarDisplay();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in GiaoDien_Load: {ex.Message}");
+            }
         }
+
         public async void SendUpdate(string updateType)
         {
-            while (true)
+            try
             {
-                if (connection != null && connection.State == HubConnectionState.Connected)
+                while (true)
                 {
-                    await connection.SendAsync($"Send{updateType}", true);
-                    break;
+                    if (connection != null && connection.State == HubConnectionState.Connected)
+                    {
+                        await connection.SendAsync($"Send{updateType}", true);
+                        break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in SendUpdate: {ex.Message}");
             }
         }
 
         private async void UpdateUsername()
         {
-            _username = await _user.FindUsername(_userid);
+            try
+            {
+                _username = await _user.FindUsername(_userid);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in UpdateUsername: {ex.Message}");
+            }
         }
+
         private async void Updatedpname()
         {
-            _dpname = await _user.FindDisplayname(_userid);
+            try
+            {
+                _dpname = await _user.FindDisplayname(_userid);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in Updatedpname: {ex.Message}");
+            }
         }
-        
+
         private async void UpdateAvatarDisplay()
         {
-            UserSession.RunOnUIThread(new Action( async ()=> cp_ProfilePic.Image = await _avatar.LoadAvatarAsync(_userid)));
+            try
+            {
+                UserSession.RunOnUIThread(new Action(async () =>
+                {
+                    try
+                    {
+                        cp_ProfilePic.Image = await _avatar.LoadAvatarAsync(_userid);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error in UpdateAvatarDisplay (RunOnUIThread): {ex.Message}");
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in UpdateAvatarDisplay: {ex.Message}");
+            }
         }
+
         private async void UpdateGroupDislay()
         {
-            UserSession.RunOnUIThread(new Action(async () =>
+            try
             {
-                flp_Group.Controls.Clear();
-                flp_Group.AutoScrollPosition = new Point(0, 0);
-                flp_Group.AutoScroll = true;
-                var result = await _group.RequestGroupName(_userid, 0);
-                if (result.issuccess)
-                    LoadGroup(result.groupidname);
-                flp_Group.PerformLayout();
-                TC_Chat.SelectedIndex = 1;
-                TC_ServerOrFriend.SelectedIndex = 0;
-            }));
+                UserSession.RunOnUIThread(new Action(async () =>
+                {
+                    try
+                    {
+                        flp_Group.Controls.Clear();
+                        flp_Group.AutoScrollPosition = new Point(0, 0);
+                        flp_Group.AutoScroll = true;
+                        var result = await _group.RequestGroupName(_userid, 0);
+                        if (result.issuccess)
+                            LoadGroup(result.groupidname);
+                        flp_Group.PerformLayout();
+                        TC_Chat.SelectedIndex = 1;
+                        TC_ServerOrFriend.SelectedIndex = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error in UpdateGroupDislay (RunOnUIThread): {ex.Message}");
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in UpdateGroupDislay: {ex.Message}");
+            }
         }
+
         private async void UpdateGroupPrivateDislay()
         {
-            UserSession.RunOnUIThread(new Action(async () =>
+            try
             {
-                flp_TinNhanTT.Controls.Clear();
-                flp_TinNhanTT.AutoScrollPosition = new Point(0, 0);
-                flp_TinNhanTT.AutoScroll = true;
-                var result = await _group.RequestGroupName(_userid, 2);
-                if (result.issuccess)
-                    LoadGroupPrivate(result.groupidname, 2);
-                var result1 = await _group.RequestGroupName(_userid, 1);
-                if (result1.issuccess)
-                    LoadGroupPrivate(result1.groupidname, 1);
-                flp_TinNhanTT.PerformLayout();
-                TC_Chat.SelectedIndex = 1;
-                TC_ServerOrFriend.SelectedIndex = 0;
-            }));
+                UserSession.RunOnUIThread(new Action(async () =>
+                {
+                    try
+                    {
+                        flp_TinNhanTT.Controls.Clear();
+                        flp_TinNhanTT.AutoScrollPosition = new Point(0, 0);
+                        flp_TinNhanTT.AutoScroll = true;
+                        var result = await _group.RequestGroupName(_userid, 2);
+                        if (result.issuccess)
+                            LoadGroupPrivate(result.groupidname, 2);
+                        var result1 = await _group.RequestGroupName(_userid, 1);
+                        if (result1.issuccess)
+                            LoadGroupPrivate(result1.groupidname, 1);
+                        flp_TinNhanTT.PerformLayout();
+                        TC_Chat.SelectedIndex = 1;
+                        TC_ServerOrFriend.SelectedIndex = 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error in UpdateGroupPrivateDislay (RunOnUIThread): {ex.Message}");
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in UpdateGroupPrivateDislay: {ex.Message}");
+            }
         }
+
         protected override async void OnFormClosing(FormClosingEventArgs e)
         {
-            UserSession.ActionUpdateusername -= UpdateUsername;
-            UserSession.ActionAvatarUpdated -= UpdateAvatarDisplay;
-            UserSession.ActionUpdateGroup -= UpdateGroupDislay;
-            UserSession.ActionUpdateGroupPrivate -= UpdateGroupPrivateDislay;
-            UserSession.ActionUpdatedpname -= Updatedpname;
-            base.OnFormClosing(e);
+            try
+            {
+                UserSession.ActionUpdateusername -= UpdateUsername;
+                UserSession.ActionAvatarUpdated -= UpdateAvatarDisplay;
+                UserSession.ActionUpdateGroup -= UpdateGroupDislay;
+                UserSession.ActionUpdateGroupPrivate -= UpdateGroupPrivateDislay;
+                UserSession.ActionUpdatedpname -= Updatedpname;
+                base.OnFormClosing(e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in OnFormClosing: {ex.Message}");
+            }
         }
 
         private async void bt_thoat_Click(object sender, EventArgs e)
         {
-            if (connection != null)
-                await StopSignalR();
-            
-            await _token.GenerateToken(_username);
-            DN.Close();
-            Environment.Exit(0);
-            this.Close(); 
+            try
+            {
+                if (connection != null)
+                    await StopSignalR();
+
+                await _token.GenerateToken(_username);
+                Environment.Exit(0);
+                DN.Close();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in bt_thoat_Click: {ex.Message}");
+            }
         }
+
         private async void LoadGroupPrivate(string[] groupname, int privatenumber)
         {
-            if (groupname != null)
+            try
+            {
+                if (groupname != null)
             {
                 for (int i = 0; i < groupname.Length; i++)
                 {
@@ -305,28 +400,7 @@ namespace QLUSER
                             deletegroup.TextAlign = ContentAlignment.MiddleCenter;
                             deletegroup.Click += async (s, e) =>
                             {
-                                var result = MessageBox.Show(
-            "Bạn có chắc chắn muốn rời nhóm này không?",
-            "Xác nhận rời nhóm",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Warning
-        );
-
-                                // Kiểm tra kết quả người dùng chọn
-                                if (result == DialogResult.Yes)
-                                {
-                                    // Thực hiện xóa nhóm
-
-                                    await _group.RemoveMemberFromGroup(useravatar.Name, _userid);
-                                    UserSession.UpdateGroup = (true, false);
-                                    SendUpdate("GroupPrivateDislay");
-                                    MessageBox.Show("Rời nhóm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                }
-                                else
-                                {
-                                    // Hủy thao tác
-                                    MessageBox.Show("Thao tác rời nhóm đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                }
+                                roinhom(useravatar.Name,false,_userid);
                             };
                             Button addmember = new Button();
                             addmember.Text = "+";
@@ -485,6 +559,7 @@ namespace QLUSER
                                         {
                                             var result2 = await _groupMember.AddMembersToGroup(user1.Name, useravatar.Name, user1.Text, "Owner");
                                         }
+                                        SendUpdate("UpdateGroupMemberPrivate");
                                         form.Dispose();
                                         form.Close();
                                     }
@@ -600,10 +675,51 @@ namespace QLUSER
                     }
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+        public async Task roinhom(string groupid,bool ispublic,string userid)
+        {
+            try
+            {
+                var result = MessageBox.Show(
+            "Bạn có chắc chắn muốn rời nhóm này không?",
+            "Xác nhận rời nhóm",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning
+        );
 
+            // Kiểm tra kết quả người dùng chọn
+            if (result == DialogResult.Yes)
+            {
+                // Thực hiện xóa nhóm
+
+                var remove =await _group.RemoveMemberFromGroup(groupid, userid);
+                if (remove)
+                {
+                    UserSession.UpdateGroup = (true, ispublic);
+                    if (ispublic) SendUpdate("UpdateGroupMember");
+                    else SendUpdate("UpdateGroupMemberPrivate");
+                    MessageBox.Show("Rời nhóm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                // Hủy thao tác
+                MessageBox.Show("Thao tác rời nhóm đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private async void LoadGroup(string[] groupname)
         {
+            try { 
             if (groupname != null)
             {
                 for (int i = 0; i < groupname.Length; i++)
@@ -663,7 +779,19 @@ namespace QLUSER
                         lb_TenGroup1.Text = selectedGroupName;
                         lb_TenGroup1.Name = group1[0];
                         lb_TenGroup.Name = group1[0];
-
+                        CreateMenu();
+                        UserSession.ActionUpdateRole += async () =>
+                        {
+                            try
+                            {
+                                UserSession.RunOnUIThread(new Action( () => CreateMenu()));
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                           
+                        };
                         UserSession.ActionUpdateGroupname += async () =>
                         {
                             _groupname = await _group.Groupname(group1[0]);
@@ -681,6 +809,13 @@ namespace QLUSER
                         };
                         kenh();
 
+                    };
+                    circulargroup.MouseUp += (s,e) =>
+                    {
+                        if (e.Button == MouseButtons.Right) // Kiểm tra chuột phải
+                        {
+                            formaddremovemember(circulargroup,e);
+                        }
                     };
                     flp_Group.Controls.Add(circulargroup);
                     UserSession.ActionUpdateChannel += () =>
@@ -711,6 +846,7 @@ namespace QLUSER
             circularadd.Anchor = AnchorStyles.None;
             circularadd.Click += (s, e) =>
             {
+
                 circularadd_Click();
             };
             flp_Group.Controls.Add(circularadd);
@@ -721,67 +857,91 @@ namespace QLUSER
             flp_Group.MouseWheel += FlowLayoutPanel2_MouseWheel;
 
             flp_Group.Padding = new Padding((flp_Group.ClientSize.Width - 50) / 2, 0, 0, 10);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void formaddremovemember(CircularPicture circulargroup, MouseEventArgs e)
+        {
+            TC_ServerOrFriend.SelectedIndex = 2;
+            //CreateMenu();
         }
         void FlowLayoutPanel2_MouseWheel(object sender, MouseEventArgs e)
         {
-            int delta = e.Delta > 0 ? -20 : 20;
-            int currentY = -flp_Group.AutoScrollPosition.Y;
-            int newScrollY = currentY + delta;
-            flp_Group.AutoScrollPosition = new Point(0, newScrollY);
+            try
+            {
+                int delta = e.Delta > 0 ? -20 : 20;
+                int currentY = -flp_Group.AutoScrollPosition.Y;
+                int newScrollY = currentY + delta;
+                flp_Group.AutoScrollPosition = new Point(0, newScrollY);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private async void kenh()
         {
-            var result = await _danhmuc.RequestDanhMucName(_groupid);
-            if (result.issuccess)
+            try
             {
-                for (int ib = 0; ib < result.danhmucidname.Length; ib++)
+                var result = await _danhmuc.RequestDanhMucName(_groupid);
+                if (result.issuccess)
                 {
-                    string[] danhmuc = result.danhmucidname[ib].Split('|');
-                    TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"danhmuc|{danhmuc[0]}", danhmuc[1]);
-                    createlabel(node);
+                    for (int ib = 0; ib < result.danhmucidname.Length; ib++)
+                    {
+                        string[] danhmuc = result.danhmucidname[ib].Split('|');
+                        TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"danhmuc|{danhmuc[0]}", danhmuc[1]);
+                        createlabel(node);
+                    }
                 }
-            }
-            var result1 = await _channel.RequestChannelName(_groupid);
-            if (result1.issuccess)
-            {
-                for (int ia = 0; ia < result1.channelidname.Length; ia++)
+                var result1 = await _channel.RequestChannelName(_groupid);
+                if (result1.issuccess)
                 {
+                    for (int ia = 0; ia < result1.channelidname.Length; ia++)
+                    {
 
-                    string[] channel = result1.channelidname[ia].Split('|');
-                    if (channel[3] == "True")
-                    {
-                        if (!string.IsNullOrEmpty(channel[2]))
+                        string[] channel = result1.channelidname[ia].Split('|');
+                        if (channel[3] == "True")
                         {
-                            TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
-                            if (nodes != null)
+                            if (!string.IsNullOrEmpty(channel[2]))
                             {
-                                TreeNode node = nodes[0].Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
+                                TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
+                                if (nodes != null)
+                                {
+                                    TreeNode node = nodes[0].Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
+                                }
+                            }
+                            else
+                            {
+                                TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
                             }
                         }
-                        else
+                        else if (channel[3] == "False")
                         {
-                            TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
-                        }
-                    }
-                    else if (channel[3] == "False")
-                    {
-                        if (!string.IsNullOrEmpty(channel[2]))
-                        {
-                            TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
-                            if (nodes != null)
+                            if (!string.IsNullOrEmpty(channel[2]))
                             {
-                                TreeNode node = nodes[0].Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                                TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
+                                if (nodes != null)
+                                {
+                                    TreeNode node = nodes[0].Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                                }
                             }
-                        }
-                        else
-                        {
-                            TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                            else
+                            {
+                                TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
+                            }
                         }
                     }
                 }
+                tv_Kenh_DanhMuc.AfterExpand += TreeView_AfterExpandCollapse;
+                tv_Kenh_DanhMuc.AfterCollapse += TreeView_AfterExpandCollapse;
             }
-            tv_Kenh_DanhMuc.AfterExpand += TreeView_AfterExpandCollapse;
-            tv_Kenh_DanhMuc.AfterCollapse += TreeView_AfterExpandCollapse;
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private async void TreeView_AfterExpandCollapse(object sender, TreeViewEventArgs e)
         {
@@ -789,6 +949,7 @@ namespace QLUSER
         }
         private async Task ChangeLabelLocation()
         {
+            try { 
             var matchedNodes = tv_Kenh_DanhMuc.Nodes
             .Cast<TreeNode>()
             .Where(node => node.Name.Contains("danhmuc"))
@@ -804,8 +965,14 @@ namespace QLUSER
                 }
             }
         }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+}
         private async Task CloseLabel()
         {
+            try { 
             var matchedNodes = tv_Kenh_DanhMuc.Nodes
             .Cast<TreeNode>()
             .Where(node => node.Name.Contains("danhmuc"))
@@ -819,6 +986,11 @@ namespace QLUSER
                     node.Tag = null;
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         
             
@@ -827,6 +999,7 @@ namespace QLUSER
 
         private async void bt_guitinnhan_Click(object sender, EventArgs e)
         {
+            try { 
             if (lb_TenKenh.Text == "") MessageBox.Show("Gửi tin nhắn thất bại");
             else
             {
@@ -867,205 +1040,235 @@ namespace QLUSER
                     }
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
         private async Task AddMessageToChat(string messageid, string gdpname, string messageContent, string[] filename)
         {
-            string gdpid= await _groupMember.FindGroupDisplayID(_groupid,gdpname);
-            Panel panelMessage = new Panel
+            try
             {
-                Width = flp_Message.Width,
-                BackColor = Color.FromArgb(66, 69, 73),
-                Padding = new Padding(5),
-                AutoSize = true,
-                Margin = new Padding(10, 0, 0, 0),
-                Name = messageid
-            };
-
-            CircularPicture pictureBoxAvatar = new CircularPicture
-            {
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Width = 40,
-                Height = 40,
-                Image = await _avatar.LoadAvatarAsync(gdpid),
-                Margin = new Padding(0, 0, 10, 0)
-            };
-            pictureBoxAvatar.Click += (s, e) =>
-            {
-
-                USERINFOR(gdpname);
-            };
-            UserSession.ActionAvatarUpdated += async () =>
-            {
-                pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(gdpid);
-            };
-            panelMessage.Controls.Add(pictureBoxAvatar);
-
-            Label lblUsername = new Label
-            {
-                Text = gdpname,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                ForeColor = Color.FromArgb(88, 101, 242),
-                AutoSize = true,
-                Top = 5,
-                Left = pictureBoxAvatar.Right + 10
-            };
-            UserSession.ActionUpdategdpname += async () => { 
-            lblUsername.Text = await _groupMember.FindGroupDisplayname(gdpid,_groupid);
-            };
-
-            panelMessage.Controls.Add(lblUsername);
-            if (!string.IsNullOrEmpty(messageContent))
-            {
-                Label lblMessage = new Label
+                string gdpid = await _groupMember.FindGroupDisplayID(_groupid, gdpname);
+                Panel panelMessage = new Panel
                 {
-                    Text = $"{messageContent}",
-                    Font = new Font("Segoe UI", 10),
-                    ForeColor = Color.White,
+                    Width = flp_Message.Width,
+                    BackColor = Color.FromArgb(66, 69, 73),
+                    Padding = new Padding(5),
                     AutoSize = true,
-                    Top = lblUsername.Bottom + 5,
-                    Left = pictureBoxAvatar.Right + 10,
+                    Margin = new Padding(10, 0, 0, 0),
+                    Name = messageid
                 };
-                UserSession.ActionUpdateMessageText += async () =>
+
+                CircularPicture pictureBoxAvatar = new CircularPicture
                 {
-                    lblMessage.Text = await _message.Onemessage(messageid);
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Width = 40,
+                    Height = 40,
+                    Image = await _avatar.LoadAvatarAsync(gdpid),
+                    Margin = new Padding(0, 0, 10, 0)
                 };
-                panelMessage.Controls.Add(lblMessage);
-            }
-            List<string> nonImageVideoFiles = new List<string>();
 
-            if (filename != null && filename.Length > 0)
-            {
-                foreach (var Filename in filename)
+                pictureBoxAvatar.MouseUp += (s, e) =>
                 {
-
-                    string fileExtension = System.IO.Path.GetExtension(Filename).ToLower();
-
-                    if (fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".png" ||
-                        fileExtension == ".bmp" || fileExtension == ".gif")
+                    if (e.Button == MouseButtons.Right)
                     {
-                        string filepath = await _file.GetFileUrlAsync(Filename);
-                        PictureBox pictureBox = new PictureBox
+                        CaiDatMayChu caiDatMayChu = new CaiDatMayChu(_groupname, _groupid, _userid, this, DN);
+                        caiDatMayChu.formusergroup(gdpname, false);
+                    }
+                    if (e.Button == MouseButtons.Left)
+                    {
+
+                        USERINFOR(gdpname);
+                    }
+                };
+                UserSession.ActionAvatarUpdated += async () =>
+                {
+                    pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(gdpid);
+                };
+                panelMessage.Controls.Add(pictureBoxAvatar);
+
+                Label lblUsername = new Label
+                {
+                    Text = gdpname,
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(88, 101, 242),
+                    AutoSize = true,
+                    Top = 5,
+                    Left = pictureBoxAvatar.Right + 10
+                };
+                UserSession.ActionUpdategdpname += async () =>
+                {
+                    lblUsername.Text = await _groupMember.FindGroupDisplayname(gdpid, _groupid);
+                };
+
+                panelMessage.Controls.Add(lblUsername);
+                if (!string.IsNullOrEmpty(messageContent))
+                {
+                    Label lblMessage = new Label
+                    {
+                        Text = $"{messageContent}",
+                        Font = new Font("Segoe UI", 10),
+                        ForeColor = Color.White,
+                        AutoSize = true,
+                        Top = lblUsername.Bottom + 5,
+                        Left = pictureBoxAvatar.Right + 10,
+                    };
+                    UserSession.ActionUpdateMessageText += async () =>
+                    {
+                        lblMessage.Text = await _message.Onemessage(messageid);
+                    };
+                    panelMessage.Controls.Add(lblMessage);
+                }
+                List<string> nonImageVideoFiles = new List<string>();
+
+                if (filename != null && filename.Length > 0)
+                {
+                    foreach (var Filename in filename)
+                    {
+
+                        string fileExtension = System.IO.Path.GetExtension(Filename).ToLower();
+
+                        if (fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".png" ||
+                            fileExtension == ".bmp" || fileExtension == ".gif")
                         {
-                            SizeMode = PictureBoxSizeMode.Zoom,
-                            Width = 200,
-                            Height = 150,
-                            Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5,
-                            Left = pictureBoxAvatar.Right + 10
-                        };
-                        using (HttpClient client = new HttpClient())
-                        {
-                            try
+                            string filepath = await _file.GetFileUrlAsync(Filename);
+                            PictureBox pictureBox = new PictureBox
                             {
-                                byte[] imageBytes = await client.GetByteArrayAsync(filepath);
-                                using (MemoryStream ms = new MemoryStream(imageBytes))
+                                SizeMode = PictureBoxSizeMode.Zoom,
+                                Width = 200,
+                                Height = 150,
+                                Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5,
+                                Left = pictureBoxAvatar.Right + 10
+                            };
+                            using (HttpClient client = new HttpClient())
+                            {
+                                try
                                 {
-                                    pictureBox.Image = Image.FromStream(ms);
+                                    byte[] imageBytes = await client.GetByteArrayAsync(filepath);
+                                    using (MemoryStream ms = new MemoryStream(imageBytes))
+                                    {
+                                        pictureBox.Image = Image.FromStream(ms);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Lỗi khi tải ảnh: " + ex.Message);
                                 }
                             }
-                            catch (Exception ex)
+                            pictureBox.Click += (sender, e) =>
                             {
-                                MessageBox.Show("Lỗi khi tải ảnh: " + ex.Message);
-                            }
+                                if (MessageBox.Show("Bạn có muốn tải xuống hình ảnh này không?", "Download Image", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                                {
+                                    isReceivingMessages = false;
+                                    _file.DownloadFile(Filename);
+                                    isReceivingMessages = true;
+                                }
+                            };
+
+                            panelMessage.Controls.Add(pictureBox);
+                            panelMessage.Height += pictureBox.Height + 10;
                         }
-                        pictureBox.Click += (sender, e) =>
+                        else
                         {
-                            if (MessageBox.Show("Bạn có muốn tải xuống hình ảnh này không?", "Download Image", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                            {
-                                isReceivingMessages = false;
-                                _file.DownloadFile(Filename);
-                                isReceivingMessages = true;
-                            }
-                        };
-
-                        panelMessage.Controls.Add(pictureBox);
-                        panelMessage.Height += pictureBox.Height + 10;
-                    }
-                    else
-                    {
-                        nonImageVideoFiles.Add(Filename);
+                            nonImageVideoFiles.Add(Filename);
+                        }
                     }
                 }
-            }
 
-            if (nonImageVideoFiles.Count > 0)
+                if (nonImageVideoFiles.Count > 0)
+                {
+                    ListView listViewFiles = new ListView
+                    {
+                        View = View.List,
+                        ForeColor = Color.White,
+                        BackColor = Color.FromArgb(47, 49, 54),
+                        Width = panelMessage.Width - 10,
+                        Height = 40,
+                        Scrollable = false,
+                        Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5
+                    };
+                    foreach (var FileName in nonImageVideoFiles)
+                    {
+                        listViewFiles.Items.Add(new ListViewItem(FileName)
+                        {
+                            Tag = FileName
+                        });
+                    }
+
+                    listViewFiles.ItemActivate += (sender, e) =>
+                    {
+                        var selectedItem = listViewFiles.SelectedItems[0];
+                        string selectedFileName = (string)selectedItem.Tag;
+
+                        if (MessageBox.Show("Bạn có muốn tải xuống tệp này không?", "Download File", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        {
+                            isReceivingMessages = false;
+                            _file.DownloadFile(selectedFileName);
+                            isReceivingMessages = true;
+                        }
+                    };
+
+                    panelMessage.Controls.Add(listViewFiles);
+                    panelMessage.Height += listViewFiles.Height + 10;
+                }
+
+                flp_Message.Controls.Add(panelMessage);
+                flp_Message.ScrollControlIntoView(panelMessage);
+            }
+            catch (Exception ex)
             {
-                ListView listViewFiles = new ListView
-                {
-                    View = View.List,
-                    ForeColor = Color.White,
-                    BackColor = Color.FromArgb(47, 49, 54),
-                    Width = panelMessage.Width - 10,
-                    Height = 40,
-                    Scrollable = false,
-                    Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5
-                };
-                foreach (var FileName in nonImageVideoFiles)
-                {
-                    listViewFiles.Items.Add(new ListViewItem(FileName)
-                    {
-                        Tag = FileName
-                    });
-                }
-
-                listViewFiles.ItemActivate += (sender, e) =>
-                {
-                    var selectedItem = listViewFiles.SelectedItems[0];
-                    string selectedFileName = (string)selectedItem.Tag;
-
-                    if (MessageBox.Show("Bạn có muốn tải xuống tệp này không?", "Download File", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                    {
-                        isReceivingMessages = false;
-                        _file.DownloadFile(selectedFileName);
-                        isReceivingMessages = true;
-                    }
-                };
-
-                panelMessage.Controls.Add(listViewFiles);
-                panelMessage.Height += listViewFiles.Height + 10;
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            flp_Message.Controls.Add(panelMessage);
-            flp_Message.ScrollControlIntoView(panelMessage);
         }
         private void buttonchonfile_Click(object sender, EventArgs e)
         {
-            Thread thread = new Thread(() =>
+            try
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog
+                Thread thread = new Thread(() =>
                 {
-                    Multiselect = true,
-                    Filter = "Document Files|*.txt;*.pdf;*.docx;*.xlsx;*.pptx;*.csv;*.xml;*.json;*.html;*.css|All Files (*.*)|*.*"
-                };
+                    OpenFileDialog openFileDialog = new OpenFileDialog
+                    {
+                        Multiselect = true,
+                        Filter = "Document Files|*.txt;*.pdf;*.docx;*.xlsx;*.pptx;*.csv;*.xml;*.json;*.html;*.css|All Files (*.*)|*.*"
+                    };
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    if (openFileDialog.FileNames.Length > 5)
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        this.Invoke(new Action(() =>
+                        if (openFileDialog.FileNames.Length > 5)
                         {
-                            MessageBox.Show("Bạn chỉ được chọn tối đa 5 file. Vui lòng chọn lại.");
-                        }));
-                    }
-                    else
-                    {
-                        string[] selectedFiles = openFileDialog.FileNames;
-                        this.Invoke(new Action(() =>
+                            this.Invoke(new Action(() =>
+                            {
+                                MessageBox.Show("Bạn chỉ được chọn tối đa 5 file. Vui lòng chọn lại.");
+                            }));
+                        }
+                        else
                         {
-                            selectedFilePaths.Clear();
-                            selectedFilePaths.AddRange(selectedFiles);
-                            lb_File_Anh.Text = string.Join(", ", openFileDialog.SafeFileNames);
-                        }));
+                            string[] selectedFiles = openFileDialog.FileNames;
+                            this.Invoke(new Action(() =>
+                            {
+                                selectedFilePaths.Clear();
+                                selectedFilePaths.AddRange(selectedFiles);
+                                lb_File_Anh.Text = string.Join(", ", openFileDialog.SafeFileNames);
+                            }));
+                        }
                     }
-                }
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+                });
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void buttonchonanh_Click(object sender, EventArgs e)
         {
+            try { 
             Thread thread = new Thread(() =>
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog
@@ -1086,12 +1289,17 @@ namespace QLUSER
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            CaiDatNguoiDung formuser = new CaiDatNguoiDung(_dpname,DN,this,_username);
-            formuser.ShowDialog();
+            CaiDatNguoiDung formuser = new CaiDatNguoiDung(_userid,DN,this,_username,0,null);
+            formuser.Show();
         }
 
 
@@ -1108,6 +1316,7 @@ namespace QLUSER
         }
         private async Task InitializeSignalR()
         {
+            try { 
             connection = new HubConnectionBuilder()
             .WithUrl(ConfigurationManager.AppSettings["HubUrl"] + "messageHub")
             .ConfigureLogging(logging =>
@@ -1227,6 +1436,11 @@ namespace QLUSER
                     }
                 }
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         private async Task ReconnectSignalR()
@@ -1246,6 +1460,7 @@ namespace QLUSER
         }
         public async Task StopSignalR()
         {
+            try { 
             if (connection != null)
             {
                 try
@@ -1273,10 +1488,16 @@ namespace QLUSER
                     break;
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            try { 
             TreeNode selectedNode = e.Node;
             if (selectedNode != null)
             {
@@ -1363,29 +1584,44 @@ namespace QLUSER
                     message();
                 };
             }
-        }
-        private void CreateMenu()
-        {
-            if (panelMenu == null)
+            }
+            catch (Exception ex)
             {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async void CreateMenu()
+        {
+            try
+            {
+                _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+                P_Kenh_DanhMuc1.Controls.Clear();
                 panelMenu = new FlowLayoutPanel();
                 panelMenu.Dock = DockStyle.Fill;
                 panelMenu.BackColor = Color.FromArgb(47, 49, 54);
                 panelMenu.FlowDirection = FlowDirection.TopDown;
                 panelMenu.WrapContents = false;
                 panelMenu.AutoScroll = true;
-
                 P_Kenh_DanhMuc1.Controls.Add(panelMenu);
+
                 AddMenuItem(panelMenu, "Mời Mọi Người");
-                AddMenuItem(panelMenu, "Cài đặt máy chủ");
-                AddMenuItem(panelMenu, "Tạo kênh");
-                AddMenuItem(panelMenu, "Tạo Danh Mục");
+                if (_userrole == "Admin" || _userrole == "Owner") AddMenuItem(panelMenu, "Cài đặt máy chủ");
+                if (_userrole == "Admin" || _userrole == "Owner") AddMenuItem(panelMenu, "Tạo kênh");
+                if (_userrole == "Admin" || _userrole == "Owner") AddMenuItem(panelMenu, "Tạo Danh Mục");
                 AddMenuItem(panelMenu, "Chỉnh Sửa Hồ Sơ Máy Chủ");
+                if (_userrole != "Owner") AddMenuItem(panelMenu, "Rời khỏi phòng");
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
 
         }
+
         private async void message()
         {
+            try { 
             var result = await _message.ReceiveMessage(_channelid);
             if (result.issuccess)
             {
@@ -1411,10 +1647,16 @@ namespace QLUSER
                     }
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void AddMenuItem(FlowLayoutPanel parentPanel, string text)
         {
+            try { 
             Panel menuItem = new Panel();
             menuItem.Height = 25;
             menuItem.Width = parentPanel.Width;
@@ -1435,82 +1677,216 @@ namespace QLUSER
                     case "Cài đặt máy chủ": Caidatmaychu(_groupname,_groupid); break;
                     case "Tạo kênh": TaoKenh(null, null); break;
                     case "Tạo Danh Mục": TaoDanhMuc(); break;
+                    case "Chỉnh Sửa Hồ Sơ Máy Chủ":
+                        CaiDatNguoiDung formuser = new CaiDatNguoiDung(_userid, DN, this, _username, 2, _groupid);
+                        formuser.ShowDialog(); 
+                        break;
+                    case "Rời khỏi phòng": roinhom(_groupid,true,_userid); break;
                 }
             };
             menuItem.Controls.Add(label);
             parentPanel.Controls.Add(menuItem);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
         private void button5_Click_1(object sender, EventArgs e)
         {
             TC_ServerOrFriend.SelectedIndex = 2;
-            CreateMenu();
+            //CreateMenu();
 
 
         }
         private void Caidatmaychu(string groupname,string groupid)
         {
-            CaiDatMayChu maychu = new CaiDatMayChu(groupname, groupid,_gdpname,this);
+            CaiDatMayChu maychu = new CaiDatMayChu(groupname, groupid,_userid,this,DN);
             maychu.ShowDialog();
         }
         private async void MoiMoiNguoi(string groupname,string groupid)
         {
-
-            Form form = new Form();
-            form.Text = $"Mời bạn bè vào {groupname}";
-            form.Size = new Size(400, 200);
-            form.StartPosition = FormStartPosition.CenterParent;
-
-            Label label = new Label();
-            label.Text = $"Mời bạn bè vào nhóm: {groupname}";
-            label.Font = new Font("Arial", 12, FontStyle.Bold);
-            label.ForeColor = Color.Black;
-            label.AutoSize = true;
-            label.Location = new Point(20, 20);
-            UserSession.ActionUpdateGroupname += async () =>
+            try
             {
-                groupname = await _group.Groupname(_groupid);
+                Form form = new Form();
                 form.Text = $"Mời bạn bè vào {groupname}";
+                form.Size = new Size(500, 370);
+                form.AutoSize = true;
+                form.StartPosition = FormStartPosition.CenterParent;
+
+                Label label = new Label();
                 label.Text = $"Mời bạn bè vào nhóm: {groupname}";
-            };
-            string maloimoi = await _group.FindMaLoiMoi(_groupid);
-
-            TextBox textbox = new TextBox();
-            textbox.Text = $"{maloimoi}";
-            textbox.Width = 340;
-            textbox.Location = new Point(20, 60);
-            textbox.ReadOnly = true;
-
-
-            Button btnCopy = new Button();
-            btnCopy.Text = "Sao chép";
-            btnCopy.Location = new Point(20, 100);
-            btnCopy.Click += (s, e) =>
-            {
-                Thread staThread = new Thread(() =>
+                label.Font = new Font("Arial", 12, FontStyle.Bold);
+                label.ForeColor = Color.Black;
+                label.AutoSize = true;
+                label.Location = new Point(20, 20);
+                UserSession.ActionUpdateGroupname += async () =>
+                {
+                    groupname = await _group.Groupname(_groupid);
+                    form.Text = $"Mời bạn bè vào {groupname}";
+                    label.Text = $"Mời bạn bè vào nhóm: {groupname}";
+                };
+                string maloimoi = await _group.FindMaLoiMoi(_groupid);
+                FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel();
+                flowLayoutPanel.Location = new Point(20, 50);
+                flowLayoutPanel.Size = new Size(440, 150);
+                flowLayoutPanel.FlowDirection = FlowDirection.TopDown;
+                flowLayoutPanel.WrapContents = false;
+                flowLayoutPanel.AutoScroll = true;
+                using (HttpClient _httpClient = new HttpClient())
                 {
                     try
                     {
-                        Clipboard.SetText(textbox.Text);
+
+                        flowLayoutPanel.Controls.Clear();
+
+                        string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/{_userid}";
+
+                        HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string responseContent = await response.Content.ReadAsStringAsync();
+                            var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                            if (responseData != null && responseData.message != null)
+                            {
+                                foreach (string displayName in responseData.message)
+                                {
+                                    string userid = await _user.finduserid(displayName);
+                                    string isjoined = await _groupMember.FindJointime(userid, _groupid);
+                                    if (isjoined != null) continue;
+                                    Image avatarImage = await _avatar.LoadAvatarAsync(userid);
+                                    Panel friendPanel = new Panel
+                                    {
+                                        Width = flowLayoutPanel.Width - 60,
+                                        Height = 30,
+                                        BorderStyle = BorderStyle.FixedSingle,
+                                        AutoSize = true,
+                                    };
+                                    Label usernamebox = new Label
+                                    {
+                                        Text = displayName,
+                                        Name = userid,
+                                        AutoSize = true,
+                                        Location = new Point(45, 10),
+                                        ForeColor = Color.Black,
+                                        TextAlign = ContentAlignment.MiddleCenter,
+                                    };
+                                    UserSession.ActionUpdatedpname += async () =>
+                                    {
+                                        usernamebox.Text = await _user.FindDisplayname(userid);
+                                    };
+                                    usernamebox.PerformLayout();
+                                    PictureBox avatarBox = new PictureBox
+                                    {
+                                        Image = avatarImage,
+                                        Width = 25,
+                                        Height = 25,
+                                        SizeMode = PictureBoxSizeMode.Zoom,
+                                        Location = new Point(5, 5)
+                                    };
+                                    UserSession.ActionAvatarUpdated += async () =>
+                                    {
+                                        avatarBox.Image = await _avatar.LoadAvatarAsync(userid);
+                                    };
+                                    Button Moivaonhom = new Button
+                                    {
+                                        Text = $"Mời",
+                                        AutoSize = true,
+                                        ForeColor = Color.Black,
+                                        Location = new Point(friendPanel.Width - 20, 10),
+                                        TextAlign = ContentAlignment.MiddleCenter,
+                                    };
+                                    Moivaonhom.Click += async (s, e) =>
+                                    {
+                                        var result = await _groupMember.AddMembersToGroup(usernamebox.Name, _groupid, usernamebox.Text, "Member");
+                                        if (result)
+                                        {
+                                            SendUpdate("UpdateGroupMember");
+                                            form.Close();
+                                        }
+                                    };
+                                    friendPanel.Controls.Add(usernamebox);
+                                    friendPanel.Controls.Add(avatarBox);
+                                    friendPanel.Controls.Add(Moivaonhom);
+                                    // Thêm Panel vào FlowLayoutPanel
+                                    flowLayoutPanel.Controls.Add(friendPanel);
+                                }
+                            }
+                            else
+                            {
+
+                                MessageBox.Show("Không có dữ liệu bạn bè trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                        else
+                        {
+                            // Hiển thị lỗi từ server nếu có
+                            string errorContent = await response.Content.ReadAsStringAsync();
+                            MessageBox.Show($"Lỗi từ server: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                     catch (Exception ex)
                     {
-                        btnCopy.Click += BtnCopy_Click;
+                        // Xử lý lỗi trong quá trình gửi request hoặc hiển thị danh sách
+                        MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                });
-                staThread.SetApartmentState(ApartmentState.STA);
-                staThread.Start();
-            };
-            Button btnClose = new Button();
-            btnClose.Text = "Đóng";
-            btnClose.Location = new Point(120, 100);
-            btnClose.Click += (s, e) => form.Close();
-            form.Controls.Add(label);
-            form.Controls.Add(textbox);
-            form.Controls.Add(btnCopy);
-            form.Controls.Add(btnClose);
-            form.ShowDialog();
+                }
+
+
+                Label label1 = new Label();
+                label1.Text = $"Hoặc gửi lời mời cho họ";
+                label1.Font = new Font("Arial", 12, FontStyle.Bold);
+                label1.ForeColor = Color.Black;
+                label1.AutoSize = true;
+                label1.Location = new Point(20, flowLayoutPanel.Location.Y + flowLayoutPanel.Size.Height + 20);
+
+                TextBox textbox = new TextBox();
+                textbox.Text = $"{maloimoi}";
+                textbox.Width = 440;
+                textbox.Location = new Point(20, flowLayoutPanel.Location.Y + flowLayoutPanel.Size.Height + 50);
+                textbox.ReadOnly = true;
+
+
+                Button btnCopy = new Button();
+                btnCopy.Text = "Sao chép";
+                btnCopy.Location = new Point(20, textbox.Location.Y + textbox.Size.Height + 20);
+                btnCopy.Click += (s, e) =>
+                {
+                    Thread staThread = new Thread(() =>
+                    {
+                        try
+                        {
+                            Clipboard.SetText(textbox.Text);
+                        }
+                        catch (Exception ex)
+                        {
+                            btnCopy.Click += BtnCopy_Click;
+                        }
+                    });
+                    staThread.SetApartmentState(ApartmentState.STA);
+                    staThread.Start();
+                };
+                Button btnClose = new Button();
+                btnClose.Text = "Đóng";
+                btnClose.Location = new Point(120, textbox.Location.Y + textbox.Size.Height + 20);
+                btnClose.Click += (s, e) => form.Close();
+
+                form.Controls.Add(label);
+                form.Controls.Add(label1);
+                form.Controls.Add(flowLayoutPanel);
+                form.Controls.Add(textbox);
+                form.Controls.Add(btnCopy);
+                form.Controls.Add(btnClose);
+                form.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnCopy_Click(object sender, EventArgs e)
@@ -1520,6 +1896,7 @@ namespace QLUSER
 
         private void circularadd_Click()
         {
+            try { 
             Form form = new Form();
             form.Text = $"Tạo máy chủ của bạn";
             form.Size = new Size(400, 300);
@@ -1577,9 +1954,15 @@ namespace QLUSER
             form.Controls.Add(label1);
             form.Controls.Add(btnjoin);
             form.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private async Task creategroup(Form form1)
         {
+            try { 
             Image image = global::QLUSER.Properties.Resources.group_1824145_1280;
             string imagepath = _find.find("group-1824145_1280.png");
             Form form = new Form();
@@ -1709,11 +2092,16 @@ namespace QLUSER
             form.Controls.Add(btnClose);
             form.Controls.Add(btncreate);
             form.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         private async Task joingroup(Form form1)
         {
-
+            try { 
             Form form = new Form();
             form.Text = $"Tham gia máy chủ";
             form.Size = new Size(600, 200);
@@ -1771,8 +2159,8 @@ namespace QLUSER
                                 string avatargroupUrl = await _avatar.LoadGroupUrlAsync(groupid);
                                 if (avatargroupUrl != null)
                                 {
-                                    UserSession.UpdateGroup = (true, true);
-                                    SendUpdate("GroupDislay");
+                                    UserSession.UpdateGroupMember = (true, true);
+                                    SendUpdate("UpdateGroupMember");
                                 }
                                 form.Close();
                                 form1.Close();
@@ -1796,10 +2184,16 @@ namespace QLUSER
             form.Controls.Add(ten);
             form.Controls.Add(btnjoin);
             form.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         private async Task<Dictionary<Image, string>> doianh()
         {
+            try { 
             Dictionary<Image, string> imagePaths = new Dictionary<Image, string>();
             var tcs = new TaskCompletionSource<Dictionary<Image, string>>();
 
@@ -1838,137 +2232,151 @@ namespace QLUSER
             imagePaths = await tcs.Task;
 
             return imagePaths;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
         private void TaoKenh(string danhmucid, TreeNode node)
         {
-            Form form = new Form();
-            form.Text = $"Tạo kênh";
-            form.Size = new Size(600, 400);
-            form.StartPosition = FormStartPosition.CenterParent;
-            Label label = new Label();
-            label.Text = $"Tạo kênh";
-            label.Font = new Font("Arial", 12, FontStyle.Bold);
-            label.ForeColor = Color.Black;
-            label.AutoSize = true;
-
-            label.PerformLayout();
-            label.Location = new Point(20, 20);
-
-            label.TextAlign = ContentAlignment.MiddleCenter;
-
-
-
-            Label Loaikenh = new Label();
-            Loaikenh.Text = $"Loại kênh";
-            Loaikenh.Font = new Font("Arial", 12, FontStyle.Bold);
-            Loaikenh.ForeColor = Color.Black;
-            Loaikenh.AutoSize = true;
-
-            Loaikenh.PerformLayout();
-            Loaikenh.Location = new Point(20, 70);
-            Loaikenh.TextAlign = ContentAlignment.MiddleCenter;
-
-            RadioButton vanban = new RadioButton();
-            vanban.Text = "Văn bản";
-            vanban.Checked = true;
-            vanban.Size = new Size(540, 30);
-            vanban.Location = new Point(20, 100);
-
-            RadioButton giongnoi = new RadioButton();
-            giongnoi.Text = "Giọng nói";
-            giongnoi.Checked = false;
-            giongnoi.Size = new Size(540, 30);
-            giongnoi.Location = new Point(20, 140);
-
-            Label Tenkenh = new Label();
-            Tenkenh.Text = $"Tên kênh";
-            Tenkenh.Font = new Font("Arial", 12, FontStyle.Bold);
-            Tenkenh.ForeColor = Color.Black;
-            Tenkenh.AutoSize = true;
-
-            Tenkenh.PerformLayout();
-            Tenkenh.Location = new Point(20, 190);
-            Tenkenh.TextAlign = ContentAlignment.MiddleCenter;
-
-            TextBox ten = new TextBox();
-            ten.Text = $"";
-            ten.Font = new Font("Arial", 12, FontStyle.Bold);
-            ten.ForeColor = Color.Black;
-            ten.Size = new Size(540, 30);
-
-            ten.PerformLayout();
-            ten.Location = new Point(20, 230);
-
-            Button btncreate = new Button();
-            btncreate.Text = "Tạo kênh";
-            btncreate.AutoSize = AutoSize;
-            btncreate.Location = new Point(560 - btncreate.Width, 280);
-            btncreate.Click += async (s, e) =>
+            try
             {
-                if (!string.IsNullOrEmpty(ten.Text) && lb_TenGroup.Text != "")
-                {
+                Form form = new Form();
+                form.Text = $"Tạo kênh";
+                form.Size = new Size(600, 400);
+                form.StartPosition = FormStartPosition.CenterParent;
+                Label label = new Label();
+                label.Text = $"Tạo kênh";
+                label.Font = new Font("Arial", 12, FontStyle.Bold);
+                label.ForeColor = Color.Black;
+                label.AutoSize = true;
 
-                    if (!string.IsNullOrEmpty(_dpname))
+                label.PerformLayout();
+                label.Location = new Point(20, 20);
+
+                label.TextAlign = ContentAlignment.MiddleCenter;
+
+
+
+                Label Loaikenh = new Label();
+                Loaikenh.Text = $"Loại kênh";
+                Loaikenh.Font = new Font("Arial", 12, FontStyle.Bold);
+                Loaikenh.ForeColor = Color.Black;
+                Loaikenh.AutoSize = true;
+
+                Loaikenh.PerformLayout();
+                Loaikenh.Location = new Point(20, 70);
+                Loaikenh.TextAlign = ContentAlignment.MiddleCenter;
+
+                RadioButton vanban = new RadioButton();
+                vanban.Text = "Văn bản";
+                vanban.Checked = true;
+                vanban.Size = new Size(540, 30);
+                vanban.Location = new Point(20, 100);
+
+                RadioButton giongnoi = new RadioButton();
+                giongnoi.Text = "Giọng nói";
+                giongnoi.Checked = false;
+                giongnoi.Size = new Size(540, 30);
+                giongnoi.Location = new Point(20, 140);
+
+                Label Tenkenh = new Label();
+                Tenkenh.Text = $"Tên kênh";
+                Tenkenh.Font = new Font("Arial", 12, FontStyle.Bold);
+                Tenkenh.ForeColor = Color.Black;
+                Tenkenh.AutoSize = true;
+
+                Tenkenh.PerformLayout();
+                Tenkenh.Location = new Point(20, 190);
+                Tenkenh.TextAlign = ContentAlignment.MiddleCenter;
+
+                TextBox ten = new TextBox();
+                ten.Text = $"";
+                ten.Font = new Font("Arial", 12, FontStyle.Bold);
+                ten.ForeColor = Color.Black;
+                ten.Size = new Size(540, 30);
+
+                ten.PerformLayout();
+                ten.Location = new Point(20, 230);
+
+                Button btncreate = new Button();
+                btncreate.Text = "Tạo kênh";
+                btncreate.AutoSize = AutoSize;
+                btncreate.Location = new Point(560 - btncreate.Width, 280);
+                btncreate.Click += async (s, e) =>
+                {
+                    if (!string.IsNullOrEmpty(ten.Text) && lb_TenGroup.Text != "")
                     {
-                        if (vanban.Checked == true)
-                        {
-                            var result = await _channel.SaveKenhToDatabase(_groupid, ten.Text, true, danhmucid);
-                            if (result.issuccess)
-                            {
 
-                                if (node != null)
-                                {
-                                    node.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
-                                }
-                                else tv_Kenh_DanhMuc.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
-                                ChangeLabelLocation();
-                                form.Close();
-                            }
-                        }
-                        else
+                        if (!string.IsNullOrEmpty(_dpname))
                         {
-                            var result = await _channel.SaveKenhToDatabase(_groupid, ten.Text, false, danhmucid);
-                            if (result.issuccess)
+                            if (vanban.Checked == true)
                             {
-                                if (node != null)
+                                var result = await _channel.SaveKenhToDatabase(_groupid, ten.Text, true, danhmucid);
+                                if (result.issuccess)
                                 {
-                                    node.Nodes.Add($"CuocGoiVideo|{result.channelID}", ten.Text);
-                                }
-                                else tv_Kenh_DanhMuc.Nodes.Add($"CuoiGoiVideo|{result.channelID}", ten.Text);
-                                ChangeLabelLocation();
-                                form.Close();
-                            }
-                        }
 
+                                    if (node != null)
+                                    {
+                                        node.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
+                                    }
+                                    else tv_Kenh_DanhMuc.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
+                                    ChangeLabelLocation();
+                                    form.Close();
+                                }
+                            }
+                            else
+                            {
+                                var result = await _channel.SaveKenhToDatabase(_groupid, ten.Text, false, danhmucid);
+                                if (result.issuccess)
+                                {
+                                    if (node != null)
+                                    {
+                                        node.Nodes.Add($"CuocGoiVideo|{result.channelID}", ten.Text);
+                                    }
+                                    else tv_Kenh_DanhMuc.Nodes.Add($"CuoiGoiVideo|{result.channelID}", ten.Text);
+                                    ChangeLabelLocation();
+                                    form.Close();
+                                }
+                            }
+
+                        }
                     }
-                }
-                else if (string.IsNullOrEmpty(ten.Text))
+                    else if (string.IsNullOrEmpty(ten.Text))
+                    {
+                        MessageBox.Show("Vui lòng nhập tên kênh.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else if (lb_TenGroup.Text == "") MessageBox.Show("Tạo kênh thất bại");
+                };
+                Button btnClose = new Button();
+                btnClose.Text = "Hủy bỏ";
+                btnClose.Location = new Point(560 - btncreate.Width - btnClose.Width - 20, 280);
+                btnClose.AutoSize = AutoSize;
+                btnClose.Click += (s, e) =>
                 {
-                    MessageBox.Show("Vui lòng nhập tên kênh.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else if (lb_TenGroup.Text == "") MessageBox.Show("Tạo kênh thất bại");
-            };
-            Button btnClose = new Button();
-            btnClose.Text = "Hủy bỏ";
-            btnClose.Location = new Point(560 - btncreate.Width - btnClose.Width - 20, 280);
-            btnClose.AutoSize = AutoSize;
-            btnClose.Click += (s, e) =>
+                    form.Close();
+                };
+                form.Controls.Add(label);
+                form.Controls.Add(btnClose);
+                form.Controls.Add(Loaikenh);
+                form.Controls.Add(vanban);
+                form.Controls.Add(giongnoi);
+                form.Controls.Add(ten);
+                form.Controls.Add(Tenkenh);
+                form.Controls.Add(btncreate);
+                form.ShowDialog();
+            }
+            catch (Exception ex)
             {
-                form.Close();
-            };
-            form.Controls.Add(label);
-            form.Controls.Add(btnClose);
-            form.Controls.Add(Loaikenh);
-            form.Controls.Add(vanban);
-            form.Controls.Add(giongnoi);
-            form.Controls.Add(ten);
-            form.Controls.Add(Tenkenh);
-            form.Controls.Add(btncreate);
-            form.ShowDialog();
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         private void TaoDanhMuc()
         {
+            try { 
             Form form = new Form();
             form.Text = $"Tạo danh mục";
             form.Size = new Size(400, 200);
@@ -2040,11 +2448,16 @@ namespace QLUSER
             form.Controls.Add(Tendanhmuc);
             form.Controls.Add(btncreate);
             form.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
         private async Task createlabel(TreeNode node)
         {
-
+            try { 
             Label label = new Label();
             label.Size = new Size(13, 13);
             label.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(49)))), ((int)(((byte)(54)))));
@@ -2066,7 +2479,11 @@ namespace QLUSER
             label.BringToFront();
             node.Tag = label;
             if (panelMenu != null) panelMenu.BringToFront();
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void cp_Menu_Click(object sender, EventArgs e)
@@ -2078,10 +2495,11 @@ namespace QLUSER
         private void button1_Click(object sender, EventArgs e)
         {
             TC_ServerOrFriend.SelectedIndex = 1;
+            //CreateMenu();
         }
         private void btn_Ketban_Click(object sender, EventArgs e)
         {
-            SearchUser friend = new SearchUser(_dpname,this);
+            SearchUser friend = new SearchUser(_userid,this);
             friend.ShowDialog();
         }
 
@@ -2292,6 +2710,7 @@ namespace QLUSER
         bool on = false;
         private async void USERINFOR(string gdpname)
         {
+            try { 
             Form form = new Form();
             form.Text = $"Thông tin người dùng";
             form.Size = new Size(500, 300);
@@ -2327,7 +2746,7 @@ namespace QLUSER
             userpicture.Anchor = AnchorStyles.None;
             userpicture.Click += async (s, e) =>
             {
-                GroupUser user = new GroupUser(gdpname, _gdpname,_groupid,this);
+                GroupUser user = new GroupUser(gdpid, _userid,_groupid,this);
                 user.ShowDialog();
             };
             UserSession.ActionAvatarUpdated += async () =>
@@ -2382,7 +2801,7 @@ namespace QLUSER
                 circulargroup.Anchor = AnchorStyles.None;
                 circulargroup.Click += async (s, e) =>
                 {
-                    GroupUser user = new GroupUser(gdpname, _gdpname,_groupid,this);
+                    GroupUser user = new GroupUser(gdpid, _userid,_groupid,this);
                     user.ShowDialog();
                 };
                 form.Controls.Add(circulargroup);
@@ -2456,9 +2875,15 @@ namespace QLUSER
                 form.Controls.Add(banbe);
             }
             form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private async void nhantin_KeyDown(object sender, KeyEventArgs e,string gdpid,TextBox nhantin)
         {
+            try { 
             if (e.KeyCode == Keys.Enter)
             {
                 string message = nhantin.Text;
@@ -2487,11 +2912,16 @@ namespace QLUSER
                 e.Handled = true;
                 e.SuppressKeyPress = true;
             }
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async Task<(string groupid, string channelid)> Createnhantinrieng(string dpname, string userid)
         {
+            try { 
             var result = await _group.SaveGroupToDatabase("Chathainguoi", 2);
             if (result.issuccess)
             {
@@ -2509,12 +2939,19 @@ namespace QLUSER
                 }
             }
             return (null, null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return (null, null);
+            }
         }
 
 
         Form form1;
         private void TrangChu(string gdpname, string gdpid)
         {
+            try { 
             on = true;
             form1 = new Form();
             form1.Text = $"Trang chủ";
@@ -2538,7 +2975,7 @@ namespace QLUSER
             button.Location = new Point(20, 20);
             button.Click += (s1, e1) =>
             {
-                GroupUser user = new GroupUser(gdpname, _gdpname,_groupid,this);
+                GroupUser user = new GroupUser(gdpid, _userid,_groupid,this);
                 user.Show();
             };
             Button moivaomaychu = new Button();
@@ -2562,10 +2999,16 @@ namespace QLUSER
             form1.Controls.Add(button);
             form1.Controls.Add(moivaomaychu);
             form1.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         Form form2;
-        private async void moivaogroup(string gdpid)
+        public async Task moivaogroup(string gdpid)
         {
+            try { 
             form2 = new Form();
             form2.Text = $"moi vao may chu";
             form2.AutoSize = AutoSize;
@@ -2600,6 +3043,7 @@ namespace QLUSER
                     {
                         string displayname = await _user.FindDisplayname(gdpid);
                         await _groupMember.AddMembersToGroup(gdpid, group1[0],displayname,"Member");
+                        SendUpdate("UpdateGroupMember");
                     };
 
                     // Add the button to the FlowLayoutPanel
@@ -2607,7 +3051,11 @@ namespace QLUSER
                 }
             }
             form2.ShowDialog();
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void button7_Click(object sender, EventArgs e)
@@ -2628,6 +3076,7 @@ namespace QLUSER
 
         private async Task InitializeEmojiPanelAsync()
         {
+            try { 
             string emojiApiUrl = "https://emoji-api.com/emojis?access_key=ee48e0cefa8273d4ac574b446253f2637877fb12";
             Panel emojiPanel = new Panel
             {
@@ -2663,6 +3112,12 @@ namespace QLUSER
             }
             TP_ChattingView.Controls.Add(emojiPanel);
             emojiPanel.BringToFront();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+            }
         }
 
         private void AddEmojiToTextBox(Emoji emoji)
@@ -2672,7 +3127,7 @@ namespace QLUSER
 
         private async void button8_Click(object sender, EventArgs e)
         {
-
+            try { 
             if (lb_TenKenh.Text == "")
             {
                 MessageBox.Show("Tìm kiếm thất bại");
@@ -2699,6 +3154,11 @@ namespace QLUSER
                         
                     }
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -2802,6 +3262,7 @@ namespace QLUSER
         
         private async void button10_Click_1(object sender, EventArgs e)
         {
+            try { 
             bool canclose=true;
             Form form = new Form();
             form.Text = $"Chọn bạn bè";
@@ -2980,6 +3441,11 @@ namespace QLUSER
 
 
             form.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btn_Banbe_Click(object sender, EventArgs e)
@@ -2987,9 +3453,6 @@ namespace QLUSER
             TC_Chat.SelectedIndex = 1;
         }
 
-        private void flp_TinNhanTT_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
     }
 }

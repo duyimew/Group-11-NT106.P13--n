@@ -163,22 +163,32 @@ namespace chatapp.Controllers
         {
             try
             {
+                // Tìm thành viên nhóm dựa trên GroupId và UserId
                 var groupmember = await _context.GroupMembers.FirstOrDefaultAsync(d => d.GroupId == int.Parse(request.groupid) && d.UserId == int.Parse(request.UserId));
                 if (groupmember == null)
                 {
-                    return NotFound(new { message = "groupmember not found." });
+                    return NotFound(new { message = "Group member not found." });
                 }
 
+                // Kiểm tra nếu GroupDisplayname mới đã tồn tại trong nhóm
+                var isGroupDisplaynameTaken = await _context.GroupMembers.AnyAsync(d => d.GroupId == int.Parse(request.groupid) && d.GroupDisplayname == request.newgroupdisplayname);
+                if (isGroupDisplaynameTaken)
+                {
+                    return BadRequest(new { message = "Group displayname is already taken within the group." });
+                }
+
+                // Cập nhật GroupDisplayname
                 groupmember.GroupDisplayname = request.newgroupdisplayname;
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "Rename groupdisplayname successfully!" });
+                return Ok(new { message = "Rename group displayname successfully!" });
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
+
         [HttpDelete("DeleteGroupMember")]
         public async Task<IActionResult> DeleteGroupMember([FromBody] DeleteGroupMemberRequestDTO request)
         {

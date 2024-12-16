@@ -1,4 +1,7 @@
 ﻿
+using Microsoft.VisualBasic;
+using NAudio.CoreAudioApi;
+using Newtonsoft.Json;
 using QLUSER.Models;
 using System;
 using System.Collections.Generic;
@@ -6,10 +9,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Security;
+
 //using System.Windows.Controls;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
@@ -18,89 +23,127 @@ namespace QLUSER
 {
     public partial class CaiDatMayChu : Form
     {
+        Dangnhap _dn;
         GiaoDien _gd;
-        string _groupdisplayname;
+        string _gdpname;
         string _groupid;
         string _userid;
+        string _userrole;
+        int _number;
         string _groupname;
         string[] usermemner;
-        private List<(string Username, string UserId, string UserRole)> users = new List<(string, string, string)>();
+        private List<(string gdpname, string UserId, string UserRole)> users = new List<(string, string, string)>();
         User _user = new User();
         UserAvatar _avatar = new UserAvatar();
         Group _group = new Group();
         GroupMember _groupMember = new GroupMember();
         string chonvaitro = "";
-        public CaiDatMayChu(string groupname, string groupid, string groupdisplayname,GiaoDien gd)
+        public CaiDatMayChu(string groupname, string groupid, string userid,GiaoDien gd,Dangnhap dn)
         {
             InitializeComponent();
             _gd = gd;
+            _dn = dn;
             label1.Text = groupname;
             label1.Name = groupid;
             textBox1.Text = groupname;
             _groupid = groupid;
-            _groupdisplayname = groupdisplayname;
             _groupname = groupname;
+            _userid = userid;
             UserSession.ActionUpdategdpname += Updategdpname;
             UserSession.ActionUpdateGroupname += UpdateGroupname;
         }
 
-        
+
 
         private async void Updategdpname()
         {
-            _groupdisplayname = await _groupMember.FindGroupDisplayname(_userid,_groupid);
+            try
+            {
+                _gdpname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
+            }
+            catch (Exception ex)
+            {
+                // Log hoặc xử lý lỗi
+                MessageBox.Show($"Error in Updategdpname: {ex.Message}");
+            }
         }
+
         private async void UpdateGroupname()
         {
-            string groupname = await _group.Groupname(_groupid);
-            label1.Text = groupname;
-            textBox1.Text = groupname;
-            _groupname = groupname;
-        }
-        private void tabPage2_Click(object sender, EventArgs e)
-        {
-
+            try
+            {
+                string groupname = await _group.Groupname(_groupid);
+                label1.Text = groupname;
+                textBox1.Text = groupname;
+                _groupname = groupname;
+            }
+            catch (Exception ex)
+            {
+                // Log hoặc xử lý lỗi
+                MessageBox.Show($"Error in UpdateGroupname: {ex.Message}");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            tabControl1.SelectedIndex = 0;
+            try
+            {
+                tabControl1.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                // Log hoặc xử lý lỗi
+                MessageBox.Show($"Error in button1_Click: {ex.Message}");
+            }
         }
+
         private async void button2_Click(object sender, EventArgs e)
         {
-            tabControl1.SelectedIndex = 1;
-            string[] roles = await _groupMember.FindUserRoleNameId(_groupid);
-            if(roles!=null)
-                foreach (var role in roles)
+            try
             {
-                string[] userole = role.Split('|');
-                    if (!users.Any(user => user.Item2 == userole[0]))
+                tabControl1.SelectedIndex = 1;
+                string[] roles = await _groupMember.FindUserRoleNameId(_groupid);
+                if (roles != null)
+                {
+                    users.Clear();
+                    foreach (var role in roles)
                     {
-                        users.Add((userole[1], userole[0], userole[2]));
+                        string[] userole = role.Split('|');
+                        if (!users.Any(user => user.Item2 == userole[0]))
+                        {
+                            users.Add((userole[1], userole[0], userole[2]));
+                        }
                     }
+                }
+                var members = users.Where(user => user.UserRole.Equals("Member", StringComparison.OrdinalIgnoreCase)).ToList();
+                label11.Text = members.Count.ToString();
+                var mods = users.Where(user => user.UserRole.Equals("Mod", StringComparison.OrdinalIgnoreCase)).ToList();
+                label18.Text = mods.Count.ToString();
+                var admins = users.Where(user => user.UserRole.Equals("Admin", StringComparison.OrdinalIgnoreCase)).ToList();
+                label20.Text = admins.Count.ToString();
+                var owners = users.Where(user => user.UserRole.Equals("Owner", StringComparison.OrdinalIgnoreCase)).ToList();
+                label22.Text = owners.Count.ToString();
+                UserSession.ActionUpdateGroupMember += () =>
+                {
+                    button2_Click(null, EventArgs.Empty);
+                };
+                UserSession.ActionUpdateRole += () =>
+                {
+                    button2_Click(null, EventArgs.Empty);
+                };
+                UserSession.ActionDeleteuser += () =>
+                {
+                    button2_Click(null, EventArgs.Empty);
+                };
             }
-            var members = users.Where(user => user.UserRole.Equals("Member", StringComparison.OrdinalIgnoreCase)).ToList();
-            label11.Text = members.Count.ToString();
-            var mods = users.Where(user => user.UserRole.Equals("Mod", StringComparison.OrdinalIgnoreCase)).ToList();
-            label18.Text = mods.Count.ToString();
-            var admins = users.Where(user => user.UserRole.Equals("Admin", StringComparison.OrdinalIgnoreCase)).ToList();
-            label20.Text = admins.Count.ToString();
-            var owners = users.Where(user => user.UserRole.Equals("Owner", StringComparison.OrdinalIgnoreCase)).ToList();
-            label22.Text = owners.Count.ToString();
-            UserSession.ActionUpdateGroupMember += () =>
+            catch (Exception ex)
             {
-                button2_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionUpdateRole += () =>
-            {
-                button2_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionDeleteuser += () =>
-            {
-                button2_Click(null, EventArgs.Empty);
-            };
+                // Log hoặc xử lý lỗi
+                MessageBox.Show($"Error in button2_Click: {ex.Message}");
+            }
         }
-        private async void button3_Click(object sender, EventArgs e)
+
+        /*private async void button3_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
             string[] roles = await _groupMember.FindUserRoleNameId(_groupid);
@@ -118,7 +161,8 @@ namespace QLUSER
                 string createtime = await _user.FindCreatetime(user.UserId);
                 string jointime = await _groupMember.FindJointime(user.UserId, _groupid);
                 ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {user.Username,jointime,createtime,user.UserRole}, -1);
-                listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {listViewItem1});
+                ListViewItem item = listView1.Items.Add(listViewItem1);
+                //createbacham(item);
             }
             tabControl1.SelectedIndex = 2;
             UserSession.ActionUpdateGroupMember += () =>
@@ -135,8 +179,365 @@ namespace QLUSER
             };
         }
 
+        }*/
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                listView1.FullRowSelect = true;
+                users.Clear();
+                listView1.Items.Clear();
+                string[] roles = await _groupMember.FindUserRoleNameId(_groupid);
+                if (roles != null)
+                {
+                    foreach (var role in roles)
+                    {
+                        string[] userole = role.Split('|');
+                        if (!users.Any(user => user.Item2 == userole[0]))
+                        {
+                            users.Add((userole[1], userole[0], userole[2]));
+                        }
+                    }
+                }
+
+                foreach (var user in users)
+                {
+                    string createtime = await _user.FindCreatetime(user.UserId);
+                    string jointime = await _groupMember.FindJointime(user.UserId, _groupid);
+                    ListViewItem listViewItem = new ListViewItem(new string[]
+                    {
+                user.gdpname,
+                jointime,
+                createtime,
+                user.UserRole,
+                "⋮",
+                    });
+                    listView1.Items.Add(listViewItem);
+                }
+                listView1.MouseClick += ListView1_MouseClick;
+                tabControl1.SelectedIndex = 2;
+                UserSession.ActionUpdateGroupMember -= hambutton3click;
+                UserSession.ActionUpdateRole -= hambutton3click;
+                UserSession.ActionDeleteuser -= hambutton3click;
+                UserSession.ActionUpdateGroupMember += hambutton3click;
+                UserSession.ActionUpdateRole += hambutton3click;
+                UserSession.ActionDeleteuser += hambutton3click;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void hambutton3click()
+        {
+            button3_Click(null, EventArgs.Empty);
+        }
+        
+        private void ListView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            foreach (ListViewItem item in listView1.Items)
+            {
+                if (item.SubItems.Count > 4) 
+                {
+                    Rectangle iconBounds = new Rectangle(item.SubItems[4].Bounds.X + item.SubItems[4].Bounds.Width - 20, item.SubItems[4].Bounds.Y, 20, item.SubItems[4].Bounds.Height);
+
+                    if (iconBounds.Contains(e.Location))
+                    {
+                        string gdpname = item.SubItems[0].Text;
+                        formusergroup(gdpname,true);
+                        break;
+                    }
+                }
+            }
+        }
+        public async void formusergroup(string groupdisplayname,bool isformcaidatmaychu)
+        {
+            try { 
+            string userid = await _groupMember.FindGroupDisplayID(_groupid, groupdisplayname);
+            UserSession.ActionUpdategdpname += async () =>
+            {
+                groupdisplayname = await _groupMember.FindGroupDisplayname(userid, _groupid);
+            };
+            string username = await _user.FindDisplayname(userid);
+            UserSession.ActionUpdateusername += async () =>
+            {
+                username = await _user.FindUsername(userid);
+            };
+            
+            _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+            _gdpname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
+            bool on = false;
+            Form form = new Form();
+            form.Text = $"Thông tin";
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.AutoSize = true;
+            form.Deactivate += (s, e) =>
+            {
+                if(!on)
+                form.Close();
+            };
+            switch (_userrole)
+            { 
+                case "Member": _number = 1; break;
+                case "Mod": _number = 2; break;
+                case "Admin": _number = 3; break;
+                case "Owner": _number = 4; break;
+            }
+            UserSession.ActionDeleteuser += () =>
+            {
+                if (form != null && !form.IsDisposed)
+                {
+                    
+                    form.Close();
+                }
+            };
+            FlowLayoutPanel panel1 = new FlowLayoutPanel
+            {
+                Location = new Point(20, 20),
+                AutoSize = true,
+                FlowDirection = FlowDirection.TopDown, // Sắp xếp các nút theo chiều dọc
+                WrapContents = false,
+                AutoScroll = true,
+                Padding = new Padding(5),
+            };
+
+            // Danh sách các nút
+            List<Button> buttons = new List<Button> {}; 
+
+            if(groupdisplayname == _gdpname)
+            {
+                buttons.Add(new Button { Text = "Hồ Sơ" });
+                buttons.Add(new Button { Text = "Chỉnh sửa hồ sơ máy chủ" });
+                buttons.Add(new Button { Text = "Vai trò" });
+            }
+            else
+            {
+                buttons.Add(new Button { Text = "Hồ Sơ" });
+                if (_userrole == "Admin" || _userrole == "Owner") buttons.Add(new Button { Text = "Đổi biệt danh" });
+
+                buttons.Add(new Button { Text = "Mời vào máy chủ" });
+
+                buttons.Add(new Button { Text = "Thêm bạn" });
+                if (_userrole == "Admin" || _userrole == "Owner") buttons.Add(new Button { Text = "Đuổi user" });
+                buttons.Add(new Button { Text = "Vai trò" });
+                if (isformcaidatmaychu &&_userrole == "Owner") buttons.Add(new Button { Text = "Chuyển quyền sở hữu" });
+
+            }
+            foreach (var btn in buttons)
+            {
+
+                btn.Width = 200; // Thiết lập chiều rộng đồng nhất
+                btn.Height = 40; // Thiết lập chiều cao đồng nhất
+                btn.ForeColor = Color.Black;
+                btn.TextAlign = ContentAlignment.MiddleCenter;
+                btn.Margin = new Padding(5); // Khoảng cách giữa các nút
+
+                btn.Click += async (s, e) =>
+                {
+                    on = true;
+
+                    switch (btn.Text)
+                    {
+                        case "Hồ Sơ":
+                            GroupUser groupUser = new GroupUser(userid,_userid, _groupid, _gd);
+                            groupUser.ShowDialog();
+                            break;
+                        case "Đổi biệt danh":
+                            string newNickname = Interaction.InputBox(
+                "Nhập biệt danh mới:",
+                "Đổi Biệt Danh",
+                "");
+                            if (newNickname != groupdisplayname && !string.IsNullOrWhiteSpace(newNickname))
+                            {
+                                var result = await _groupMember.RenameGroupDisplayname(newNickname, _groupid, userid);
+                                if (result)
+                                {
+                                    UserSession.Renamegdpname = (true, true);
+                                    _gd.SendUpdate("Updategdpname");
+                                    MessageBox.Show("Biệt danh máy chủ đã được cập nhật thành công!", "Thông Báo");
+                                }
+                                else MessageBox.Show("Biệt danh máy chủ cập nhật thất bại!", "Thông Báo");
+                            }
+                            break;
+                        case "Mời vào máy chủ":
+                            await _gd.moivaogroup(userid);
+                            break;
+                        case "Thêm bạn":
+                            SearchUser searchUser = new SearchUser(_userid, _gd);
+                            searchUser.ShowDialog();
+                            break;
+                        case "Đuổi user":
+                            await _gd.roinhom(_groupid,true,userid);
+                            break;
+                        case "Vai trò":
+                            await showuserrole(userid);
+                            break;
+                        case "Chỉnh sửa hồ sơ máy chủ":
+                            CaiDatNguoiDung caiDatNguoiDung = new CaiDatNguoiDung(_userid, _dn, _gd, username, 2, _groupid);
+                            caiDatNguoiDung.ShowDialog();
+                            break;
+                        case "Chuyển quyền sở hữu":
+                            var resultthemrole= await _groupMember.themrole(_groupid,userid, "Owner");
+                            var resultgorole= await _groupMember.Goborole(_groupid, _userid);
+                            if (resultthemrole && resultgorole)
+                            {
+                                UserSession.UpdateUserRole = (true, true);
+                                _gd.SendUpdate("UpdateRole");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    on = false;
+                };
+
+                panel1.Controls.Add(btn);
+            }
+
+            form.Controls.Add(panel1);
+            form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async Task showuserrole(string userid)
+        {
+            try
+            {
+                Form form2 = new Form
+                {
+                    Text = "hien role",
+                    AutoSize = true,
+                    StartPosition = FormStartPosition.CenterParent
+                };
+
+                // Create a FlowLayoutPanel to hold the buttons
+                FlowLayoutPanel flowLayoutPanel1 = new FlowLayoutPanel
+                {
+                    Dock = DockStyle.Fill,            // Dock the panel to fill the form
+                    FlowDirection = FlowDirection.TopDown, // Arrange buttons vertically
+                    WrapContents = false,            // Don't wrap buttons to next row
+                    AutoScroll = true                // Enable scrolling if buttons overflow
+                };
+
+                // Add the FlowLayoutPanel to the form
+                form2.Controls.Add(flowLayoutPanel1);
+
+                int number = 1;
+                string role = await _groupMember.FindOneUserRole(_groupid, userid);
+
+                switch (role)
+                {
+                    case "Member": number = 1; break;
+                    case "Mod": number = 2; break;
+                    case "Admin": number = 3; break;
+                    case "Owner": number = 4; break;
+                }
+
+                var buttons = new List<CheckBox>
+        {
+            new CheckBox { Text = "Member"},
+            new CheckBox { Text = "Mod" },
+            new CheckBox { Text = "Admin" },
+            new CheckBox { Text = "Owner" },
+        };
+
+                foreach (var btn in buttons)
+                {
+                    btn.Width = 200; // Thiết lập chiều rộng đồng nhất
+                    btn.Height = 40; // Thiết lập chiều cao đồng nhất
+                    btn.ForeColor = Color.Black;
+                    btn.TextAlign = ContentAlignment.MiddleCenter;
+                    btn.Margin = new Padding(5); // Khoảng cách giữa các nút
+                    btn.Checked = role == btn.Text;
+
+                    btn.Click += async (s, e) =>
+                    {
+                        try
+                        {
+                            if (role == btn.Text)
+                            {
+                                foreach (var Btn in buttons)
+                                {
+                                    Btn.Checked = Btn.Text == role;
+                                }
+                                return;
+                            }
+
+                            if (role != btn.Text)
+                            {
+                                if (btn.Text == "Owner")
+                                {
+                                    foreach (var Btn in buttons)
+                                    {
+                                        Btn.Checked = Btn.Text == role;
+                                    }
+                                    return;
+                                }
+
+                                if (number >= _number)
+                                {
+                                    foreach (var Btn in buttons)
+                                    {
+                                        Btn.Checked = Btn.Text == role;
+                                    }
+                                    return;
+                                }
+
+                                if (!btn.Checked) return;
+
+                                foreach (var otherBtn in buttons)
+                                {
+                                    if (otherBtn != btn)
+                                    {
+                                        otherBtn.Checked = false;
+                                    }
+                                }
+
+                                var themrole = await _groupMember.themrole(_groupid, userid, btn.Text);
+                                role = btn.Text;
+
+                                switch (role)
+                                {
+                                    case "Member": number = 1; break;
+                                    case "Mod": number = 2; break;
+                                    case "Admin": number = 3; break;
+                                    case "Owner": number = 4; break;
+                                }
+
+                                if (themrole)
+                                {
+                                    UserSession.UpdateUserRole = (true, true);
+                                    _gd.SendUpdate("UpdateRole");
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log hoặc xử lý lỗi
+                            MessageBox.Show($"Error in button click: {ex.Message}");
+                        }
+                    };
+
+                    flowLayoutPanel1.Controls.Add(btn);
+                }
+
+                form2.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                // Log hoặc xử lý lỗi
+                MessageBox.Show($"Error in showuserrole: {ex.Message}");
+            }
+        }
+
+
         private async void button5_Click(object sender, EventArgs e)
         {
+            try { 
             // Hiển thị hộp thoại xác nhận
             var result = MessageBox.Show(
                 "Bạn có chắc chắn muốn xóa nhóm này không?",
@@ -149,16 +550,24 @@ namespace QLUSER
             if (result == DialogResult.Yes)
             {
                 // Thực hiện xóa nhóm
-                await _group.DeleteGroup(_groupid);
-                UserSession.UpdateGroup = (true, true);
-                _gd.SendUpdate("GroupDislay");
-                MessageBox.Show("Nhóm đã được xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                var delete =await _group.DeleteGroup(_groupid);
+                if (delete)
+                {
+                    UserSession.UpdateGroup = (true, true);
+                    _gd.SendUpdate("GroupDislay");
+                    MessageBox.Show("Nhóm đã được xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
             }
             else
             {
                 // Hủy thao tác
                 MessageBox.Show("Thao tác xóa nhóm đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -170,7 +579,16 @@ namespace QLUSER
 
         private async void CaiDatMayChu_Load(object sender, EventArgs e)
         {
-            _userid = await _groupMember.FindGroupDisplayID(_groupid,_groupdisplayname);
+            try { 
+            _gdpname = await _groupMember.FindGroupDisplayname(_userid,_groupid);
+            _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+            switch (_userrole)
+            {
+                case "Member": _number = 1; break;
+                case "Mod": _number = 2; break;
+                case "Admin": _number = 3; break;
+                case "Owner": _number = 4; break;
+            }
             circularPicture1.Image = await _avatar.LoadAvatarGroupAsync(_groupid);
             circularPicture1.Text = _groupname;
             circularPicture1.Name = _groupid;
@@ -182,6 +600,11 @@ namespace QLUSER
             {
                 circularPicture1.Text = await _group.Groupname(_groupid);
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void button6_Click(object sender, EventArgs e)
         {
@@ -223,6 +646,7 @@ namespace QLUSER
 
         private async void button10_Click(object sender, EventArgs e)
         {
+            try { 
             if (textBox1.Text != _groupname)
             {
                 string newgroupname = textBox1.Text;
@@ -236,6 +660,11 @@ namespace QLUSER
                     circularPicture1.Text = newgroupname;
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void panel1_Click(object sender, EventArgs e)
@@ -243,15 +672,6 @@ namespace QLUSER
             tabControl1.SelectedIndex = 3;
         }
 
-        private void label10_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button11_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -260,6 +680,7 @@ namespace QLUSER
 
         private async void button12_Click(object sender, EventArgs e)
         {
+            try { 
             if (chonvaitro == "") return;
             Form form = new Form();
             form.Text = $"Thêm người dùng";
@@ -329,90 +750,94 @@ namespace QLUSER
                 {
                     if (control is CheckBox checkBox && checkBox.Checked)
                     {
-                        _groupMember.themrole(_groupid, checkBox.Name, chonvaitro);
-                        UserSession.UpdateUserRole = (true, true);
-                        _gd.SendUpdate("UpdateRole");
-                        var index = users.FindIndex(user => user.UserId == checkBox.Name);
-
-                        if (index != -1)
+                        var themrole=await _groupMember.themrole(_groupid, checkBox.Name, chonvaitro);
+                        if (themrole)
                         {
-                            var user = users[index];
-                            users[index] = (user.Username, user.UserId, chonvaitro);
+                            UserSession.UpdateUserRole = (true, true);
+                            _gd.SendUpdate("UpdateRole");
 
-                        }
-                        var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
+                            var index = users.FindIndex(user => user.UserId == checkBox.Name);
 
-                        flowLayoutPanel1.Controls.Clear();
-                        if (members == null)
-                        {
-                            Panel panel = new Panel
+                            if (index != -1)
                             {
-                                Width = flowLayoutPanel1.Width,
-                                AutoSize = true,
-                            };
-                            Label lblUsername = new Label
-                            {
-                                Text = "Không tìm thấy thành viên nào",
-                                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                                ForeColor = Color.FromArgb(88, 101, 242),
-                                AutoSize = true,
-                            };
+                                var user = users[index];
+                                users[index] = (user.gdpname, user.UserId, chonvaitro);
 
+                            }
+                            var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                            panel.Controls.Add(lblUsername);
-                            flowLayoutPanel1.Controls.Add(panel);
-                        }
-                        else
-                        {
-                            foreach (var user in members)
+                            flowLayoutPanel1.Controls.Clear();
+                            if (members == null)
                             {
                                 Panel panel = new Panel
                                 {
-                                    Width = flowLayoutPanel1.Width - 40,
+                                    Width = flowLayoutPanel1.Width,
                                     AutoSize = true,
                                 };
-
-                                CircularPicture pictureBoxAvatar = new CircularPicture
-                                {
-                                    SizeMode = PictureBoxSizeMode.Zoom,
-                                    Width = 25,
-                                    Height = 25,
-                                    Image = await _avatar.LoadAvatarAsync(user.UserId),
-                                };
-                                UserSession.ActionAvatarUpdated += async () =>
-                                {
-                                    pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
-                                };
-                                panel.Controls.Add(pictureBoxAvatar);
-
                                 Label lblUsername = new Label
                                 {
-                                    Text = user.Username,
+                                    Text = "Không tìm thấy thành viên nào",
                                     Font = new Font("Segoe UI", 10, FontStyle.Bold),
                                     ForeColor = Color.FromArgb(88, 101, 242),
                                     AutoSize = true,
-                                    Left = pictureBoxAvatar.Right + 10
                                 };
-                                UserSession.ActionUpdategdpname += async () =>
-                                {
-                                    lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
-                                };
-                                panel.Controls.Add(lblUsername);
-                                Button xoa = new Button
-                                {
-                                    Text = "X",
-                                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                                    ForeColor = Color.FromArgb(88, 101, 242),
-                                    Size = pictureBoxAvatar.Size,
-                                    Location = new Point(panel.Width - 20, pictureBoxAvatar.Location.Y)
 
-                                };
-                                xoa.Click += (s2, e2) =>
-                                {
-                                    Xoathanhvien(user.Username, user.UserId, user.UserRole);
-                                };
-                                panel.Controls.Add(xoa);
+
+                                panel.Controls.Add(lblUsername);
                                 flowLayoutPanel1.Controls.Add(panel);
+                            }
+                            else
+                            {
+                                foreach (var user in members)
+                                {
+                                    Panel panel = new Panel
+                                    {
+                                        Width = flowLayoutPanel1.Width - 40,
+                                        AutoSize = true,
+                                    };
+
+                                    CircularPicture pictureBoxAvatar = new CircularPicture
+                                    {
+                                        SizeMode = PictureBoxSizeMode.Zoom,
+                                        Width = 25,
+                                        Height = 25,
+                                        Image = await _avatar.LoadAvatarAsync(user.UserId),
+                                    };
+                                    UserSession.ActionAvatarUpdated += async () =>
+                                    {
+                                        pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
+                                    };
+                                    panel.Controls.Add(pictureBoxAvatar);
+
+                                    Label lblUsername = new Label
+                                    {
+                                        Text = user.gdpname,
+                                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                                        ForeColor = Color.FromArgb(88, 101, 242),
+                                        AutoSize = true,
+                                        Left = pictureBoxAvatar.Right + 10
+                                    };
+                                    UserSession.ActionUpdategdpname += async () =>
+                                    {
+                                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
+                                    };
+                                    panel.Controls.Add(lblUsername);
+                                    Button xoa = new Button
+                                    {
+                                        Text = "X",
+                                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                                        ForeColor = Color.FromArgb(88, 101, 242),
+                                        Size = pictureBoxAvatar.Size,
+                                        Location = new Point(panel.Width - 20, pictureBoxAvatar.Location.Y)
+
+                                    };
+                                    xoa.Click += (s2, e2) =>
+                                    {
+                                        Xoathanhvien(user.gdpname, user.UserId, user.UserRole);
+                                    };
+                                    panel.Controls.Add(xoa);
+                                    flowLayoutPanel1.Controls.Add(panel);
+                                }
                             }
                         }
                     }
@@ -438,10 +863,16 @@ namespace QLUSER
             form.Controls.Add(btncreate);
             form.Controls.Add(btnClose);
             form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void label30_Click(object sender, EventArgs e)
         {
+            try { 
             chonvaitro = "Member";
             var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
 
@@ -490,7 +921,7 @@ namespace QLUSER
 
                     Label lblUsername = new Label
                     {
-                        Text = user.Username,
+                        Text = user.gdpname,
                         Font = new Font("Segoe UI", 10, FontStyle.Bold),
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
@@ -512,7 +943,7 @@ namespace QLUSER
                     };
                     xoa.Click += (s1, e1) =>
                     {
-                        Xoathanhvien(user.Username, user.UserId, user.UserRole);
+                        Xoathanhvien(user.gdpname, user.UserId, user.UserRole);
                     };
                     panel.Controls.Add(xoa);
                     flowLayoutPanel1.Controls.Add(panel);
@@ -530,10 +961,16 @@ namespace QLUSER
             {
                 label30_Click(null, EventArgs.Empty);
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void label27_Click(object sender, EventArgs e)
         {
+            try { 
             chonvaitro = "Mod";
             var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
 
@@ -582,7 +1019,7 @@ namespace QLUSER
 
                     Label lblUsername = new Label
                     {
-                        Text = user.Username,
+                        Text = user.        gdpname,
                         Font = new Font("Segoe UI", 10, FontStyle.Bold),
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
@@ -604,7 +1041,7 @@ namespace QLUSER
                     };
                     xoa.Click += (s1, e1) =>
                     {
-                        Xoathanhvien(user.Username, user.UserId, user.UserRole);
+                        Xoathanhvien(user.gdpname, user.UserId, user.UserRole);
                     };
                     panel.Controls.Add(xoa);
                     flowLayoutPanel1.Controls.Add(panel);
@@ -622,6 +1059,11 @@ namespace QLUSER
             {
                 label27_Click(null, EventArgs.Empty);
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void tabPage4_Click(object sender, EventArgs e)
@@ -631,6 +1073,7 @@ namespace QLUSER
 
         private async void label25_Click(object sender, EventArgs e)
         {
+            try { 
             chonvaitro = "Owner";
             var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
 
@@ -679,7 +1122,7 @@ namespace QLUSER
 
                     Label lblUsername = new Label
                     {
-                        Text = user.Username,
+                        Text = user.gdpname,
                         Font = new Font("Segoe UI", 10, FontStyle.Bold),
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
@@ -701,7 +1144,7 @@ namespace QLUSER
                     };
                     xoa.Click += (s1, e1) =>
                     {
-                        Xoathanhvien(user.Username, user.UserId, user.UserRole);
+                        Xoathanhvien(user.gdpname, user.UserId, user.UserRole);
                     };
                     panel.Controls.Add(xoa);
                     flowLayoutPanel1.Controls.Add(panel);
@@ -719,10 +1162,16 @@ namespace QLUSER
             {
                 label25_Click(null, EventArgs.Empty);
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void label24_Click(object sender, EventArgs e)
         {
+            try { 
             chonvaitro = "Admin";
             var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
 
@@ -771,7 +1220,7 @@ namespace QLUSER
 
                     Label lblUsername = new Label
                     {
-                        Text = user.Username,
+                        Text = user.gdpname,
                         Font = new Font("Segoe UI", 10, FontStyle.Bold),
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
@@ -793,7 +1242,7 @@ namespace QLUSER
                     };
                     xoa.Click += (s1, e1) =>
                     {
-                        Xoathanhvien(user.Username, user.UserId, user.UserRole);
+                        Xoathanhvien(user.gdpname, user.UserId, user.UserRole);
                     };
                     panel.Controls.Add(xoa);
                     flowLayoutPanel1.Controls.Add(panel);
@@ -811,28 +1260,17 @@ namespace QLUSER
             {
                 label24_Click(null, EventArgs.Empty);
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private async void label11_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void label18_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void label20_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private async void label22_Click(object sender, EventArgs e)
-        {
-        }
+     
         private async void Xoathanhvien(string gdpname, string userid, string role)
         {
+            try { 
             Form form = new Form();
             form.Text = $"Xóa thành viên";
             form.Size = new Size(400, 200);
@@ -866,93 +1304,95 @@ namespace QLUSER
             btncreate.Location = new Point(340 - btncreate.Width, 120);
             btncreate.Click += async (s, e) =>
             {
-                _groupMember.Goborole(_groupid, userid);
-                UserSession.UpdateUserRole = (true, true);
-                _gd.SendUpdate("UpdateRole");
-                var index = users.FindIndex(user => user.UserId == userid);
-
-                if (index != -1)
+                var gorole=await _groupMember.Goborole(_groupid, userid);
+                if (gorole)
                 {
-                    var user = users[index];
-                    users[index] = (user.Username, user.UserId, "Member");
+                    UserSession.UpdateUserRole = (true, true);
+                    _gd.SendUpdate("UpdateRole");
+                    var index = users.FindIndex(user => user.UserId == userid);
 
-                }
-                var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                flowLayoutPanel1.Controls.Clear();
-                if (members == null)
-                {
-                    Panel panel = new Panel
+                    if (index != -1)
                     {
-                        Width = flowLayoutPanel1.Width,
-                        AutoSize = true,
-                    };
-                    Label lblUsername = new Label
-                    {
-                        Text = "Không tìm thấy thành viên nào",
-                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                        ForeColor = Color.FromArgb(88, 101, 242),
-                        AutoSize = true,
-                    };
+                        var user = users[index];
+                        users[index] = (user.gdpname, user.UserId, "Member");
 
+                    }
+                    var members = users.Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                    panel.Controls.Add(lblUsername);
-                    flowLayoutPanel1.Controls.Add(panel);
-                }
-                else
-                {
-                    foreach (var user in members)
+                    flowLayoutPanel1.Controls.Clear();
+                    if (members == null)
                     {
                         Panel panel = new Panel
                         {
-                            Width = flowLayoutPanel1.Width - 40,
+                            Width = flowLayoutPanel1.Width,
                             AutoSize = true,
                         };
-
-                        CircularPicture pictureBoxAvatar = new CircularPicture
-                        {
-                            SizeMode = PictureBoxSizeMode.Zoom,
-                            Width = 25,
-                            Height = 25,
-                            Image = await _avatar.LoadAvatarAsync(user.UserId),
-                        };
-                        UserSession.ActionAvatarUpdated += async () =>
-                        {
-                            pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
-                        };
-                        panel.Controls.Add(pictureBoxAvatar);
-
                         Label lblUsername = new Label
                         {
-                            Text = user.Username,
+                            Text = "Không tìm thấy thành viên nào",
                             Font = new Font("Segoe UI", 10, FontStyle.Bold),
                             ForeColor = Color.FromArgb(88, 101, 242),
                             AutoSize = true,
-                            Left = pictureBoxAvatar.Right + 10
                         };
-                        UserSession.ActionUpdategdpname += async () =>
-                        {
-                            lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
-                        };
-                        panel.Controls.Add(lblUsername);
-                        Button xoa = new Button
-                        {
-                            Text = "X",
-                            Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                            ForeColor = Color.FromArgb(88, 101, 242),
-                            Size = pictureBoxAvatar.Size,
-                            Location = new Point(panel.Width - 20, pictureBoxAvatar.Location.Y)
 
-                        };
-                        xoa.Click += (s1, e1) =>
-                        {
-                            Xoathanhvien(user.Username, user.UserId, user.UserRole);
-                        };
-                        panel.Controls.Add(xoa);
+
+                        panel.Controls.Add(lblUsername);
                         flowLayoutPanel1.Controls.Add(panel);
                     }
+                    else
+                    {
+                        foreach (var user in members)
+                        {
+                            Panel panel = new Panel
+                            {
+                                Width = flowLayoutPanel1.Width - 40,
+                                AutoSize = true,
+                            };
+
+                            CircularPicture pictureBoxAvatar = new CircularPicture
+                            {
+                                SizeMode = PictureBoxSizeMode.Zoom,
+                                Width = 25,
+                                Height = 25,
+                                Image = await _avatar.LoadAvatarAsync(user.UserId),
+                            };
+                            UserSession.ActionAvatarUpdated += async () =>
+                            {
+                                pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.UserId);
+                            };
+                            panel.Controls.Add(pictureBoxAvatar);
+
+                            Label lblUsername = new Label
+                            {
+                                Text = user.gdpname,
+                                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                                ForeColor = Color.FromArgb(88, 101, 242),
+                                AutoSize = true,
+                                Left = pictureBoxAvatar.Right + 10
+                            };
+                            UserSession.ActionUpdategdpname += async () =>
+                            {
+                                lblUsername.Text = await _groupMember.FindGroupDisplayname(user.UserId, _groupid);
+                            };
+                            panel.Controls.Add(lblUsername);
+                            Button xoa = new Button
+                            {
+                                Text = "X",
+                                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                                ForeColor = Color.FromArgb(88, 101, 242),
+                                Size = pictureBoxAvatar.Size,
+                                Location = new Point(panel.Width - 20, pictureBoxAvatar.Location.Y)
+
+                            };
+                            xoa.Click += (s1, e1) =>
+                            {
+                                Xoathanhvien(user.gdpname, user.UserId, user.UserRole);
+                            };
+                            panel.Controls.Add(xoa);
+                            flowLayoutPanel1.Controls.Add(panel);
+                        }
+                    }
                 }
-            
             };
             Button btnClose = new Button();
             btnClose.Text = "Hủy bỏ";
@@ -971,19 +1411,22 @@ namespace QLUSER
             form.Controls.Add(btncreate);
             form.Controls.Add(btnClose);
             form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
 
         private async void btnSearch_Click(object sender, EventArgs e)
         {
+            try { 
             if (chonvaitro == "" || string.IsNullOrEmpty(txtUser.Text)) return;
             var members = users
                 .Where(user => user.UserRole.Equals(chonvaitro, StringComparison.OrdinalIgnoreCase)
-                               && user.Username.Contains(txtUser.Text))
+                               && user.gdpname.Contains(txtUser.Text))
                 .ToList();
             flowLayoutPanel1.Controls.Clear();
             if (members.Count == 0)
@@ -1030,7 +1473,7 @@ namespace QLUSER
 
                     Label lblUsername = new Label
                     {
-                        Text = user.Username,
+                        Text = user.gdpname,
                         Font = new Font("Segoe UI", 10, FontStyle.Bold),
                         ForeColor = Color.FromArgb(88, 101, 242),
                         AutoSize = true,
@@ -1052,23 +1495,20 @@ namespace QLUSER
                     };
                     xoa.Click += (s1, e1) =>
                     {
-                        Xoathanhvien(user.Username, user.UserId, user.UserRole);
+                        Xoathanhvien(user.gdpname, user.UserId, user.UserRole);
                     };
                     panel.Controls.Add(xoa);
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void label8_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
     }
 

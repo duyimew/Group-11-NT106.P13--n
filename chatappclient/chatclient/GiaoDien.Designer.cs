@@ -236,7 +236,6 @@ namespace QLUSER
             this.flp_TinNhanTT.Size = new System.Drawing.Size(174, 285);
             this.flp_TinNhanTT.TabIndex = 2;
             this.flp_TinNhanTT.WrapContents = false;
-            this.flp_TinNhanTT.Paint += new System.Windows.Forms.PaintEventHandler(this.flp_TinNhanTT_Paint);
             // 
             // lb_TinNhanTT
             // 

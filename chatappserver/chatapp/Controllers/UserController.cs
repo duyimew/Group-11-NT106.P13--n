@@ -136,12 +136,21 @@ namespace chatapp.Controllers
         {
             try
             {
+                // Tìm người dùng theo UserId
                 var user = await _context.Users.FirstOrDefaultAsync(g => g.UserId == int.Parse(request.UserId));
                 if (user == null)
                 {
-                    return NotFound(new { message = "user not found." });
+                    return NotFound(new { message = "User not found." });
                 }
 
+                // Kiểm tra nếu Displayname mới đã tồn tại
+                var isDisplaynameTaken = await _context.Users.AnyAsync(g => g.Displayname == request.newdisplayname);
+                if (isDisplaynameTaken)
+                {
+                    return BadRequest(new { message = "Displayname is already taken." });
+                }
+
+                // Cập nhật Displayname
                 user.Displayname = request.newdisplayname;
                 await _context.SaveChangesAsync();
 
@@ -152,6 +161,7 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
+
         [HttpPost("RenameUsername")]
         public async Task<IActionResult> RenameUsername([FromBody] RenameUsernameDTO request)
         {

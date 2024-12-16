@@ -167,8 +167,16 @@ namespace QLUSER.Models
             {
                 _updategroupmember = value.update;
                 _updatestatus=value.status;
-                if (_updatestatus) ActionUpdateGroupMember?.Invoke();
-                else ActionUpdateGroupMemberPrivate?.Invoke();
+                if (_updatestatus)
+                {
+                    ActionUpdateGroup?.Invoke();
+                    ActionUpdateGroupMember?.Invoke();
+                }
+                else
+                {
+                    ActionUpdateGroupPrivate?.Invoke();
+                    ActionUpdateGroupMemberPrivate?.Invoke(); 
+                }
                 //0 la update groupmember private
                 //1 la update groupmember public
             }
@@ -191,7 +199,7 @@ namespace QLUSER.Models
             {
                 _upgroupid = value.groupid;
                     _upuserid = value.userid;
-                    ActionUpdateRole?.Invoke();
+                    ActionUpdateRole();
                 
             }
         }

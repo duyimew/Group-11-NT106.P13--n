@@ -65,6 +65,7 @@ namespace QLUSER
 
         private async void VideoCall_Load(object sender, EventArgs e)
         {
+            try { 
             InitializeSignalR();
             InitializeAudio();
             InitializeCamera();
@@ -74,9 +75,15 @@ namespace QLUSER
                     this.Close();
                 }
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void SetPictureBoxLayout(int n)
         {
+            try { 
             // Xóa tất cả các PictureBox hiện tại khỏi form
             foreach (var pictureBox in pictureBoxes)
             {
@@ -127,6 +134,11 @@ namespace QLUSER
                 this.Invoke(new Action(() => this.Controls.Add(pictureBox)));
                 pictureBoxes[i] = pictureBox;
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -134,6 +146,7 @@ namespace QLUSER
 
         private void InitializeAudio()
         {
+            try { 
             waveIn = new WaveInEvent();
             waveIn.WaveFormat = new WaveFormat(8000, 1);
             waveIn.DataAvailable += WaveIn_DataAvailable;
@@ -141,12 +154,16 @@ namespace QLUSER
             waveOut = new WaveOutEvent();
             waveOut.Init(waveProvider);
             waveOut.Play();
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
 
-
+            try { 
             if (isMicOn && connection != null && connection.State == HubConnectionState.Connected)
             {
                 byte[] audioData = e.Buffer.Take(e.BytesRecorded).ToArray();
@@ -166,11 +183,15 @@ namespace QLUSER
                     isSendingData = false;
                 }
             }
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void InitializeCamera()
         {
-
+            try { 
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (videoDevices.Count > 0)
             {
@@ -181,12 +202,16 @@ namespace QLUSER
             {
                 MessageBox.Show("No video sources found.");
             }
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void videoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-
+            try { 
             Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
             if (frame == null)
             {
@@ -243,6 +268,11 @@ namespace QLUSER
             });
 
             frame.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
@@ -259,6 +289,7 @@ namespace QLUSER
 
         private async void InitializeSignalR()
         {
+            try { 
             if (listBox1.InvokeRequired)
             {
                 listBox1.Invoke(new Action(() =>
@@ -420,12 +451,17 @@ namespace QLUSER
                     }
                 }
             };
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // Hàm tiện ích để thêm người dùng vào ListBox1
         private async Task AddUserToListBox(string groupdisplayname)
         {
+            try { 
             if (listBox1.InvokeRequired)
             {
                 listBox1.Invoke(new Action(() =>
@@ -447,25 +483,37 @@ namespace QLUSER
                     SetPictureBoxLayout(n);
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // Hàm tiện ích để xóa người dùng khỏi ListBox1
         private async Task RemoveUserFromListBox(string groupdisplayname)
         {
-            if (listBox1.InvokeRequired)
+            try
             {
-                listBox1.Invoke(new Action(() =>
+                if (listBox1.InvokeRequired)
+                {
+                    listBox1.Invoke(new Action(() =>
+                    {
+                        listBox1.Items.Remove(groupdisplayname);
+                        int n = listBox1.Items.Count;
+                        SetPictureBoxLayout(n);
+                    }));
+                }
+                else
                 {
                     listBox1.Items.Remove(groupdisplayname);
                     int n = listBox1.Items.Count;
                     SetPictureBoxLayout(n);
-                }));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                listBox1.Items.Remove(groupdisplayname);
-                int n = listBox1.Items.Count;
-                SetPictureBoxLayout(n);
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -479,6 +527,7 @@ namespace QLUSER
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            try { 
             if (button4.Text == "Share Screen on")
             {
                 button4.Text = "Share Screen off";
@@ -496,10 +545,16 @@ namespace QLUSER
                 videoSource.Start();
                 button1.Text = "Video on";
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void button3_Click(object sender, EventArgs e)
         {
+            try { 
             if (connection != null)
             {
                 try
@@ -553,11 +608,17 @@ namespace QLUSER
                 }
             }
             this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
         private void button2_Click(object sender, EventArgs e)
         {
+            try { 
             if (isMicOn)
             {
                 waveIn.StopRecording();
@@ -569,6 +630,11 @@ namespace QLUSER
                 waveIn.StartRecording();
                 button2.Text = "Mic On";
                 isMicOn = true;
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -25,14 +25,14 @@ namespace QLUSER
         string gdpnametk1;
         string _groupid;
         User user = new User();
-        public GroupUser(string gdpname,string gdpnametk,string groupid,GiaoDien gd)
+        public GroupUser(string userid,string useridtk,string groupid,GiaoDien gd)
         {
             InitializeComponent();
             _gd = gd;
-            gdpname1 = gdpname;
+            gdpid = userid;
             _groupid=groupid;
-            gdpnametk1 = gdpnametk;
-            if(gdpname != gdpnametk)
+            gdpidtk = useridtk;
+            if(userid != useridtk)
             {
                 label3.Visible = true;
                 label4.Visible = true;
@@ -45,8 +45,9 @@ namespace QLUSER
 
         private async void GroupUser_Load(object sender, EventArgs e)
         {
-            gdpid = await member.FindGroupDisplayID(_groupid,gdpname1);
-            gdpidtk = await member.FindGroupDisplayID(_groupid, gdpnametk1);
+            try { 
+            gdpname1 = await member.FindGroupDisplayname(gdpid,_groupid);
+            gdpnametk1 = await member.FindGroupDisplayname(gdpidtk, _groupid);
             circularPicture1.Image = await avatar.LoadAvatarAsync(gdpid);
             UserSession.ActionAvatarUpdated += UpdateAvatarDisplay;    
             circularPicture1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -64,6 +65,11 @@ namespace QLUSER
                     this.Close();
                 }
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private async void UpdateAvatarDisplay()
         {
@@ -73,6 +79,7 @@ namespace QLUSER
 
         private void label2_Click(object sender, EventArgs e)
         {
+
             flowLayoutPanel1.Controls.Clear();
             Label label = new Label();
             label.Text = "Vai trò";
@@ -90,6 +97,7 @@ namespace QLUSER
 
         private async void label4_Click(object sender, EventArgs e)
         {
+            try { 
             flowLayoutPanel1.Controls.Clear();
             var result = await group.RequestGroupName(gdpid,0);
             var result1 = await group.RequestGroupName(gdpidtk, 0);
@@ -143,6 +151,11 @@ namespace QLUSER
 
                 // Add the FlowLayoutPanel to the main FlowLayoutPanel
                 flowLayoutPanel1.Controls.Add(panel);
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

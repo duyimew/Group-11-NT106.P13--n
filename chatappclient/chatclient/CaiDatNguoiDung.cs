@@ -21,9 +21,9 @@ namespace QLUSER
     {
         bool change = false;
         Dangnhap DN;
-        string userid;
+        string _userid;
         Find find = new Find();
-
+        string _groupid=null;
         UserAvatar userAvatar = new UserAvatar();
         Group _group = new Group();
         string _displayname;
@@ -35,30 +35,43 @@ namespace QLUSER
         User _user = new User();
         GroupMember groupMember = new GroupMember();
         private List<(string id,string name)> groups = new List<(string,string)>();
-        public CaiDatNguoiDung(string displayname, Dangnhap dN, GiaoDien gd,string username)
+        public CaiDatNguoiDung(string userid, Dangnhap dN, GiaoDien gd,string username,int tagepage,string groupid)
         {
             InitializeComponent();
-            _displayname = displayname;
+            _userid = userid;
             DN = dN;
             GD = gd;
             _username = username;
-            
+            tabControl1.SelectedIndex = tagepage;
+            _groupid = groupid;
             UserSession.ActionAvatarUpdated += UpdateAvatarDisplay;
             UserSession.ActionUpdateusername += UpdateUsername;
             UserSession.ActionUpdatedpname += Updatedpname;
         }
         private async void UpdateUsername()
         {
-            _username = await _user.FindUsername(userid);
+            try { 
+            _username = await _user.FindUsername(_userid);
             label4.Text = _username;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private async void Updatedpname()
         {
-            _displayname = await _user.FindDisplayname(userid);
+            try { 
+            _displayname = await _user.FindDisplayname(_userid);
             lb_uname.Text = _displayname;
             label2.Text = _displayname;
             label12.Text = _displayname;
             textBox1.Text = _displayname;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -75,9 +88,10 @@ namespace QLUSER
 
         private async void button1_Click(object sender, EventArgs e)
         {
+
             if (change)
             {
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -98,7 +112,7 @@ namespace QLUSER
         {
             if (change)
             {
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -119,7 +133,7 @@ namespace QLUSER
         {
             if (change)
             {
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -140,7 +154,7 @@ namespace QLUSER
         {
             if (change)
             {
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -162,7 +176,7 @@ namespace QLUSER
         {
             if (change)
             {
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -183,7 +197,7 @@ namespace QLUSER
         {
             if (change)
             {
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -204,7 +218,7 @@ namespace QLUSER
         {
             if (change)
             {
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -231,16 +245,16 @@ namespace QLUSER
             MessageBox.Show("Đăng xuất thành công!");
             if (GD.connection != null)
                 await GD.StopSignalR();
-            DN.Show();
+            DN.Show(); 
+            this.Close(); 
             GD.Close();
-            this.Close();
         }
 
         private async void CaiDatNguoiDung_Load(object sender, EventArgs e)
         {
             try
             {
-                userid = await _user.finduserid(_displayname);
+                _displayname = await _user.FindDisplayname(_userid);
                 string[] text = await get(_displayname);
                 lb_uname.Text = _displayname;
                 label2.Text = _displayname;
@@ -250,7 +264,7 @@ namespace QLUSER
                 lb_mail.Text = text[0];
                 lb_name.Text = text[1];
                 lb_bd.Text = text[2];
-                var result=await _group.RequestGroupName(userid, 0);
+                var result=await _group.RequestGroupName(_userid, 0);
                 if(result.issuccess)
                 {
                     if (result.groupidname.Length!=0)
@@ -261,7 +275,19 @@ namespace QLUSER
                             groups.Add((groupidname[0], groupidname[1]));
                             comboBox1.Items.Add(groupidname[1]);
                         }
-                        comboBox1.SelectedIndex = 0;
+                        if(_groupid!=null)
+                        {
+                            int index = groups.FindIndex(g => g.Item1 == _groupid);
+                            if (index >= 0)
+                            {
+                                comboBox1.SelectedIndex = index;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Group ID không tồn tại trong danh sách.");
+                            }
+                        }
+                        else comboBox1.SelectedIndex = 0;
                     }
                     else
                     {
@@ -281,7 +307,7 @@ namespace QLUSER
                 MessageBox.Show("Lỗi không lấy được thông tin người dùng: " + ex.Message);
             }
 
-                Image image = await userAvatar.LoadAvatarAsync(userid);
+                Image image = await userAvatar.LoadAvatarAsync(_userid);
                 circularPicture1.Image = image;
                 circularPicture2.Image = image;
                 circularPicture3.Image = image;
@@ -289,7 +315,7 @@ namespace QLUSER
         }
         private async void UpdateAvatarDisplay()
         {
-            Image image = await userAvatar.LoadAvatarAsync(userid);
+            Image image = await userAvatar.LoadAvatarAsync(_userid);
             circularPicture1.Image = image;
             circularPicture2.Image = image;
             circularPicture3.Image = image;
@@ -350,7 +376,7 @@ namespace QLUSER
 
         private async void button4_Click(object sender, EventArgs e)
         {
-            
+            try {    
             string newDisplayName = Microsoft.VisualBasic.Interaction.InputBox(
            $"Nhập tên hiển thị mới:",
            "Đổi Tên Hiển Thị",
@@ -358,7 +384,7 @@ namespace QLUSER
             );
             if (newDisplayName!=_displayname&&!string.IsNullOrWhiteSpace(newDisplayName))
             {
-                var result=await _user.RenameDisplayname(newDisplayName,userid);
+                var result=await _user.RenameDisplayname(newDisplayName, _userid);
                 if (result)
                 {
                     _displayname = newDisplayName;
@@ -376,26 +402,38 @@ namespace QLUSER
             {
                 MessageBox.Show("Tên hiển thị không thay đổi.", "Thông Báo");
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            try { 
             string selectedItem = comboBox1.SelectedIndex.ToString();
             string groupid = groups[int.Parse(selectedItem)].id;
-            string groupdisplayname = await groupMember.FindGroupDisplayname(userid, groupid);
+            string groupdisplayname = await groupMember.FindGroupDisplayname(_userid, groupid);
             label14.Text = groupdisplayname;
             label14.Name = groupid;
             textBox2.Text = groupdisplayname;
             UserSession.ActionUpdategdpname += async () =>
             {
-                string groupdisplayname1 = await groupMember.FindGroupDisplayname(userid, groupid);
+                string groupdisplayname1 = await groupMember.FindGroupDisplayname(_userid, groupid);
                 label14.Text = groupdisplayname1;
                 textBox2.Text = groupdisplayname1;
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void button8_Click(object sender, EventArgs e)
         {
+            try { 
             string newusername = Microsoft.VisualBasic.Interaction.InputBox(
            $"Nhập tên đăng nhập mới:",
            "Đổi Tên đăng nhập",
@@ -403,7 +441,7 @@ namespace QLUSER
             );
             if (newusername != _username && !string.IsNullOrWhiteSpace(newusername))
             {
-                var result = await _user.Renameusername(newusername, userid);
+                var result = await _user.Renameusername(newusername, _userid);
                 if (result)
                 {
                     _username = newusername;
@@ -417,10 +455,16 @@ namespace QLUSER
             {
                 MessageBox.Show(" Tên đăng nhập không thay đổi.", "Thông Báo");
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void button9_Click(object sender, EventArgs e)
         {
+            try { 
             string newemail = Microsoft.VisualBasic.Interaction.InputBox(
            $"Nhập email mới:",
            "Đổi email",
@@ -429,7 +473,7 @@ namespace QLUSER
 
             if (newemail != lb_mail.Text && !string.IsNullOrWhiteSpace(newemail)&& _user.IsValidEmail(newemail))
             {
-                var result = await _user.Renameemail(newemail, userid);
+                var result = await _user.Renameemail(newemail, _userid);
                 if (result)
                 {
                     lb_mail.Text = newemail;
@@ -441,10 +485,16 @@ namespace QLUSER
             {
                 MessageBox.Show(" Email không thay đổi.", "Thông Báo");
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void button10_Click(object sender, EventArgs e)
         {
+            try { 
             string newten = Microsoft.VisualBasic.Interaction.InputBox(
            $"Nhập Fullname mới:",
            "Đổi Fullname",
@@ -452,7 +502,7 @@ namespace QLUSER
             );
             if (newten != lb_name.Text && !string.IsNullOrWhiteSpace(newten))
             {
-                var result = await _user.Renameten(newten, userid);
+                var result = await _user.Renameten(newten, _userid);
                 if (result)
                 {
                     lb_name.Text = newten;
@@ -463,10 +513,17 @@ namespace QLUSER
             {
                 MessageBox.Show(" Fullname không thay đổi.", "Thông Báo");
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private async void button11_Click(object sender, EventArgs e)
         {
+            try { 
             string newngaysinh = Microsoft.VisualBasic.Interaction.InputBox(
            $"Nhập ngày sinh mới:",
            "Đổi ngày sinh",
@@ -474,7 +531,7 @@ namespace QLUSER
             );
             if (newngaysinh != lb_bd.Text && !string.IsNullOrWhiteSpace(newngaysinh))
             {
-                var result = await _user.Renamengaysinh(newngaysinh, userid);
+                var result = await _user.Renamengaysinh(newngaysinh, _userid);
                 if (result)
                 {
                     lb_bd.Text = newngaysinh;
@@ -486,10 +543,16 @@ namespace QLUSER
             {
                 MessageBox.Show(" ngày sinh không thay đổi.", "Thông Báo");
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void button7_Click(object sender, EventArgs e)
         {
+            try { 
             // Hiển thị hộp thoại xác nhận
             var result = MessageBox.Show(
                 "Bạn có chắc chắn muốn xóa tài khoàn này không?",
@@ -501,14 +564,14 @@ namespace QLUSER
             // Kiểm tra kết quả người dùng chọn
             if (result == DialogResult.Yes)
             {
-                var result1 = await _group.RequestGroupName(userid, 2);
-                var result2 = await _group.RequestGroupName(userid, 1);
+                var result1 = await _group.RequestGroupName(_userid, 2);
+                var result2 = await _group.RequestGroupName(_userid, 1);
                 if(result1.groupidname!=null)
                 {
                     foreach(var group in result1.groupidname)
                     {
                         string[] groupid = group.Split('|');
-                        await _group.RemoveMemberFromGroup(groupid[0], userid);
+                        await _group.RemoveMemberFromGroup(groupid[0], _userid);
                     }
                 }
                 if (result2.groupidname != null)
@@ -516,28 +579,36 @@ namespace QLUSER
                     foreach (var group in result2.groupidname)
                     {
                         string[] groupid = group.Split('|');
-                        await _group.RemoveMemberFromGroup(groupid[0], userid);
+                        await _group.RemoveMemberFromGroup(groupid[0], _userid);
                     }
                 }
-                await _user.DeleteUser(userid);
-                UserSession.DeleteUser = true;
-                GD.SendUpdate("Deleteuser");
-                if (GD.connection != null)
-                    await GD.StopSignalR();
-                MessageBox.Show("Tài khoản đã được xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                string tokenFile = find.find("token.txt");
-                if (tokenFile != null && File.Exists(tokenFile))
+                var delete =await _user.DeleteUser(_userid);
+                if (delete)
                 {
-                    File.Delete(tokenFile);
+                    UserSession.DeleteUser = true;
+                    GD.SendUpdate("Deleteuser");
+                    if (GD.connection != null)
+                        await GD.StopSignalR();
+                    MessageBox.Show("Tài khoản đã được xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string tokenFile = find.find("token.txt");
+                    if (tokenFile != null && File.Exists(tokenFile))
+                    {
+                        File.Delete(tokenFile);
+                    }
+                    DN.Show();
+                    GD.Close();
+                    this.Close();
                 }
-                DN.Show();
-                GD.Close();
-                this.Close();
             }
             else
             {
                 // Hủy thao tác
                 MessageBox.Show("Thao tác xóa tài khoản đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -570,9 +641,10 @@ namespace QLUSER
 
         private async void button17_Click(object sender, EventArgs e)
         {
+            try { 
             if(change)
             {
-                            string avatarUrl = await avatar.UploadAvatarAsync(circularPicture2.filepath, userid);
+                            string avatarUrl = await avatar.UploadAvatarAsync(circularPicture2.filepath, _userid);
 
                             if (avatarUrl != null)
                             {
@@ -608,7 +680,7 @@ namespace QLUSER
 
                 if (textBox1.Text != _displayname && !string.IsNullOrWhiteSpace(textBox1.Text))
                 {
-                var result = await _user.RenameDisplayname(textBox1.Text, userid);
+                var result = await _user.RenameDisplayname(textBox1.Text, _userid);
                 if (result)
                 {
 
@@ -626,7 +698,12 @@ namespace QLUSER
                 {
                     MessageBox.Show("Tên hiển thị không thay đổi.", "Thông Báo");
                 }
-            
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void button19_Click(object sender, EventArgs e)
@@ -658,9 +735,10 @@ namespace QLUSER
 
         private async void button18_Click(object sender, EventArgs e)
         {
+            try { 
             if (change)
             {
-                string avatarUrl = await avatar.UploadAvatarAsync(circularPicture3.filepath, userid);
+                string avatarUrl = await avatar.UploadAvatarAsync(circularPicture3.filepath, _userid);
 
                 if (avatarUrl != null)
                 {
@@ -696,7 +774,7 @@ namespace QLUSER
 
             if (textBox2.Text != label14.Text && !string.IsNullOrWhiteSpace(textBox2.Text))
             {
-                var result = await groupMember.RenameGroupDisplayname(textBox2.Text, label14.Name,userid);
+                var result = await groupMember.RenameGroupDisplayname(textBox2.Text, label14.Name,_userid);
                 if (result)
                 {
                     label14.Text = textBox2.Text;
@@ -710,8 +788,12 @@ namespace QLUSER
             {
                 MessageBox.Show("Biệt danh máy chủ không thay đổi.", "Thông Báo");
             }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-        
-    }
+        }
     }
 }

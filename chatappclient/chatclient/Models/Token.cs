@@ -67,14 +67,17 @@ namespace QLUSER.Models
                         Dangnhap dangnhap = new Dangnhap();
                         GiaoDien giaoDien = new GiaoDien(responseData.username,responseData.userid, dangnhap);
                         Application.Run(giaoDien);
-                        dangnhap.Show();
+                        if (dangnhap.IsDisposed) dangnhap = new Dangnhap();
+                        Application.Run(dangnhap);
                         Environment.Exit(0);
+
                     }
                     else
                     {
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                        MessageBox.Show(responseData.message);
+                        string message =responseData.message;
+                        MessageBox.Show(message);
                         Dangnhap dangnhap = new Dangnhap();
                         Application.Run(dangnhap);
                         Environment.Exit(0);
@@ -89,7 +92,7 @@ namespace QLUSER.Models
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi trong file token.cs"+ex.Message);
+                MessageBox.Show("Lỗi trong file token.cs "+ex.Message);
                 Dangnhap dangnhap = new Dangnhap();
                 Application.Run(dangnhap);
                 Environment.Exit(0);

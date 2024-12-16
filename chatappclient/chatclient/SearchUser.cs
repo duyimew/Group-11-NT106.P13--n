@@ -25,15 +25,22 @@ namespace QLUSER
         private string _displayname;
         private string _userid;
         User _user = new User();
-        public SearchUser(string displayname, GiaoDien gd)
+        public SearchUser(string userid, GiaoDien gd)
         {
             InitializeComponent();
-            _displayname = displayname;
+            _userid = userid;
             _gd = gd;
         }
 
-        private Panel UserRow(string displayname)
+        private async Task<Panel> UserRow(string displayname)
         {
+            try { 
+            string userid = await _user.finduserid(displayname);
+            UserSession.ActionUpdatedpname += async () => {
+                displayname = await _user.FindDisplayname(userid);
+                
+            };
+
             Panel userRow = new Panel
             {
                 Height = 30,
@@ -46,7 +53,10 @@ namespace QLUSER
                 Dock = DockStyle.Fill,
                 ForeColor = Color.White,
             };
-
+            UserSession.ActionUpdatedpname += async () => {
+                displayname = await _user.FindDisplayname(userid);
+                username.Text = displayname;
+            };
             username.DoubleClick += new EventHandler(async (obj, args) =>
             {
                 HttpClient client = new HttpClient();
@@ -116,10 +126,17 @@ namespace QLUSER
 
             userRow.Controls.Add(username);
             return userRow;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
 
         private async void btnSearch_ClickAsync(object sender, EventArgs e)
         {
+            try { 
             panelList.Controls.Clear();
             var Username = new InforuserDTO
             {
@@ -144,12 +161,17 @@ namespace QLUSER
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
             }
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void SearchUser_Load(object sender, EventArgs e)
         {
-            _userid = await _user.finduserid(_displayname);
+            try { 
+            _displayname = await _user.FindDisplayname(_userid);
             UserSession.ActionUpdatedpname += async () => {
                 _displayname = await _user.FindDisplayname(_userid);
             };
@@ -159,6 +181,11 @@ namespace QLUSER
                     this.Close();
                 }
             };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

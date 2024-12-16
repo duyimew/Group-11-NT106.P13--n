@@ -30,6 +30,7 @@ namespace QLUSER
 
         private async void button1_Click(object sender, EventArgs e)
         {
+            try { 
             string messagetext = textBox1.Text;
             string username = textBox2.Text;
             bool Hinhanh = checkBox1.Checked;
@@ -68,9 +69,15 @@ namespace QLUSER
             }
             this.DialogResult = DialogResult.OK;
             this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private async Task<(bool issucess, string[] message)> SearchMessagesFromServer(string messagetext, string username, bool hinhanh, bool tep, string beforeDate, string onDate, string afterDate)
         {
+            try { 
             var SearchMessage = new SearchMessageDTO
             {
                 channelid = channelid1,
@@ -104,6 +111,12 @@ namespace QLUSER
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string Message = responseData.message;
                 MessageBox.Show(Message);
+                return (false, null);
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return (false, null);
             }
         }

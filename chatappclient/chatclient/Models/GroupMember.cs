@@ -342,9 +342,9 @@ namespace QLUSER.Models
                 return false;
             }
         }
-        
-        
-        public async void Goborole(string groupid,string userid)
+
+
+        public async Task<bool> Goborole(string groupid,string userid)
         {
             try
             {
@@ -369,22 +369,23 @@ namespace QLUSER.Models
                         var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                         string message = responseData.message;
                         MessageBox.Show(message);
+                        return true;
                     }
                     else
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
                         MessageBox.Show("Failed to rename group: " + errorResponse);
-
+                        return false;
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error renaming group: " + ex.Message);
-
+                return false;
             }
         }
-        public async void themrole(string groupid, string userid,string role)
+        public async Task<bool> themrole(string groupid, string userid,string role)
         {
             try
             {
@@ -408,20 +409,20 @@ namespace QLUSER.Models
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                         string message = responseData.message;
-                        MessageBox.Show(message);
+                        MessageBox.Show(message);return true;
                     }
                     else
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
                         MessageBox.Show("Failed to rename group: " + errorResponse);
-
+                        return false;
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error renaming group: " + ex.Message);
-
+                return false;
             }
         }
     }
