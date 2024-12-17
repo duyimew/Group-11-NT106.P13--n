@@ -6,6 +6,9 @@ using chatapp.DataAccess;
 using chatserver.DTOs.User;
 using chatserver.DTOs.Channel;
 using chatserver.DTOs.GroupMember;
+using chatserver.Models;
+using Microsoft.AspNetCore.Identity.Data;
+using chatserver.DataAccess;
 namespace chatapp.Controllers
 {
     [ApiController]
@@ -15,11 +18,13 @@ namespace chatapp.Controllers
         private readonly ChatAppContext _context;
         private readonly Inforuser _inforuser;
         private readonly FindUser _findUser;
-        public UserController(ChatAppContext context, Inforuser inforuser, FindUser findUser)
+        private readonly ForgotPassword _forgotpass;
+        public UserController(ChatAppContext context, Inforuser inforuser, FindUser findUser, ForgotPassword forgotpass)
         {
             _context = context;
             _inforuser = inforuser;
             _findUser = findUser;
+            _forgotpass = forgotpass;
         }
 
         [HttpPost("InforUser")]
@@ -296,6 +301,75 @@ namespace chatapp.Controllers
                 return BadRequest(new { message = $"Error: {ex.Message}" });
             }
         }
+
+        [HttpPost("MailOTP")]
+        public IActionResult MailOTP([FromBody] MailOTPDTO request)
+        {
+            // Tìm User từ email
+            var user = _context.Users.FirstOrDefault(u => u.Email == request.Email);
+
+            if (user == null)
+            {
+                return NotFound("Email không tồn tại trong hệ thống.");
+            }
+
+            // Sinh OTP
+            var otpCode = _forgotpass.GenerateOtp(); // Hàm tạo mã OTP ngẫu nhiên
+            var otp = new OTP
+            {
+                UserId = user.UserId,
+                Code = otpCode,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(1) // OTP hết hạn sau 5 phút
+            };
+
+            // Lưu OTP vào database
+            _context.Otps.Add(otp);
+            _context.SaveChanges();
+
+            // Gửi OTP qua email (giả lập)
+            _forgotpass.SendOtpByEmail(user.Email, otpCode);
+
+            return Ok("OTP đã được gửi tới email của bạn.");
+        }
+
+        [HttpPost("VerifyOTP")]
+        public IActionResult VerifyOtp([FromBody] VerifyOTPDTO request)
+        {
+            // Tìm OTP trong database
+            var otpRecord = _context.Otps
+                .FirstOrDefault(o => o.Code == request.OtpCode && o.ExpiresAt > DateTime.UtcNow && !o.IsUsed);
+
+            if (otpRecord == null)
+            {
+                return BadRequest("Mã OTP không hợp lệ hoặc đã hết hạn.");
+            }
+
+            // Đánh dấu OTP đã được sử dụng
+            otpRecord.IsUsed = true;
+            _context.SaveChanges();
+
+            // Tạo một token hoặc cờ để cho phép đổi mật khẩu
+            return Ok(new { Message = "OTP hợp lệ.", UserId = otpRecord.UserId });
+        }
+
+        [HttpPost("ResetPassword")]
+        public IActionResult ResetPassword([FromBody] ResetPasswordDTO request)
+        {
+            // Tìm User từ UserId hoặc Email
+            var user = _context.Users.FirstOrDefault(u => u.UserId == request.UserId);
+
+            if (user == null)
+            {
+                return NotFound("Người dùng không tồn tại.");
+            }
+
+            // Hash mật khẩu mới
+            user.Password = request.NewPassword; // Hàm hash mật khẩu của bạn
+            _context.SaveChanges();
+
+            return Ok("Mật khẩu đã được đổi thành công.");
+        }
+
 
     }
 }

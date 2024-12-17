@@ -1,6 +1,7 @@
 ﻿using chatapp.Data;
 using chatapp.DataAccess;
 using chatapp.Models;
+using chatserver.DataAccess;
 using chatserver.HUB;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -33,6 +34,7 @@ builder.Services.AddScoped<Danhmucname>();
 builder.Services.AddScoped<SearchMess>();
 builder.Services.AddScoped<RequestUserRole>();
 builder.Services.AddScoped<FindGroup>();
+builder.Services.AddScoped<ForgotPassword>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
