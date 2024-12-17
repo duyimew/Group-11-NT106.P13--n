@@ -469,7 +469,6 @@
             this.label11.Size = new System.Drawing.Size(72, 17);
             this.label11.TabIndex = 32;
             this.label11.Text = "Xem trước";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
             // button16
             // 

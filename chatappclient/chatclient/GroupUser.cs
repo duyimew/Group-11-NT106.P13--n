@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using QLUSER.Models;
 using System;
 using System.Collections.Generic;
@@ -6,11 +7,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-
+using System.Configuration;
+using NAudio.CoreAudioApi;
 namespace QLUSER
 {
     public partial class GroupUser : Form
@@ -76,25 +79,140 @@ namespace QLUSER
             circularPicture1.Image = await avatar.LoadAvatarAsync(gdpid);
           
         }
-
-        private void label2_Click(object sender, EventArgs e)
+        private async void label2_Click(object sender, EventArgs e)
         {
 
             flowLayoutPanel1.Controls.Clear();
             Label label = new Label();
             label.Text = "Vai trò";
             flowLayoutPanel1.Controls.Add(label);
+            Label role = new Label();
+            role.Text =await member.FindOneUserRole(_groupid,gdpid);
+            UserSession.ActionUpdateRole += async () =>
+            {
+                role.Text = await member.FindOneUserRole(_groupid, gdpid);
+            };
+            flowLayoutPanel1.Controls.Add(role);
             flowLayoutPanel1.Padding = new Padding(20, 0, 0, 10);
             Label label1 = new Label();
             label1.Text = "Gia nhập từ";
+            Panel panel = new Panel();
+            panel.AutoSize = true;
+            CircularPicture circularPicture = new CircularPicture();
+            circularPicture.Image = await avatar.LoadAvatarGroupAsync(_groupid);
+            circularPicture.Location = new Point(20, 10);
+            circularPicture.Size = new Size(25, 25);
+            UserSession.ActionAvatarGroupUpdated += async () =>
+            {
+                circularPicture.Image = await avatar.LoadAvatarGroupAsync(_groupid);
+            };
+            panel.Controls.Add(circularPicture);
+            Label time = new Label();
+            time.Location = new Point(50, 15);
+            time.Text = await member.FindDateJointime(gdpid, _groupid);
+            panel.Controls.Add(time);
             flowLayoutPanel1.Controls.Add(label1);
+            flowLayoutPanel1.Controls.Add(panel);
         }
 
+        private Action actionShowFriendHandler;
         private void label3_Click(object sender, EventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
-        }
+            showfriend(gdpid); 
+            if (actionShowFriendHandler == null)
+                actionShowFriendHandler = () => ShowFriendHandler(gdpid);
+            UserSession.ActionUpdateFriend -= actionShowFriendHandler;
 
+        }
+        public void ShowFriendHandler(string _userid)
+        {
+            UserSession.RunOnUIThread(new Action(() => showfriend(_userid)));
+        }
+        public async void showfriend(string userid1)
+        {
+            using (HttpClient _httpClient = new HttpClient())
+            {
+                try
+                {
+
+                    flowLayoutPanel1.Controls.Clear();
+
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/{userid1}";
+
+                    HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+                        if (responseData != null && responseData.message != null)
+                        {
+                            foreach (string displayName in responseData.message)
+                            {
+                                string userid = await user.finduserid(displayName);
+                                Image avatarImage = await avatar.LoadAvatarAsync(userid);
+                                Panel friendPanel = new Panel
+                                {
+                                    Width = flowLayoutPanel1.Width - 20,
+                                    Height = 60,
+                                    BorderStyle = BorderStyle.FixedSingle
+                                };
+                                Label usernameLabel = new Label
+                                {
+                                    Text = displayName,
+                                    AutoSize = true,
+                                    Location = new Point(65, 20),
+                                    ForeColor = Color.Black
+                                };
+                                UserSession.ActionUpdatedpname += async () =>
+                                {
+                                    usernameLabel.Text = await user.FindDisplayname(userid);
+                                };
+                                PictureBox avatarBox = new PictureBox
+                                {
+                                    Image = avatarImage,
+                                    Width = 50,
+                                    Height = 50,
+                                    SizeMode = PictureBoxSizeMode.Zoom,
+                                    Location = new Point(5, 5)
+                                };
+                                UserSession.ActionAvatarUpdated += async () =>
+                                {
+                                    avatarBox.Image = await avatar.LoadAvatarAsync(userid);
+                                };
+
+                                // Thêm các điều khiển vào Panel
+                                friendPanel.Controls.Add(usernameLabel);
+                                friendPanel.Controls.Add(avatarBox);
+                                // Thêm Panel vào FlowLayoutPanel
+                                flowLayoutPanel1.Controls.Add(friendPanel);
+                            }
+                            UserSession.ActionDeleteuser += () =>
+                            {
+                                showfriend(userid1);
+                            };
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không có dữ liệu bạn bè trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        // Hiển thị lỗi từ server nếu có
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Lỗi từ server: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi trong quá trình gửi request hoặc hiển thị danh sách
+                    MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         private async void label4_Click(object sender, EventArgs e)
         {
             try { 
@@ -157,11 +275,6 @@ namespace QLUSER
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

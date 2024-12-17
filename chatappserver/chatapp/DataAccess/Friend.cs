@@ -72,18 +72,20 @@ namespace chatapp.DataAccess
             }
         }
 
-        public async Task<string[]> ListSentRequest(string userid)
+        public async Task<(string[] listsender, string[] listreceiver )> ListSentRequest(string userid)
         {
-            string[] result = new string[1];
-            result[0] = "0"; // Default to failure status
+            string[] sender = new string[1];
+            string[] receiver = new string[1];
+            sender[0] = "0";
+            receiver[0] = "0";
             try
             {
                 using (SqlConnection connectionDB = _connectDB.ConnectToDatabase())
                 {
                     if (connectionDB == null)
                     {
-                        result[0] = "Kết nối tới database thất bại";
-                        return result;
+                        sender[0] = receiver[0] = "Kết nối tới database thất bại";
+                        return (sender, receiver);
                     }
 
 
@@ -104,28 +106,55 @@ namespace chatapp.DataAccess
                     {
                         adapter.Fill(dataTable);
                     }
-
                     if (dataTable.Rows.Count > 0)
                     {
-                        result = new string[dataTable.Rows.Count + 1];
+                        sender = new string[dataTable.Rows.Count + 1];
                         for (int i = 0; i < dataTable.Rows.Count; i++)
                         {
-                            result[i + 1] = dataTable.Rows[i]["Displayname"].ToString();
+                            sender[i + 1] = dataTable.Rows[i]["Displayname"].ToString();
                         }
-                        result[0] = "1"; // Success
-                        return result;
+                        sender[0] = "1"; // Success
                     }
                     else
                     {
-                        result[0] = "Không có yêu cầu kết bạn nào";
-                        return result; // No friend requests
+                        sender[0] = "Không có yêu cầu cần chấp nhận kết bạn nào";
                     }
+                    string strQuery1 = @"
+                SELECT Displayname 
+                FROM Users 
+                WHERE UserId IN 
+                (
+                    SELECT ReceiverId
+                    FROM FriendRequests 
+                    WHERE SenderId = @UserId
+                )";
+                    SqlCommand command1 = new SqlCommand(strQuery1, connectionDB);
+                    command1.Parameters.AddWithValue("@UserId", userid);
+                    DataTable dataTable1 = new DataTable();
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command1))
+                    {
+                        adapter.Fill(dataTable1);
+                    }
+                    if (dataTable1.Rows.Count > 0)
+                    {
+                        receiver = new string[dataTable1.Rows.Count + 1];
+                        for (int i = 0; i < dataTable1.Rows.Count; i++)
+                        {
+                            receiver[i + 1] = dataTable1.Rows[i]["Displayname"].ToString();
+                        }
+                        receiver[0] = "1"; // Success
+                    }
+                    else
+                    {
+                        receiver[0] = "Không có yêu cầu gửi kết bạn nào";
+                    }
+                    return (sender, receiver);
                 }
             }
             catch (Exception ex)
             {
-                result[0] = $"Error: {ex.Message}";
-                return result; // Error handling
+                sender[0] = receiver[0] = $"Error: {ex.Message}";
+                return (sender,receiver); // Error handling
             }
         }
 

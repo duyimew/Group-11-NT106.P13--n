@@ -81,11 +81,6 @@ namespace QLUSER
             UserSession.ActionUpdatedpname -= Updatedpname;
         }
 
-        private void label11_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private async void button1_Click(object sender, EventArgs e)
         {
 
@@ -408,7 +403,7 @@ namespace QLUSER
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        private Action actionupdategdpname;
         private async void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             try { 
@@ -418,19 +413,23 @@ namespace QLUSER
             label14.Text = groupdisplayname;
             label14.Name = groupid;
             textBox2.Text = groupdisplayname;
-            UserSession.ActionUpdategdpname += async () =>
-            {
-                string groupdisplayname1 = await groupMember.FindGroupDisplayname(_userid, groupid);
-                label14.Text = groupdisplayname1;
-                textBox2.Text = groupdisplayname1;
-            };
+                if (actionupdategdpname != null)
+                    UserSession.ActionUpdategdpname -= actionupdategdpname;
+
+                actionupdategdpname = () => hamupdategdpname(groupid);
+                UserSession.ActionUpdategdpname += actionupdategdpname;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        private async void hamupdategdpname(string groupid)
+        {
+            string groupdisplayname1 = await groupMember.FindGroupDisplayname(_userid, groupid);
+            label14.Text = groupdisplayname1;
+            textBox2.Text = groupdisplayname1;
+        }
         private async void button8_Click(object sender, EventArgs e)
         {
             try { 

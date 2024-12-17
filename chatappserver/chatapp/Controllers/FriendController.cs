@@ -27,6 +27,10 @@ namespace chatapp.Controllers
             {
                 return Ok(new { message = result.Skip(1) });
             }
+            else if (result[0] =="0")
+            {
+                return Ok();
+            }
             else
             {
                 return BadRequest(new { message = result[0] });
@@ -36,14 +40,14 @@ namespace chatapp.Controllers
         [HttpGet("Request/{userid}")]
         public async Task<IActionResult> ListSentRequest(string userid)
         {
-            string[] result = await _friend.ListSentRequest(userid);
-            if (result[0] == "1")
+            var result = await _friend.ListSentRequest(userid);
+            if (result.listsender[0] == "1" || result.listreceiver[0] =="1")
             {
-                return Ok(new { message = result.Skip(1) });
+                return Ok(new { sender=result.listsender.Skip(1),receiver = result.listreceiver.Skip(1) });
             }
             else
             {
-                return BadRequest(new { message = result[0] });
+                return BadRequest(new { messagesender = result.listsender[0], messagereceiver = result.listreceiver[0] });
             }
         }
 
@@ -75,35 +79,38 @@ namespace chatapp.Controllers
             }
         }
 
-        [HttpPost("DeleteRequest")]
-        public async Task<IActionResult> DeleteRequest([FromBody] DeleteFriendRequestDTO request)
+        [HttpPost("DeleteFriend")]
+        public async Task<IActionResult> DeleteFriend([FromBody] DeleteFriendDTO request)
         {
-            if (request == null || request.SenderId <= 0 || request.ReceiverId <= 0)
+            if (request == null || request.UserId_1 <= 0 || request.UserId_2 <= 0)
             {
                 return BadRequest(new { message = "Dữ liệu không hợp lệ." });
             }
 
             try
             {
-                var friendRequest = await _context.FriendRequests
-                    .FirstOrDefaultAsync(fr => (fr.SenderId == request.SenderId && fr.ReceiverId == request.ReceiverId) ||
-                                               (fr.SenderId == request.ReceiverId && fr.ReceiverId == request.SenderId));
+                // Tìm quan hệ bạn bè trong database
+                var friendship = await _context.Friends
+                    .FirstOrDefaultAsync(f => (f.UserId_1 == request.UserId_1 && f.UserId_2 == request.UserId_2) ||
+                                              (f.UserId_1 == request.UserId_2 && f.UserId_2 == request.UserId_1));
 
-                if (friendRequest == null)
+                if (friendship == null)
                 {
-                    return NotFound(new { message = "Lời mời kết bạn không tồn tại." });
+                    return NotFound(new { message = "Quan hệ bạn bè không tồn tại." });
                 }
 
-                _context.FriendRequests.Remove(friendRequest);
+                // Xóa quan hệ bạn bè
+                _context.Friends.Remove(friendship);
                 await _context.SaveChangesAsync();
 
-                return Ok(new { message = "Lời mời kết bạn đã được xóa thành công." });
+                return Ok(new { message = "Quan hệ bạn bè đã được xóa thành công." });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = $"Đã xảy ra lỗi: {ex.Message}" });
             }
         }
+
 
     }
 }

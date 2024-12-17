@@ -43,6 +43,27 @@ namespace chatserver.HUB
 
                     await Groups.RemoveFromGroupAsync(Context.ConnectionId, callId);
         }
+        public async Task RenamegdpnameInCall(string callId, string oldGroupDisplayName, string newGroupDisplayName)
+        {
+            // Kiểm tra nếu nhóm tồn tại trong CallParticipants
+            if (CallParticipants.ContainsKey(callId))
+            {
+                // Thay đổi tên nhóm trong CallParticipants
+                if (CallParticipants[callId].Remove(oldGroupDisplayName))
+                {
+                    CallParticipants[callId].Add(newGroupDisplayName);
+                }
+
+                // Thông báo tới tất cả những người khác trong nhóm về thay đổi tên nhóm
+                await Clients.OthersInGroup(callId).SendAsync("GroupNameChanged", oldGroupDisplayName, newGroupDisplayName);
+            }
+            else
+            {
+                // Nếu nhóm không tồn tại
+                throw new ArgumentException($"Call ID {callId} does not exist.");
+            }
+        }
+
 
         public async Task SendVideoFrame(string callId, byte[] frameData, string groupdisplayname)
         {

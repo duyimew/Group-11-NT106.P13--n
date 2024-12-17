@@ -23,18 +23,17 @@ namespace QLUSER
     {
         GiaoDien _gd;
         GroupMember _groupMember = new GroupMember();
+        UserAvatar _avatar = new UserAvatar();
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
         private HubConnection connection;
-        private Button btnEndCall;
         private Label lblStatus;
-        private ComboBox comboBoxCameras;
+        string _userid;
+        string _groupid;
         private ListBox listBoxParticipants;
         private WaveInEvent waveIn;
         private WaveOutEvent waveOut;
         private BufferedWaveProvider waveProvider;
-        private HubConnection audioConnection;
-        private Button btnToggleMic;
         private bool isMicOn = false;
         private bool isSendingData = false;
         string _groupdisplayname;
@@ -47,13 +46,14 @@ namespace QLUSER
         private bool picture = false;
         private bool isstop = false;
         private string callId;
-        public VideoCall(string groupdisplayname, string channelid,GiaoDien gd)
+        public VideoCall(string groupdisplayname, string channelid,string groupid,GiaoDien gd)
         {
             InitializeComponent();
             _gd = gd;
             _groupdisplayname = groupdisplayname;
             pictureBoxes = new PictureBox[10];
             callId = channelid;
+            _groupid = groupid;
             UserSession.ActionDeleteuser += () =>
             {
                 if (this != null && !this.IsDisposed)
@@ -65,7 +65,8 @@ namespace QLUSER
 
         private async void VideoCall_Load(object sender, EventArgs e)
         {
-            try { 
+            try {
+                _userid = await _groupMember.FindGroupDisplayID(_groupid, _groupdisplayname);
             InitializeSignalR();
             InitializeAudio();
             InitializeCamera();
@@ -80,8 +81,22 @@ namespace QLUSER
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            UserSession.ActionUpdategdpname += async () =>
+            {
+                string oldgdpname = _groupdisplayname;
+                _groupdisplayname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
+                string newgdpname = _groupdisplayname;
+                RenameUserInListBox(oldgdpname, newgdpname);
+                await Task.Run(async () =>
+                {
+                    if (connection.State == HubConnectionState.Connected)
+                        {
+                            await connection.SendAsync("RenamegdpnameInCall", callId, oldgdpname, newgdpname);
+                        }
+                });
+            };
         }
-        private void SetPictureBoxLayout(int n)
+        private async void SetPictureBoxLayout(int n)
         {
             try { 
             // Xóa tất cả các PictureBox hiện tại khỏi form
@@ -117,7 +132,9 @@ namespace QLUSER
                         Location = new Point(layouts[n - 1].x + (i % 2) * layouts[n - 1].width, layouts[n - 1].y + (i / 2) * layouts[n - 1].height),
                         Size = new Size(layouts[n - 1].width, layouts[n - 1].height),
                         Visible = true,
-                        BorderStyle = BorderStyle.FixedSingle // Thêm border để dễ quan sát
+                        BorderStyle = BorderStyle.FixedSingle, // Thêm border để dễ quan sát
+                        BackgroundImage = Image.FromFile("path/to/your/image.jpg"), // Đường dẫn đến hình nền
+                        BackgroundImageLayout = ImageLayout.Stretch
                     };
                 }
                 else
@@ -127,9 +144,12 @@ namespace QLUSER
                         Location = new Point(layouts[n - 1].x + (i % 3) * layouts[n - 1].width, layouts[n - 1].y + (i / 3) * layouts[n - 1].height),
                         Size = new Size(layouts[n - 1].width, layouts[n - 1].height),
                         Visible = true,
-                        BorderStyle = BorderStyle.FixedSingle // Thêm border để dễ quan sát
+                        BorderStyle = BorderStyle.FixedSingle,// Thêm border để dễ quan sát
+                        BackgroundImage = Image.FromFile("path/to/your/image.jpg"), // Đường dẫn đến hình nền
+                        BackgroundImageLayout = ImageLayout.Stretch
                     };
                 }
+
                 // Thêm PictureBox vào form
                 this.Invoke(new Action(() => this.Controls.Add(pictureBox)));
                 pictureBoxes[i] = pictureBox;
@@ -172,6 +192,10 @@ namespace QLUSER
                     isSendingData = true;
                     Task.Run(async () =>
                     {
+                        if (listBox1.Items.Count == 1 && listBox1.Items[0].ToString() == _groupdisplayname)
+                        {
+                            return;
+                        }
                         if (connection.State == HubConnectionState.Connected)
                         {
                             await connection.SendAsync("SendAudio", callId, audioData);
@@ -257,6 +281,10 @@ namespace QLUSER
 
             Task.Run(async () =>
             {
+                if (listBox1.Items.Count == 1 && listBox1.Items[0].ToString() == _groupdisplayname)
+                {
+                    return;
+                }
                 using (var uploadFrame = resizedFrameclone)
                 {
                     if (connection.State == HubConnectionState.Connected)
@@ -364,7 +392,23 @@ namespace QLUSER
                 isRecevie = false;
                 isleft = false;
             });
-
+                connection.On<string, string>("GroupNameChanged", (oldGroupDisplayName, newGroupDisplayName) =>
+                {
+                    isleft = true;
+                    isRecevie = true;
+                    this.Invoke(new Action(async () =>
+                    {
+                        if (button4.Text == "Share Screen on")
+                        {
+                            button4_Click(null, EventArgs.Empty);
+                            await RenameUserInListBox(oldGroupDisplayName, newGroupDisplayName);
+                            button4_Click(null, EventArgs.Empty);
+                        }
+                        else await RenameUserInListBox(oldGroupDisplayName, newGroupDisplayName);
+                    }));
+                    isRecevie = false;
+                    isleft = false;
+                });
             // Xử lý sự kiện khi người dùng rời khỏi cuộc gọi
 
 
@@ -479,15 +523,50 @@ namespace QLUSER
                 if (!listBox1.Items.Contains(groupdisplayname))
                 {
                     listBox1.Items.Add(groupdisplayname);
-                    int n = listBox1.Items.Count;
-                    SetPictureBoxLayout(n);
-                }
+                        int n = listBox1.Items.Count;
+                        SetPictureBoxLayout(n);
+                    }
             }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private async Task RenameUserInListBox(string oldGroupDisplayName, string newGroupDisplayName)
+        {
+            try
+            {
+                if (listBox1.InvokeRequired)
+                {
+                    listBox1.Invoke(new Action(() =>
+                    {
+                        UpdateListBoxAtSamePosition(oldGroupDisplayName, newGroupDisplayName);
+                    }));
+                }
+                else
+                {
+                    UpdateListBoxAtSamePosition(oldGroupDisplayName, newGroupDisplayName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UpdateListBoxAtSamePosition(string oldGroupDisplayName, string newGroupDisplayName)
+        {
+            // Kiểm tra nếu tên cũ tồn tại
+            int index = listBox1.Items.IndexOf(oldGroupDisplayName);
+            if (index != -1)
+            {
+                // Xóa tên cũ
+                listBox1.Items.RemoveAt(index);
+                // Thêm tên mới vào đúng vị trí
+                listBox1.Items.Insert(index, newGroupDisplayName);
+            }
+            
         }
 
         // Hàm tiện ích để xóa người dùng khỏi ListBox1
@@ -727,8 +806,12 @@ namespace QLUSER
                                     pictureBoxes[0].Image = (Bitmap)finalImage.Clone();
                                 }));
 
-                                Task.Run(async () =>
+                                await Task.Run(async () =>
                                 {
+                                    if (listBox1.Items.Count == 1 && listBox1.Items[0].ToString() == _groupdisplayname)
+                                    {
+                                        return;
+                                    }
                                     using (var uploadFrame = resizedFrameclone)
                                     {
                                         if (connection.State == HubConnectionState.Connected)

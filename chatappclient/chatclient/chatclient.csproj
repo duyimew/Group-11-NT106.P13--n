@@ -396,6 +396,7 @@
     <Compile Include="DTOs\Danhmuc\DKDanhMucDTO.cs" />
     <Compile Include="DTOs\Danhmuc\OneDanhmucNameDTO.cs" />
     <Compile Include="DTOs\Danhmuc\RenameDanhmucRequestDTO.cs" />
+    <Compile Include="DTOs\Friends\DeleteFriendDTO.cs" />
     <Compile Include="DTOs\Friends\RespondFriendRequestDTO.cs" />
     <Compile Include="DTOs\Friends\SendFriendRequestDTO.cs" />
     <Compile Include="DTOs\GroupMember\FindGroupDisplayIDDTO.cs" />

@@ -36,6 +36,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using System.Runtime.ConstrainedExecution;
+using System.Runtime.CompilerServices;
+using chatclient.DTOs.Friends;
 
 namespace QLUSER
 {
@@ -400,7 +402,7 @@ namespace QLUSER
                             deletegroup.TextAlign = ContentAlignment.MiddleCenter;
                             deletegroup.Click += async (s, e) =>
                             {
-                                roinhom(useravatar.Name,false,_userid);
+                                await roinhom(useravatar.Name,false,_userid,1);
                             };
                             Button addmember = new Button();
                             addmember.Text = "+";
@@ -681,17 +683,29 @@ namespace QLUSER
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public async Task roinhom(string groupid,bool ispublic,string userid)
+        public async Task roinhom(string groupid,bool ispublic,string userid,int duoiorroi)
         {
             try
             {
-                var result = MessageBox.Show(
-            "Bạn có chắc chắn muốn rời nhóm này không?",
-            "Xác nhận rời nhóm",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Warning
-        );
-
+                var result = DialogResult.No;
+                if (duoiorroi == 1)
+                {
+                    result = MessageBox.Show(
+                "Bạn có chắc chắn muốn rời nhóm này không?",
+                "Xác nhận rời nhóm",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+                }
+                else
+                {
+                    result = MessageBox.Show(
+                "Bạn có chắc chắn muốn đuổi người dùng này ra khỏi nhóm này không?",
+                "Xác nhận đuổi người dùng",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+                }
             // Kiểm tra kết quả người dùng chọn
             if (result == DialogResult.Yes)
             {
@@ -703,8 +717,9 @@ namespace QLUSER
                     UserSession.UpdateGroup = (true, ispublic);
                     if (ispublic) SendUpdate("UpdateGroupMember");
                     else SendUpdate("UpdateGroupMemberPrivate");
-                    MessageBox.Show("Rời nhóm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    if(duoiorroi ==1) MessageBox.Show("Rời nhóm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    else MessageBox.Show("Đuổi khỏi nhóm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
             }
             else
             {
@@ -763,7 +778,7 @@ namespace QLUSER
                                 break;
                             }
                         }
-                        CloseLabel();
+                        await CloseLabel();
                         tv_Kenh_DanhMuc.Nodes.Clear();
                         flp_Message.Controls.Clear();
                         flp_Message.AutoScrollPosition = new Point(0, 0);
@@ -893,7 +908,7 @@ namespace QLUSER
                     {
                         string[] danhmuc = result.danhmucidname[ib].Split('|');
                         TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"danhmuc|{danhmuc[0]}", danhmuc[1]);
-                        createlabel(node);
+                        await createlabel(node);
                     }
                 }
                 var result1 = await _channel.RequestChannelName(_groupid);
@@ -1521,13 +1536,9 @@ namespace QLUSER
                     lb_TenKenh.Name = channelid[1];
                     _channelid = channelid[1];
                     _channelname = selectedKenhName;
-                    UserSession.ActionUpdateChannelname += async () =>
-                    {
-                        var channel = await _channel.RequestoneChannelName(_channelid);
-                        lb_TenKenh.Text = channel.channelname;
-                        _channelname = channel.channelname;
-                    };
-                    message();
+                        UserSession.ActionUpdateChannelname -= hamupdatechannelname;
+                        UserSession.ActionUpdateChannelname += hamupdatechannelname;
+                        message();
                     while (true)
                     {
                         if (connection != null && connection.State == HubConnectionState.Connected)
@@ -1547,7 +1558,7 @@ namespace QLUSER
                             break;
                         }
                     }
-                    VideoCall vc = new VideoCall(_gdpname, _channelid,this);
+                    VideoCall vc = new VideoCall(_gdpname, _channelid,_groupid,this);
                     vc.Show();
                     displayedMessages.Clear();
                     flp_Message.Controls.Clear();
@@ -1559,12 +1570,8 @@ namespace QLUSER
                     lb_TenKenh.Name = channelid[1];
                     _channelid = channelid[1];
                     _channelname = selectedKenhName;
-                    UserSession.ActionUpdateChannelname += async () =>
-                    {
-                        var channel = await _channel.RequestoneChannelName(_channelid);
-                        lb_TenKenh.Text = channel.channelname;
-                        _channelname = channel.channelname;
-                    };
+                        UserSession.ActionUpdateChannelname -= hamupdatechannelname;
+                        UserSession.ActionUpdateChannelname += hamupdatechannelname;
                     message();
                     while (true)
                     {
@@ -1575,14 +1582,10 @@ namespace QLUSER
                         }
                     }
                 }
-                UserSession.ActionUpdateMessage += () =>
-                {
-                    message();
-                };
-                UserSession.ActionDeleteuser += () =>
-                {
-                    message();
-                };
+                    UserSession.ActionUpdateMessage -= hamupdatemessage;
+                    UserSession.ActionDeleteuser -= hamupdatemessage;
+                    UserSession.ActionUpdateMessage += hamupdatemessage;
+                    UserSession.ActionDeleteuser += hamupdatemessage;
             }
             }
             catch (Exception ex)
@@ -1590,7 +1593,17 @@ namespace QLUSER
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private async void CreateMenu()
+        private async void hamupdatechannelname()
+        {
+            var channel = await _channel.RequestoneChannelName(_channelid);
+            lb_TenKenh.Text = channel.channelname;
+            _channelname = channel.channelname;
+        }
+        private async void hamupdatemessage()
+        {
+            message();
+        }
+            private async void CreateMenu()
         {
             try
             {
@@ -1669,7 +1682,7 @@ namespace QLUSER
             label.Font = new Font("Arial", 10, FontStyle.Regular);
             label.Dock = DockStyle.Fill;
             label.TextAlign = ContentAlignment.MiddleLeft;
-            label.Click += (s, e) =>
+            label.Click += async (s, e) =>
             {
                 switch (text)
                 {
@@ -1681,7 +1694,7 @@ namespace QLUSER
                         CaiDatNguoiDung formuser = new CaiDatNguoiDung(_userid, DN, this, _username, 2, _groupid);
                         formuser.ShowDialog(); 
                         break;
-                    case "Rời khỏi phòng": roinhom(_groupid,true,_userid); break;
+                    case "Rời khỏi phòng": await roinhom(_groupid,true,_userid,1); break;
                 }
             };
             menuItem.Controls.Add(label);
@@ -1917,10 +1930,10 @@ namespace QLUSER
             btncreate.Text = "Tạo Group mới";
             btncreate.Location = new Point(20, 100);
             btncreate.Size = new Size(340, 30);
-            btncreate.Click += (s, e) =>
+            btncreate.Click += async (s, e) =>
             {
                 form.Hide();
-                creategroup(form);
+                await creategroup(form);
             };
             Button btnClose = new Button();
             btnClose.Text = "Đóng";
@@ -1943,10 +1956,10 @@ namespace QLUSER
             btnjoin.Text = "Tham gia group";
             btnjoin.Location = new Point(20, 200);
             btnjoin.Size = new Size(340, 30);
-            btnjoin.Click += (s, e) =>
+            btnjoin.Click += async (s, e) =>
             {
                 form.Hide();
-                joingroup(form);
+                await joingroup(form);
             };
             form.Controls.Add(label);
             form.Controls.Add(btncreate);
@@ -2323,7 +2336,7 @@ namespace QLUSER
                                         node.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
                                     }
                                     else tv_Kenh_DanhMuc.Nodes.Add($"VanBanChat|{result.channelID}", ten.Text);
-                                    ChangeLabelLocation();
+                                    await ChangeLabelLocation();
                                     form.Close();
                                 }
                             }
@@ -2337,7 +2350,7 @@ namespace QLUSER
                                         node.Nodes.Add($"CuocGoiVideo|{result.channelID}", ten.Text);
                                     }
                                     else tv_Kenh_DanhMuc.Nodes.Add($"CuoiGoiVideo|{result.channelID}", ten.Text);
-                                    ChangeLabelLocation();
+                                    await ChangeLabelLocation();
                                     form.Close();
                                 }
                             }
@@ -2502,30 +2515,37 @@ namespace QLUSER
             SearchUser friend = new SearchUser(_userid,this);
             friend.ShowDialog();
         }
-
+        private Action actionShowFriendHandler;
+        private Action actionShowFriendRequestHandler;
         private async void button2_Click(object sender, EventArgs e)
         {
-            showfriendrequest();
-            UserSession.ActionUpdateFriend -= ShowFriendHandler;
-            UserSession.ActionUpdateFriendRequest += ShowFriendRequestHandler;
+            showfriendrequest(_userid);
+
+            if (actionShowFriendHandler == null)
+                actionShowFriendHandler = () => ShowFriendHandler(_userid);
+            if (actionShowFriendRequestHandler == null)
+                actionShowFriendRequestHandler = () => ShowFriendRequestHandler(_userid);
+            UserSession.ActionUpdateFriend -= actionShowFriendHandler;
+            UserSession.ActionUpdateFriendRequest -= actionShowFriendRequestHandler;
+            UserSession.ActionUpdateFriendRequest += actionShowFriendRequestHandler;
         }
-        private void ShowFriendHandler()
+        public void ShowFriendHandler(string _userid)
         {
-            UserSession.RunOnUIThread(showfriend);
+            UserSession.RunOnUIThread(new Action(()=> showfriend(_userid)));
         }
 
-        private void ShowFriendRequestHandler()
+        private void ShowFriendRequestHandler(string _userid)
         {
-            UserSession.RunOnUIThread(showfriendrequest);
+            UserSession.RunOnUIThread(new Action(() => showfriendrequest(_userid)));
         }
-        private async void showfriendrequest()
+        private async void showfriendrequest(string userid1)
         {
             using (HttpClient _httpClient = new HttpClient())
             {
                 try
                 {
                     flp_Friends.Controls.Clear();
-                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Request/{_userid}";
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/Request/{userid1}";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
@@ -2534,9 +2554,9 @@ namespace QLUSER
                         string responseContent = await response.Content.ReadAsStringAsync();
                         var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
 
-                        if (responseData != null && responseData.message != null)
+                        if (responseData != null && responseData.sender != null)
                         {
-                            foreach (string Displayname in responseData.message)
+                            foreach (string Displayname in responseData.sender)
                             {
                                 string userid = await _user.finduserid(Displayname);
                                 Image avatarImage = await _avatar.LoadAvatarAsync(userid);
@@ -2596,7 +2616,7 @@ namespace QLUSER
 
                                 rejectButton.Click += async (s, ev) =>
                                 {
-                                    await RejectFriendRequest(Displayname);
+                                    await RejectFriendRequest(Displayname,_dpname);
                                 };
 
                                 userPanel.Controls.Add(avatarBox);
@@ -2607,7 +2627,75 @@ namespace QLUSER
                             }
                             UserSession.ActionDeleteuser += () =>
                             {
-                                showfriend();
+                                showfriendrequest(userid1);
+                            };
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không có dữ liệu trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+
+                        if (responseData != null && responseData.receiver != null)
+                        {
+                            foreach (string Displayname in responseData.receiver)
+                            {
+                                string userid = await _user.finduserid(Displayname);
+                                Image avatarImage = await _avatar.LoadAvatarAsync(userid);
+
+                                Panel userPanel = new Panel
+                                {
+                                    Width = flp_Friends.Width,
+                                    Height = 60,
+                                    BorderStyle = BorderStyle.FixedSingle
+                                };
+
+                                PictureBox avatarBox = new PictureBox
+                                {
+                                    Image = avatarImage,
+                                    Width = 50,
+                                    Height = 50,
+                                    SizeMode = PictureBoxSizeMode.Zoom,
+                                    Location = new Point(5, 5)
+                                };
+                                UserSession.ActionAvatarUpdated += async () =>
+                                {
+                                    avatarBox.Image = await _avatar.LoadAvatarAsync(userid);
+                                };
+                                Label usernameLabel = new Label
+                                {
+                                    Text = Displayname,
+                                    AutoSize = true,
+                                    Location = new Point(65, 20),
+                                    ForeColor = Color.White
+                                };
+                                UserSession.ActionUpdatedpname += async () =>
+                                {
+                                    usernameLabel.Text = await _user.FindDisplayname(userid);
+                                };
+
+
+                                Button rejectButton = new Button
+                                {
+                                    Text = "Xóa lời mời kết bạn",
+                                    Tag = Displayname,
+                                    Location = new Point(userPanel.Width - 120, 15),
+                                    AutoSize =true,
+                                    ForeColor = Color.White
+                                };
+
+                                rejectButton.Click += async (s, ev) =>
+                                {
+                                    await RejectFriendRequest(_dpname,Displayname);
+                                };
+
+                                userPanel.Controls.Add(avatarBox);
+                                userPanel.Controls.Add(usernameLabel);
+                                userPanel.Controls.Add(rejectButton);
+                                flp_Friends.Controls.Add(userPanel);
+                            }
+                            UserSession.ActionDeleteuser += () =>
+                            {
+                                showfriendrequest(userid1);
                             };
                         }
                         else
@@ -2623,20 +2711,20 @@ namespace QLUSER
                 }
             }
         }
-        private async Task RejectFriendRequest(string displayname)
+        private async Task RejectFriendRequest(string senderdpname,string receiverdpname)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string senderId = await _user.finduserid(displayname);
+                    string senderId = await _user.finduserid(senderdpname);
 
-                    int receiverId = int.Parse(_userid);
+                    string receiverId = await _user.finduserid(receiverdpname);
 
                     var requestBody = new
                     {
                         senderId = int.Parse(senderId),
-                        receiverId = receiverId,
+                        receiverId = int.Parse(receiverId),
                         action = "Decline"
                     };
 
@@ -2650,18 +2738,18 @@ namespace QLUSER
                     {
                         UserSession.UpdateFriendRequest = true;
                         SendUpdate("UpdateFriendRequest");
-                        MessageBox.Show($"Đã từ chối lời mời kết bạn từ {displayname}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"Đã xóa lời mời kết bạn", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
                         string errorContent = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show($"Lỗi từ server khi từ chối lời mời: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Lỗi từ server khi xóa lời mời: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi từ chối lời mời: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Lỗi khi xóa lời mời: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private async Task AcceptFriendRequest(string displayname)
@@ -2859,10 +2947,13 @@ namespace QLUSER
             banbe.Text = "banbe";
             banbe.Location = new Point(460 - thongtin.Width - banbe.Width - 20, 20);
             banbe.AutoSize = AutoSize;
-            banbe.Click += (s, e) =>
+            banbe.Click += async (s, e) =>
             {
-                SearchUser user = new SearchUser(_dpname,this);
-                user.ShowDialog();
+                on = true;
+                string dpname = await _user.FindDisplayname(gdpid);
+                SearchUser user = new SearchUser(_userid,this);
+                await user.GuiKetBan(dpname);
+                on = false;
             };
 
             form.Controls.Add(userpicture);
@@ -2985,7 +3076,7 @@ namespace QLUSER
             moivaomaychu.Click += async (s1, e1) =>
             {
 
-                if (form2 == null) moivaogroup(gdpid);
+                if (form2 == null) await moivaogroup(gdpid);
                 else
                 {
                     form2.Dispose();
@@ -3170,12 +3261,17 @@ namespace QLUSER
         }
         private async void btn_XemListFriend_Click(object sender, EventArgs e)
         {
-            showfriend();
-            UserSession.ActionUpdateFriend += ShowFriendHandler;
-            UserSession.ActionUpdateFriendRequest -= ShowFriendRequestHandler;
+            showfriend(_userid);
+            if (actionShowFriendHandler == null)
+                actionShowFriendHandler = () => ShowFriendHandler(_userid);
+            if (actionShowFriendRequestHandler == null)
+                actionShowFriendRequestHandler = () => ShowFriendRequestHandler(_userid);
+            UserSession.ActionUpdateFriend -= actionShowFriendHandler;
+            UserSession.ActionUpdateFriend += actionShowFriendHandler;
+            UserSession.ActionUpdateFriendRequest -= actionShowFriendRequestHandler;
 
         }
-        private async void showfriend()
+        public async void showfriend(string userid1)
         {
             using (HttpClient _httpClient = new HttpClient())
             {
@@ -3184,7 +3280,7 @@ namespace QLUSER
 
                     flp_Friends.Controls.Clear();
 
-                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/{_userid}";
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/{userid1}";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
@@ -3228,8 +3324,19 @@ namespace QLUSER
                                 {
                                     avatarBox.Image = await _avatar.LoadAvatarAsync(userid);
                                 };
+                                Label XoaKetBan = new Label
+                                {
+                                    Text = "X",
+                                    AutoSize = true,
+                                    Location = new Point(friendPanel.Width-20, 20),
+                                    ForeColor = Color.White
+                                };
+                                XoaKetBan.Click += async (s,e) => await HamXoaKetBan(displayName, _dpname);
+                                
 
+                              
                                 // Thêm các điều khiển vào Panel
+                                friendPanel.Controls.Add(XoaKetBan);
                                 friendPanel.Controls.Add(usernameLabel);
                                 friendPanel.Controls.Add(avatarBox);
                                 // Thêm Panel vào FlowLayoutPanel
@@ -3237,12 +3344,12 @@ namespace QLUSER
                             }
                             UserSession.ActionDeleteuser += () =>
                             {
-                                showfriend();
+                                showfriend(userid1);
                             };
                         }
                         else
                         {
-                            MessageBox.Show("Không có dữ liệu bạn bè trả về.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Không có bạn bè", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                     else
@@ -3259,7 +3366,46 @@ namespace QLUSER
                 }
             }
         }
-        
+        private async Task HamXoaKetBan(string dpname1, string dpname2)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string userid1 = await _user.finduserid(dpname1);
+
+                    string userid2 = await _user.finduserid(dpname2);
+
+                    var requestBody = new DeleteFriendDTO
+                    {
+                        UserId_1 = int.Parse(userid1),
+                        UserId_2 = int.Parse(userid2),
+                    };
+
+                    string jsonContent = JsonConvert.SerializeObject(requestBody);
+                    StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                    string requestUrl = $"{ConfigurationManager.AppSettings["ServerUrl"]}Friend/DeleteFriend";
+                    HttpResponseMessage response = await client.PostAsync(requestUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        UserSession.UpdateFriend = true;
+                        SendUpdate("UpdateFriend");
+                        MessageBox.Show($"Đã xóa bạn bè", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        string errorContent = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Lỗi từ server khi xóa bạn: {errorContent}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xóa bạn: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private async void button10_Click_1(object sender, EventArgs e)
         {
             try { 

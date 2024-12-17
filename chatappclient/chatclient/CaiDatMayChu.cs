@@ -31,7 +31,6 @@ namespace QLUSER
         string _userrole;
         int _number;
         string _groupname;
-        string[] usermemner;
         private List<(string gdpname, string UserId, string UserRole)> users = new List<(string, string, string)>();
         User _user = new User();
         UserAvatar _avatar = new UserAvatar();
@@ -123,18 +122,12 @@ namespace QLUSER
                 label20.Text = admins.Count.ToString();
                 var owners = users.Where(user => user.UserRole.Equals("Owner", StringComparison.OrdinalIgnoreCase)).ToList();
                 label22.Text = owners.Count.ToString();
-                UserSession.ActionUpdateGroupMember += () =>
-                {
-                    button2_Click(null, EventArgs.Empty);
-                };
-                UserSession.ActionUpdateRole += () =>
-                {
-                    button2_Click(null, EventArgs.Empty);
-                };
-                UserSession.ActionDeleteuser += () =>
-                {
-                    button2_Click(null, EventArgs.Empty);
-                };
+                UserSession.ActionUpdateGroupMember -= hambutton2click;
+                UserSession.ActionUpdateRole -= hambutton2click;
+                UserSession.ActionDeleteuser -= hambutton2click;
+                UserSession.ActionUpdateGroupMember += hambutton2click;
+                UserSession.ActionUpdateRole += hambutton2click;
+                UserSession.ActionDeleteuser += hambutton2click;
             }
             catch (Exception ex)
             {
@@ -142,7 +135,10 @@ namespace QLUSER
                 MessageBox.Show($"Error in button2_Click: {ex.Message}");
             }
         }
-
+        private void hambutton2click()
+        {
+            button2_Click(null, EventArgs.Empty);
+        }
         /*private async void button3_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
@@ -264,8 +260,27 @@ namespace QLUSER
             {
                 username = await _user.FindUsername(userid);
             };
-            
-            _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+                string userrole = await _groupMember.FindOneUserRole(_groupid, userid);
+                int number = 1;
+                switch (userrole)
+                {
+                    case "Member": number = 1; break;
+                    case "Mod": number = 2; break;
+                    case "Admin": number = 3; break;
+                    case "Owner": number = 4; break;
+                }
+                UserSession.ActionUpdateRole += async () =>
+                {
+                    userrole = await _groupMember.FindOneUserRole(_groupid, userid);
+                    switch (userrole)
+                    {
+                        case "Member": number = 1; break;
+                        case "Mod": number = 2; break;
+                        case "Admin": number = 3; break;
+                        case "Owner": number = 4; break;
+                    }
+                };
+                _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
             _gdpname = await _groupMember.FindGroupDisplayname(_userid, _groupid);
             bool on = false;
             Form form = new Form();
@@ -344,6 +359,11 @@ namespace QLUSER
                             groupUser.ShowDialog();
                             break;
                         case "Đổi biệt danh":
+                            if(_number<number)
+                            {
+                                MessageBox.Show("Không có đủ quyền hạn để đổi biệt danh");
+                                break;
+                            }
                             string newNickname = Interaction.InputBox(
                 "Nhập biệt danh mới:",
                 "Đổi Biệt Danh",
@@ -364,11 +384,17 @@ namespace QLUSER
                             await _gd.moivaogroup(userid);
                             break;
                         case "Thêm bạn":
+                            string dpname = await _user.FindDisplayname(userid);
                             SearchUser searchUser = new SearchUser(_userid, _gd);
-                            searchUser.ShowDialog();
+                            await searchUser.GuiKetBan(dpname);
                             break;
                         case "Đuổi user":
-                            await _gd.roinhom(_groupid,true,userid);
+                            if (_number < number)
+                            {
+                                MessageBox.Show("Không có đủ quyền hạn để đuổi người dùng này");
+                                break;
+                            }
+                            await _gd.roinhom(_groupid,true,userid,0);
                             break;
                         case "Vai trò":
                             await showuserrole(userid);
@@ -537,6 +563,12 @@ namespace QLUSER
 
         private async void button5_Click(object sender, EventArgs e)
         {
+            _userrole = await _groupMember.FindOneUserRole(_groupid, _userid);
+            if (_userrole != "Owner")
+            {
+                MessageBox.Show("Bạn không có quyền xóa group");
+                return;
+            }
             try { 
             // Hiển thị hộp thoại xác nhận
             var result = MessageBox.Show(
@@ -750,6 +782,20 @@ namespace QLUSER
                 {
                     if (control is CheckBox checkBox && checkBox.Checked)
                     {
+                        string userrole = await _groupMember.FindOneUserRole(_groupid, checkBox.Name);
+                        int number=1;
+                        switch (userrole)
+                        {
+                            case "Member": number = 1; break;
+                            case "Mod": number = 2; break;
+                            case "Admin": number = 3; break;
+                            case "Owner": number = 4; break;
+                        }
+                        if (_number <= number)
+                        {
+                            MessageBox.Show("Không có đủ quyền hạn để đổi role");
+                            return;
+                        }
                         var themrole=await _groupMember.themrole(_groupid, checkBox.Name, chonvaitro);
                         if (themrole)
                         {
@@ -949,25 +995,22 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
-            UserSession.ActionUpdateGroupMember += () =>
-            {
-                label30_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionUpdateRole += () =>
-            {
-                label30_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionDeleteuser += () =>
-            {
-                label30_Click(null, EventArgs.Empty);
-            };
+                UserSession.ActionUpdateGroupMember -= hamlabel30click;
+                UserSession.ActionUpdateRole -= hamlabel30click;
+                UserSession.ActionDeleteuser -= hamlabel30click;
+                UserSession.ActionUpdateGroupMember += hamlabel30click;
+                UserSession.ActionUpdateRole += hamlabel30click;
+                UserSession.ActionDeleteuser += hamlabel30click;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
+        private void hamlabel30click()
+        {
+            label30_Click(null, EventArgs.Empty);
+        }
         private async void label27_Click(object sender, EventArgs e)
         {
             try { 
@@ -1047,29 +1090,23 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
-            UserSession.ActionUpdateGroupMember += () =>
-            {
-                label27_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionUpdateRole += () =>
-            {
-                label27_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionDeleteuser += () =>
-            {
-                label27_Click(null, EventArgs.Empty);
-            };
+                UserSession.ActionUpdateGroupMember -= hamlabel27click;
+                UserSession.ActionUpdateRole -= hamlabel27click;
+                UserSession.ActionDeleteuser -= hamlabel27click;
+                UserSession.ActionUpdateGroupMember += hamlabel27click;
+                UserSession.ActionUpdateRole += hamlabel27click;
+                UserSession.ActionDeleteuser += hamlabel27click;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void tabPage4_Click(object sender, EventArgs e)
+        private void hamlabel27click()
         {
-
+            label27_Click(null, EventArgs.Empty);
         }
+        
 
         private async void label25_Click(object sender, EventArgs e)
         {
@@ -1150,23 +1187,21 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
-            UserSession.ActionUpdateGroupMember += () =>
-            {
-                label25_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionUpdateRole += () =>
-            {
-                label25_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionDeleteuser += () =>
-            {
-                label25_Click(null, EventArgs.Empty);
-            };
+                UserSession.ActionUpdateGroupMember -= hamlabel25click;
+                UserSession.ActionUpdateRole -= hamlabel25click;
+                UserSession.ActionDeleteuser -= hamlabel25click;
+                UserSession.ActionUpdateGroupMember += hamlabel25click;
+                UserSession.ActionUpdateRole += hamlabel25click;
+                UserSession.ActionDeleteuser += hamlabel25click;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void hamlabel25click()
+        {
+            label25_Click(null, EventArgs.Empty);
         }
 
         private async void label24_Click(object sender, EventArgs e)
@@ -1248,26 +1283,23 @@ namespace QLUSER
                     flowLayoutPanel1.Controls.Add(panel);
                 }
             }
-            UserSession.ActionUpdateGroupMember += () =>
-            {
-                label24_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionUpdateRole += () =>
-            {
-                label24_Click(null, EventArgs.Empty);
-            };
-            UserSession.ActionDeleteuser += () =>
-            {
-                label24_Click(null, EventArgs.Empty);
-            };
+                UserSession.ActionUpdateGroupMember -= hamlabel24click;
+                UserSession.ActionUpdateRole -= hamlabel24click;
+                UserSession.ActionDeleteuser -= hamlabel24click;
+                UserSession.ActionUpdateGroupMember += hamlabel24click;
+                UserSession.ActionUpdateRole += hamlabel24click;
+                UserSession.ActionDeleteuser += hamlabel24click;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void hamlabel24click()
+        {
+            label24_Click(null, EventArgs.Empty);
+        }
 
-     
         private async void Xoathanhvien(string gdpname, string userid, string role)
         {
             try { 
@@ -1304,6 +1336,20 @@ namespace QLUSER
             btncreate.Location = new Point(340 - btncreate.Width, 120);
             btncreate.Click += async (s, e) =>
             {
+                string userrole = await _groupMember.FindOneUserRole(_groupid, userid);
+                int number = 1;
+                switch (userrole)
+                {
+                    case "Member": number = 1; break;
+                    case "Mod": number = 2; break;
+                    case "Admin": number = 3; break;
+                    case "Owner": number = 4; break;
+                }
+                if (_number <= number)
+                {
+                    MessageBox.Show("Không có đủ quyền hạn để đổi role");
+                    return;
+                }
                 var gorole=await _groupMember.Goborole(_groupid, userid);
                 if (gorole)
                 {

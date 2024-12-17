@@ -258,6 +258,36 @@ namespace QLUSER.Models
                 return null;
             }
         }
+        public async Task<string> FindDateJointime(string userid, string groupid)
+        {
+            var Username = new FindJointimeDTO
+            {
+                UserId = userid,
+                groupid = groupid
+            };
+            var json = JsonConvert.SerializeObject(Username);
+            var content = new StringContent(json, Encoding.Unicode, "application/json");
+            HttpClient client = new HttpClient();
+
+            var response = await client.PostAsync(ConfigurationManager.AppSettings["ServerUrl"] + "GroupMember/FindJointime", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                DateTime time = responseData.time;
+
+                // Trả về ngày theo định dạng dd/MM/yyyy
+                return time.ToString("dd/MM/yyyy");
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
+                string message = responseData.message;
+                return null; // hoặc có thể return message nếu bạn muốn trả thông báo lỗi
+            }
+        }
+
         public async Task<bool> RenameGroupDisplayname(string newgroupdisplayname, string groupid, string userid)
         {
             try

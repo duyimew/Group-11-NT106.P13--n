@@ -456,7 +456,6 @@ namespace QLUSER
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
-            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
             // 
             // flowLayoutPanel1
             // 
