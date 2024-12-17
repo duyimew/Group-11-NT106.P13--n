@@ -299,7 +299,8 @@ namespace QLUSER
             this.tv_Kenh_DanhMuc.Name = "tv_Kenh_DanhMuc";
             this.tv_Kenh_DanhMuc.Size = new System.Drawing.Size(168, 324);
             this.tv_Kenh_DanhMuc.TabIndex = 0;
-            this.tv_Kenh_DanhMuc.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            //this.tv_Kenh_DanhMuc.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.tv_Kenh_DanhMuc.NodeMouseClick += treeView1_NodeMouseClick;
             // 
             // P_TenGroup
             // 

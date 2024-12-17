@@ -833,14 +833,11 @@ namespace QLUSER
                         }
                     };
                     flp_Group.Controls.Add(circulargroup);
-                    UserSession.ActionUpdateChannel += () =>
-                    {
-                        kenh();
-                    };
-                    UserSession.ActionUpdateDanhMuc += () =>
-                    {
-                        kenh();
-                    };
+                        UserSession.ActionUpdateChannel -= kenh;
+                        UserSession.ActionUpdateChannel += kenh;
+                        UserSession.ActionUpdateDanhMuc -= kenh;
+                        UserSession.ActionUpdateDanhMuc += kenh;
+                 
                 }
             }
             
@@ -901,13 +898,18 @@ namespace QLUSER
         {
             try
             {
+                await CloseLabel();
+                tv_Kenh_DanhMuc.Nodes.Clear();
+                flp_Message.Controls.Clear();
+                flp_Message.AutoScrollPosition = new Point(0, 0);
+                flp_Message.PerformLayout();
                 var result = await _danhmuc.RequestDanhMucName(_groupid);
                 if (result.issuccess)
                 {
                     for (int ib = 0; ib < result.danhmucidname.Length; ib++)
                     {
                         string[] danhmuc = result.danhmucidname[ib].Split('|');
-                        TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"danhmuc|{danhmuc[0]}", danhmuc[1]);
+                        TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"DanhMuc|{danhmuc[0]}", danhmuc[1]);
                         await createlabel(node);
                     }
                 }
@@ -922,7 +924,7 @@ namespace QLUSER
                         {
                             if (!string.IsNullOrEmpty(channel[2]))
                             {
-                                TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
+                                TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"DanhMuc|{channel[2]}", false);
                                 if (nodes != null)
                                 {
                                     TreeNode node = nodes[0].Nodes.Add($"VanBanChat|{channel[0]}", channel[1]);
@@ -937,7 +939,7 @@ namespace QLUSER
                         {
                             if (!string.IsNullOrEmpty(channel[2]))
                             {
-                                TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"danhmuc|{channel[2]}", false);
+                                TreeNode[] nodes = tv_Kenh_DanhMuc.Nodes.Find($"DanhMuc|{channel[2]}", false);
                                 if (nodes != null)
                                 {
                                     TreeNode node = nodes[0].Nodes.Add($"CuocGoiVideo|{channel[0]}", channel[1]);
@@ -967,7 +969,7 @@ namespace QLUSER
             try { 
             var matchedNodes = tv_Kenh_DanhMuc.Nodes
             .Cast<TreeNode>()
-            .Where(node => node.Name.Contains("danhmuc"))
+            .Where(node => node.Name.Contains("DanhMuc"))
             .ToList();
             foreach (var node in matchedNodes)
             {
@@ -990,7 +992,7 @@ namespace QLUSER
             try { 
             var matchedNodes = tv_Kenh_DanhMuc.Nodes
             .Cast<TreeNode>()
-            .Where(node => node.Name.Contains("danhmuc"))
+            .Where(node => node.Name.Contains("DanhMuc"))
             .ToList();
             foreach (var node in matchedNodes)
             {
@@ -1510,7 +1512,7 @@ namespace QLUSER
             }
         }
 
-        private async void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        private async void treeView1_AfterSelect(TreeNodeMouseClickEventArgs e)
         {
             try { 
             TreeNode selectedNode = e.Node;
@@ -1547,6 +1549,7 @@ namespace QLUSER
                             break;
                         }
                     }
+                    
                 }
                 else if (selectedNode.Name.Contains("CuocGoiVideo"))
                 {
@@ -1593,6 +1596,151 @@ namespace QLUSER
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                TreeNode clickedNode = e.Node;
+
+                if (clickedNode != null)
+                {
+                    TreeNode node = clickedNode.Parent;
+                    _danhmucid = null;
+                    string[] danhmucid=null;
+                    if (node != null)
+                    { danhmucid = node.Name.Split('|');
+                        _danhmucid = danhmucid[1]; }
+                    //MessageBox.Show(node + "|" + node.Text + "|" + node.Name);
+                    //tv_Kenh_DanhMuc.SelectedNode = clickedNode; // Đặt nút này làm nút được chọn dòng này cho vảo chỉ để nhấn 1 lần muốn nhấn lại phải nhấn nút khác trước
+                    ContextMenuStrip contextMenu = new ContextMenuStrip();
+
+                    if (clickedNode.Name.Contains("VanBanChat")|| clickedNode.Name.Contains("CuocGoiVideo"))
+                    {
+                        contextMenu.Items.Add("Chỉnh sửa kênh", null, (s, ev) =>
+                        {
+                            string[] channelid = clickedNode.Name.Split('|');
+                            CaiDatKenh caiDatKenh = new CaiDatKenh(channelid[1], clickedNode.Text,_danhmucid,this);
+                            caiDatKenh.ShowDialog();
+                        });
+                        contextMenu.Items.Add("Tạo kênh", null, (s, ev) => TaoKenh(_danhmucid,node));
+                        contextMenu.Items.Add("Xóa kênh", null, (s, ev) => XoaKenh(clickedNode));
+                    }
+                    else if (clickedNode.Name.Contains("DanhMuc"))
+                    {
+                        contextMenu.Items.Add("Chỉnh sửa danh mục", null, (s, ev) =>
+                        {
+                            string[] danhmucid1 = clickedNode.Name.Split('|');
+                            CaiDatDanhMuc caiDatDanhMuc = new CaiDatDanhMuc(danhmucid1[1], clickedNode.Text,this);
+                            caiDatDanhMuc.ShowDialog();
+                        });
+                        contextMenu.Items.Add("Xóa mục", null, (s, ev) => XoaMuc(clickedNode));
+                    }
+
+                    // Hiển thị menu ngữ cảnh tại vị trí nhấp chuột
+                    contextMenu.Show(tv_Kenh_DanhMuc, e.Location);
+                }
+            }
+            else if(e.Button == MouseButtons.Left)
+            {
+                treeView1_AfterSelect(e);
+            }
+        }
+        public async void XoaKenh(TreeNode node)
+        {
+            try
+            {
+                var result = DialogResult.No;
+
+                    result = MessageBox.Show(
+                "Bạn có chắc chắn muốn xóa kênh này không?",
+                "Xác nhận xóa kênh",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+ 
+                    
+                
+                // Kiểm tra kết quả người dùng chọn
+                if (result == DialogResult.Yes)
+                {
+                    // Thực hiện xóa nhóm
+                    string[] channelid = node.Name.Split('|');
+                    var remove = await _channel.DeleteChannel(channelid[1]);
+                    if (remove)
+                    {
+                        UserSession.UpdateChannel = true;
+                        SendUpdate("UpdateChannel");
+                        MessageBox.Show("Xóa kênh thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    // Hủy thao tác
+                    MessageBox.Show("Thao tác xóa kênh đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public async void XoaMuc(TreeNode node)
+        {
+            try
+            {
+                var result = DialogResult.No;
+
+                result = MessageBox.Show(
+            "Bạn có chắc chắn muốn xóa danh mục này không?",
+            "Xác nhận xóa danh mục",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning
+        );
+
+
+
+                // Kiểm tra kết quả người dùng chọn
+                if (result == DialogResult.Yes)
+                {
+                    // Thực hiện xóa nhóm
+                    string[] danhmucid = node.Name.Split('|');
+                    var remove = await _danhmuc.Deletedanhmuc(danhmucid[1]);
+                    if (remove)
+                    {
+                        UserSession.UpdateDanhMuc = true;
+                        SendUpdate("UpdateDanhMuc");
+                        MessageBox.Show("Xóa danh mục thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    // Hủy thao tác
+                    MessageBox.Show("Thao tác xóa danh mục đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void ShowTextChannelForm(TreeNode node)
+        {
+            MessageBox.Show($"Bạn vừa chọn kênh: {node.Text}", "Kênh Văn Bản", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Gọi form hoặc thực hiện logic tương ứng
+        }
+        private void StartVideoCall(TreeNode node)
+        {
+            MessageBox.Show($"Bắt đầu cuộc gọi video trong kênh: {node.Text}", "Cuộc Gọi Video", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Hiển thị form gọi video
+            //VideoCall vc = new VideoCall(_gdpname, _channelid, _groupid, this);
+            //vc.Show();
+        }
+        private void OpenChannelSettings(TreeNode node)
+        {
+            MessageBox.Show($"Cài đặt kênh: {node.Text}", "Cài Đặt Kênh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Thực hiện logic cài đặt kênh tại đây
+        }
+
         private async void hamupdatechannelname()
         {
             var channel = await _channel.RequestoneChannelName(_channelid);
@@ -2435,7 +2583,7 @@ namespace QLUSER
                     var result = await _danhmuc.SaveDanhMucToDatabase(_groupid, ten.Text);
                     if (result.issuccess)
                     {
-                        TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"danhmuc|{result.danhmucID}", ten.Text);
+                        TreeNode node = tv_Kenh_DanhMuc.Nodes.Add($"DanhMuc|{result.danhmucID}", ten.Text);
                         await createlabel(node);
                         form.Close();
                     }
@@ -2538,6 +2686,7 @@ namespace QLUSER
         {
             UserSession.RunOnUIThread(new Action(() => showfriendrequest(_userid)));
         }
+
         private async void showfriendrequest(string userid1)
         {
             using (HttpClient _httpClient = new HttpClient())

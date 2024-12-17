@@ -101,7 +101,7 @@ namespace QLUSER.Models
                 return (false, null);
             }
         }
-        public async Task<bool> RenameChannel(string danhmucid, string newdanhmucname)
+        public async Task<bool> RenameDanhMuc(string danhmucid, string newdanhmucname)
         {
             var RenameDanhmucRequest = new RenameDanhmucRequestDTO
             {

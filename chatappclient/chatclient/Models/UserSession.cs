@@ -222,6 +222,7 @@ namespace QLUSER.Models
             set
             {
                 _updanhmucid = value;
+                ActionUpdateDanhMuc?.Invoke();
                 ActionUpdatedanhmucname?.Invoke();
 
             }
@@ -241,6 +242,7 @@ namespace QLUSER.Models
             set
             {
                 _upchannelid = value;
+                ActionUpdateChannel?.Invoke();
                 ActionUpdateChannelname?.Invoke();
             }
         }
