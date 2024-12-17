@@ -133,8 +133,6 @@ namespace QLUSER
                         Size = new Size(layouts[n - 1].width, layouts[n - 1].height),
                         Visible = true,
                         BorderStyle = BorderStyle.FixedSingle, // Thêm border để dễ quan sát
-                        BackgroundImage = Image.FromFile("path/to/your/image.jpg"), // Đường dẫn đến hình nền
-                        BackgroundImageLayout = ImageLayout.Stretch
                     };
                 }
                 else
@@ -145,8 +143,6 @@ namespace QLUSER
                         Size = new Size(layouts[n - 1].width, layouts[n - 1].height),
                         Visible = true,
                         BorderStyle = BorderStyle.FixedSingle,// Thêm border để dễ quan sát
-                        BackgroundImage = Image.FromFile("path/to/your/image.jpg"), // Đường dẫn đến hình nền
-                        BackgroundImageLayout = ImageLayout.Stretch
                     };
                 }
 
