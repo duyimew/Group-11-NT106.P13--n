@@ -71,7 +71,12 @@ namespace chatserver.HUB
                 await Clients.OthersInGroup(callId).SendAsync("ReceiveVideoFrame", frameData, groupdisplayname);
                
         }
+        public async Task SendImage(string callId, string groupdisplayname)
+        {
 
+            await Clients.OthersInGroup(callId).SendAsync("ReceiveImage", groupdisplayname);
+
+        }
         public async Task SendAudio(string callId, byte[] audioData)
         {
            

@@ -362,6 +362,18 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaiDatDanhMuc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaiDatDanhMuc.Designer.cs">
+      <DependentUpon>CaiDatDanhMuc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CaiDatKenh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CaiDatKenh.Designer.cs">
+      <DependentUpon>CaiDatKenh.cs</DependentUpon>
+    </Compile>
     <Compile Include="CaiDatMayChu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -493,6 +505,12 @@
     <Compile Include="VideoCall.Designer.cs">
       <DependentUpon>VideoCall.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CaiDatDanhMuc.resx">
+      <DependentUpon>CaiDatDanhMuc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CaiDatKenh.resx">
+      <DependentUpon>CaiDatKenh.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CaiDatMayChu.resx">
       <DependentUpon>CaiDatMayChu.cs</DependentUpon>
     </EmbeddedResource>

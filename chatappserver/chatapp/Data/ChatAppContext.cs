@@ -1,5 +1,7 @@
 ﻿using chatapp.Models;
+using chatserver.Models;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.WebRequestMethods;
 
 namespace chatapp.Data
 {
@@ -16,6 +18,8 @@ namespace chatapp.Data
         public DbSet<Friends> Friends { get; set; }
         public DbSet<FriendRequests> FriendRequests { get; set; }
         public DbSet<Danhmuc> danhmuc { get; set; }
+        public DbSet<OTP> Otps { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -95,7 +99,11 @@ namespace chatapp.Data
                 .HasForeignKey(fr => fr.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-        
+            modelBuilder.Entity<OTP>()
+                .HasOne(o => o.User)
+                .WithMany()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
