@@ -23,6 +23,20 @@ namespace chatapp.Controllers
             _requestUserRole = requestUserRole;
         }
 
+        [HttpGet("ListUser")]
+        public async Task<IActionResult> GetAvatarUrl(int groupId)
+        {
+            var users = _context.GroupMembers.Where(user => user.GroupId == groupId);
+
+            if (users == null)
+            {
+                return NotFound("Group ID not found (doesn't have any members)");
+            }
+
+            return Ok(new { Users = users.Select(user => new { user.GroupDisplayname, user.UserId }) });
+        }
+
+
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] AddUserDTO request)
         {
