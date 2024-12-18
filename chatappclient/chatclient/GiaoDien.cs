@@ -795,7 +795,7 @@ namespace QLUSER
                         lb_TenGroup1.Text = selectedGroupName;
                         lb_TenGroup1.Name = group1[0];
                         lb_TenGroup.Name = group1[0];
-                        AddGroupMembersList();
+                        //AddGroupMembersList();
                         CreateMenu();
                         UserSession.ActionUpdateRole += async () =>
                         {
@@ -1074,14 +1074,15 @@ namespace QLUSER
                 string gdpid = await _groupMember.FindGroupDisplayID(_groupid, gdpname);
                 Panel panelMessage = new Panel
                 {
-                    Width = flp_Message.Width,
                     BackColor = Color.FromArgb(66, 69, 73),
                     Padding = new Padding(5),
-                    AutoSize = true,
+                    AutoSize = true, // Tự động điều chỉnh kích thước
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink, // Chỉ điều chỉnh theo chiều cao
                     Margin = new Padding(10, 0, 0, 0),
-                    Name = messageid
+                    Name = messageid,
+                    Width = flp_Message.Size.Width-40, // Cố định chiều rộng
+                    MinimumSize = new Size(flp_Message.Size.Width - 40, 0), // Giữ chiều rộng cố định
                 };
-
                 CircularPicture pictureBoxAvatar = new CircularPicture
                 {
                     SizeMode = PictureBoxSizeMode.Zoom,
@@ -1123,11 +1124,11 @@ namespace QLUSER
                 {
                     lblUsername.Text = await _groupMember.FindGroupDisplayname(gdpid, _groupid);
                 };
-
+                Label lblMessage=null;
                 panelMessage.Controls.Add(lblUsername);
                 if (!string.IsNullOrEmpty(messageContent))
                 {
-                    Label lblMessage = new Label
+                    lblMessage = new Label
                     {
                         Text = $"{messageContent}",
                         Font = new Font("Segoe UI", 10),
@@ -1160,7 +1161,7 @@ namespace QLUSER
                                 SizeMode = PictureBoxSizeMode.Zoom,
                                 Width = 200,
                                 Height = 150,
-                                Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5,
+                                Top = panelMessage.Controls.Count > 2 ? lblMessage.Bottom + 5 : lblUsername.Bottom + 5,
                                 Left = pictureBoxAvatar.Right + 10
                             };
                             using (HttpClient client = new HttpClient())
@@ -1202,13 +1203,14 @@ namespace QLUSER
                 {
                     ListView listViewFiles = new ListView
                     {
-                        View = View.List,
+                        View = View.LargeIcon,
                         ForeColor = Color.White,
                         BackColor = Color.FromArgb(47, 49, 54),
-                        Width = panelMessage.Width - 10,
+                        Width = panelMessage.Width - 60,
                         Height = 40,
-                        Scrollable = false,
-                        Top = panelMessage.Controls.Count > 1 ? panelMessage.Controls[1].Bottom + 5 : lblUsername.Bottom + 5
+                        Scrollable = true,
+                        Top = panelMessage.Controls.Count > 2 ? lblMessage.Bottom + 5 : lblUsername.Bottom + 5,
+                        Left = pictureBoxAvatar.Right + 10
                     };
                     foreach (var FileName in nonImageVideoFiles)
                     {
@@ -1235,8 +1237,134 @@ namespace QLUSER
                     panelMessage.Height += listViewFiles.Height + 10;
                 }
 
+                panelMessage.MouseUp += (s, e) =>
+                {
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        // Tạo menu ngữ cảnh
+                        ContextMenuStrip contextMenu = new ContextMenuStrip();
+                        contextMenu.Items.Add("Chỉnh sửa tin nhắn", null, (sv, ev) => {
+                            Chinhsuatinnhan(messageid,lblMessage);
+                        });
+                        contextMenu.Items.Add("Sao chép văn bản", null, (sv, ev) => {
+                            Saochepvanban(lblMessage);
+                        });
+                        contextMenu.Items.Add("Xóa tin nhắn", null, (sv, ev) => {
+                            XoaTinNhan(messageid);
+                        });
+
+                        // Chuyển đổi tọa độ từ Panel sang màn hình
+                        Point screenPoint = panelMessage.PointToScreen(e.Location);
+
+                        // Chuyển đổi tọa độ từ màn hình sang flp_Message
+                        Point flpPoint = flp_Message.PointToClient(screenPoint);
+
+                        // Hiển thị ContextMenuStrip tại vị trí chính xác
+                        contextMenu.Show(flp_Message, flpPoint);
+
+                    }
+
+                };
                 flp_Message.Controls.Add(panelMessage);
                 flp_Message.ScrollControlIntoView(panelMessage);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async void Chinhsuatinnhan(string messageid,Label message)
+        {
+            try
+            {
+                string messagetext = "";
+                if (message != null) messagetext = message.Text; 
+                string newmessagetext = Microsoft.VisualBasic.Interaction.InputBox(
+               $"Nhập nội dung tin nhắn mới:",
+               "Đổi nội dung tin nhắn",
+               messagetext
+                );
+                if (newmessagetext != messagetext && !string.IsNullOrWhiteSpace(newmessagetext))
+                {
+                    var result = await _message.EditMessage(newmessagetext, messageid);
+                    if (result)
+                    {
+
+                        if (messagetext != "")
+                        {
+                            UserSession.RenameMessageText = true;
+                            SendUpdate("UpdateMessageText");
+                        }
+                        else
+                        {
+                            UserSession.UpdateMessage = true;
+                            SendUpdate("UpdateMessage");
+                        }
+                        MessageBox.Show("Nội dung tin nhắn đã được đổi thành công!", "Thông Báo");
+                    }
+                    else MessageBox.Show("Nội dung tin nhắn đổi thất bại!", "Thông Báo");
+                }
+                else
+                {
+                    MessageBox.Show("Nội dung tin nhắn không thay đổi.", "Thông Báo");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async void Saochepvanban(Label message)
+        {
+            try
+            {
+                if (message == null) return;
+                Thread staThread = new Thread(() =>
+                {
+                    try
+                    {
+                        Clipboard.SetText(message.Text);
+                    }
+                    catch (Exception ex)
+                    {
+                        Saochepvanban(message);
+                    }
+                });
+                staThread.SetApartmentState(ApartmentState.STA);
+                staThread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private async void XoaTinNhan(string messageid)
+        {
+            try
+            {
+                var result = MessageBox.Show(
+                    "Bạn có chắc chắn muốn xóa tin nhắn này không?",
+                    "Xác nhận xóa tin nhắn",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                // Kiểm tra kết quả người dùng chọn
+                if (result == DialogResult.Yes)
+                {
+                    // Thực hiện xóa nhóm
+                    var delete = await _message.DeleteMessage(messageid);
+                    if (delete)
+                    {
+                        UserSession.UpdateMessage = true;
+                        SendUpdate("UpdateMessage");
+                        MessageBox.Show("Tin nhắn đã được xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Thao tác xóa tin nhắn đã bị hủy.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -1725,23 +1853,7 @@ namespace QLUSER
                 MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void ShowTextChannelForm(TreeNode node)
-        {
-            MessageBox.Show($"Bạn vừa chọn kênh: {node.Text}", "Kênh Văn Bản", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            // Gọi form hoặc thực hiện logic tương ứng
-        }
-        private void StartVideoCall(TreeNode node)
-        {
-            MessageBox.Show($"Bắt đầu cuộc gọi video trong kênh: {node.Text}", "Cuộc Gọi Video", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            // Hiển thị form gọi video
-            //VideoCall vc = new VideoCall(_gdpname, _channelid, _groupid, this);
-            //vc.Show();
-        }
-        private void OpenChannelSettings(TreeNode node)
-        {
-            MessageBox.Show($"Cài đặt kênh: {node.Text}", "Cài Đặt Kênh", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            // Thực hiện logic cài đặt kênh tại đây
-        }
+
 
         private async void hamupdatechannelname()
         {
@@ -1751,7 +1863,7 @@ namespace QLUSER
         }
         private async void hamupdatemessage()
         {
-            message();
+           UserSession.RunOnUIThread(new Action(()=> message()));
         }
 
         private async void AddGroupMembersList()
@@ -1811,9 +1923,12 @@ namespace QLUSER
                     };
                     UserSession.ActionUpdategdpname += async () =>
                     {
-                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.userId.ToString(), _groupid);
+                        string groupdisplayname = await _groupMember.FindGroupDisplayname(user.userId.ToString(), _groupid);
+                        lblUsername.Text = groupdisplayname;
+                        panelUser.Name = groupdisplayname;
                     };
-
+                    UserSession.ActionDeleteuser -= AddGroupMembersList;
+                    UserSession.ActionDeleteuser += AddGroupMembersList;
                     panelUser.Controls.Add(lblUsername);
 
                     flp_Members.Controls.Add(panelUser);
@@ -1855,7 +1970,9 @@ namespace QLUSER
 
         private async void message()
         {
-            try { 
+            try {
+                displayedMessages.Clear();
+                flp_Message.Controls.Clear();
             var result = await _message.ReceiveMessage(_channelid);
             if (result.issuccess)
             {
@@ -3824,6 +3941,25 @@ namespace QLUSER
         private void GiaoDien_FormClosing(object sender, FormClosingEventArgs e)
         {
             btn_Thoat.PerformClick();
+        }
+        private bool AddGroupMembers = false;
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (!AddGroupMembers)
+            {
+                TP_ChattingView.Controls.Add(flp_Members);
+                flp_Message.Size = new Size(flp_Message.Width-flp_Members.Width, flp_Message.Height);
+                flp_Members.BringToFront();
+                flp_Members.Controls.Clear();
+                AddGroupMembersList();
+                AddGroupMembers = true;
+            }
+            else
+            {
+                TP_ChattingView.Controls.Remove(flp_Members);
+                flp_Message.Size = new Size(824, 415);
+                AddGroupMembers = false;
+            }
         }
     }
 }

@@ -32,9 +32,11 @@ namespace QLUSER
         private void InitializeComponent()
         {
             this.P_Group_Friend = new System.Windows.Forms.Panel();
+            this.cp_MenuFriend = new QLUSER.Models.CircularPicture();
             this.flp_Group = new System.Windows.Forms.FlowLayoutPanel();
             this.P_Kenh_DanhMuc_User = new System.Windows.Forms.Panel();
             this.P_TTinUser = new System.Windows.Forms.Panel();
+            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
             this.btn_CDuser = new System.Windows.Forms.Button();
             this.TC_ServerOrFriend = new System.Windows.Forms.TabControl();
             this.TP_FriendsTab = new System.Windows.Forms.TabPage();
@@ -66,23 +68,24 @@ namespace QLUSER
             this.flp_Message = new System.Windows.Forms.FlowLayoutPanel();
             this.lb_TenKenh = new System.Windows.Forms.Label();
             this.P_TenKenh = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.btn_SearchMessage = new System.Windows.Forms.Button();
             this.P_Thoat = new System.Windows.Forms.Panel();
             this.btn_Thoat = new System.Windows.Forms.Button();
             this.TC_Chat = new System.Windows.Forms.TabControl();
             this.TP_ChattingView = new System.Windows.Forms.TabPage();
-            this.flp_Members = new System.Windows.Forms.FlowLayoutPanel();
             this.TP_FriendRequestView = new System.Windows.Forms.TabPage();
             this.btn_XemListFriend = new System.Windows.Forms.Button();
             this.P_Friend = new System.Windows.Forms.Panel();
             this.flp_Friends = new System.Windows.Forms.FlowLayoutPanel();
             this.btn_XemLoiMoi = new System.Windows.Forms.Button();
             this.btn_Ketban = new System.Windows.Forms.Button();
-            this.cp_ProfilePic = new QLUSER.Models.CircularPicture();
-            this.cp_MenuFriend = new QLUSER.Models.CircularPicture();
+            this.flp_Members = new System.Windows.Forms.FlowLayoutPanel();
             this.P_Group_Friend.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).BeginInit();
             this.P_Kenh_DanhMuc_User.SuspendLayout();
             this.P_TTinUser.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
             this.TC_ServerOrFriend.SuspendLayout();
             this.TP_FriendsTab.SuspendLayout();
             this.TP_ServerTab.SuspendLayout();
@@ -100,8 +103,6 @@ namespace QLUSER
             this.TP_ChattingView.SuspendLayout();
             this.TP_FriendRequestView.SuspendLayout();
             this.P_Friend.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).BeginInit();
             this.SuspendLayout();
             // 
             // P_Group_Friend
@@ -114,6 +115,20 @@ namespace QLUSER
             this.P_Group_Friend.Name = "P_Group_Friend";
             this.P_Group_Friend.Size = new System.Drawing.Size(93, 535);
             this.P_Group_Friend.TabIndex = 0;
+            // 
+            // cp_MenuFriend
+            // 
+            this.cp_MenuFriend.filepath = "";
+            this.cp_MenuFriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
+            this.cp_MenuFriend.Location = new System.Drawing.Point(23, 5);
+            this.cp_MenuFriend.Margin = new System.Windows.Forms.Padding(2);
+            this.cp_MenuFriend.Name = "cp_MenuFriend";
+            this.cp_MenuFriend.Size = new System.Drawing.Size(51, 53);
+            this.cp_MenuFriend.TabIndex = 0;
+            this.cp_MenuFriend.TabStop = false;
+            this.cp_MenuFriend.TextColor = System.Drawing.Color.Black;
+            this.cp_MenuFriend.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
+            this.cp_MenuFriend.Click += new System.EventHandler(this.cp_Menu_Click);
             // 
             // flp_Group
             // 
@@ -149,6 +164,22 @@ namespace QLUSER
             this.P_TTinUser.Name = "P_TTinUser";
             this.P_TTinUser.Size = new System.Drawing.Size(190, 65);
             this.P_TTinUser.TabIndex = 9;
+            // 
+            // cp_ProfilePic
+            // 
+            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
+            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cp_ProfilePic.filepath = "";
+            this.cp_ProfilePic.ImageLocation = "";
+            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
+            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
+            this.cp_ProfilePic.Name = "cp_ProfilePic";
+            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
+            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.cp_ProfilePic.TabIndex = 5;
+            this.cp_ProfilePic.TabStop = false;
+            this.cp_ProfilePic.TextColor = System.Drawing.Color.Black;
+            this.cp_ProfilePic.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
             // 
             // btn_CDuser
             // 
@@ -274,7 +305,6 @@ namespace QLUSER
             this.tv_Kenh_DanhMuc.Name = "tv_Kenh_DanhMuc";
             this.tv_Kenh_DanhMuc.Size = new System.Drawing.Size(168, 324);
             this.tv_Kenh_DanhMuc.TabIndex = 0;
-            //this.tv_Kenh_DanhMuc.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.tv_Kenh_DanhMuc.NodeMouseClick += treeView1_NodeMouseClick;
             // 
             // P_TenGroup
@@ -498,7 +528,7 @@ namespace QLUSER
             this.flp_Message.Location = new System.Drawing.Point(2, 53);
             this.flp_Message.Name = "flp_Message";
             this.flp_Message.Padding = new System.Windows.Forms.Padding(10, 0, 10, 10);
-            this.flp_Message.Size = new System.Drawing.Size(642, 409);
+            this.flp_Message.Size = new System.Drawing.Size(824, 415);
             this.flp_Message.TabIndex = 7;
             this.flp_Message.WrapContents = false;
             // 
@@ -514,6 +544,7 @@ namespace QLUSER
             // P_TenKenh
             // 
             this.P_TenKenh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.P_TenKenh.Controls.Add(this.button1);
             this.P_TenKenh.Controls.Add(this.btn_SearchMessage);
             this.P_TenKenh.Controls.Add(this.P_Thoat);
             this.P_TenKenh.Controls.Add(this.lb_TenKenh);
@@ -522,6 +553,24 @@ namespace QLUSER
             this.P_TenKenh.Name = "P_TenKenh";
             this.P_TenKenh.Size = new System.Drawing.Size(825, 51);
             this.P_TenKenh.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.AutoSize = true;
+            this.button1.BackColor = System.Drawing.Color.Transparent;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.button1.Location = new System.Drawing.Point(603, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(36, 30);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "🤵";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // btn_SearchMessage
             // 
@@ -581,7 +630,6 @@ namespace QLUSER
             // TP_ChattingView
             // 
             this.TP_ChattingView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
-            this.TP_ChattingView.Controls.Add(this.flp_Members);
             this.TP_ChattingView.Controls.Add(this.P_GuiMessage);
             this.TP_ChattingView.Controls.Add(this.P_TenKenh);
             this.TP_ChattingView.Controls.Add(this.flp_Message);
@@ -592,18 +640,6 @@ namespace QLUSER
             this.TP_ChattingView.Size = new System.Drawing.Size(829, 545);
             this.TP_ChattingView.TabIndex = 0;
             this.TP_ChattingView.Text = "tabPage1";
-            // 
-            // flp_Members
-            // 
-            this.flp_Members.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flp_Members.AutoSize = true;
-            this.flp_Members.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
-            this.flp_Members.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flp_Members.Location = new System.Drawing.Point(650, 53);
-            this.flp_Members.Name = "flp_Members";
-            this.flp_Members.Size = new System.Drawing.Size(183, 409);
-            this.flp_Members.TabIndex = 9;
             // 
             // TP_FriendRequestView
             // 
@@ -673,35 +709,17 @@ namespace QLUSER
             this.btn_Ketban.UseVisualStyleBackColor = true;
             this.btn_Ketban.Click += new System.EventHandler(this.btn_Ketban_Click);
             // 
-            // cp_ProfilePic
+            // flp_Members
             // 
-            this.cp_ProfilePic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(43)))), ((int)(((byte)(48)))));
-            this.cp_ProfilePic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cp_ProfilePic.filepath = "";
-            this.cp_ProfilePic.ImageLocation = "";
-            this.cp_ProfilePic.Location = new System.Drawing.Point(2, 5);
-            this.cp_ProfilePic.Margin = new System.Windows.Forms.Padding(2);
-            this.cp_ProfilePic.Name = "cp_ProfilePic";
-            this.cp_ProfilePic.Size = new System.Drawing.Size(59, 56);
-            this.cp_ProfilePic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.cp_ProfilePic.TabIndex = 5;
-            this.cp_ProfilePic.TabStop = false;
-            this.cp_ProfilePic.TextColor = System.Drawing.Color.Black;
-            this.cp_ProfilePic.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
-            // 
-            // cp_MenuFriend
-            // 
-            this.cp_MenuFriend.filepath = "";
-            this.cp_MenuFriend.Image = global::QLUSER.Properties.Resources._379512_chat_icon;
-            this.cp_MenuFriend.Location = new System.Drawing.Point(23, 5);
-            this.cp_MenuFriend.Margin = new System.Windows.Forms.Padding(2);
-            this.cp_MenuFriend.Name = "cp_MenuFriend";
-            this.cp_MenuFriend.Size = new System.Drawing.Size(51, 53);
-            this.cp_MenuFriend.TabIndex = 0;
-            this.cp_MenuFriend.TabStop = false;
-            this.cp_MenuFriend.TextColor = System.Drawing.Color.Black;
-            this.cp_MenuFriend.TextFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
-            this.cp_MenuFriend.Click += new System.EventHandler(this.cp_Menu_Click);
+            this.flp_Members.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flp_Members.AutoSize = true;
+            this.flp_Members.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
+            this.flp_Members.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flp_Members.Location = new System.Drawing.Point(650, 53);
+            this.flp_Members.Name = "flp_Members";
+            this.flp_Members.Size = new System.Drawing.Size(183, 415);
+            this.flp_Members.TabIndex = 9;
             // 
             // GiaoDien
             // 
@@ -717,8 +735,10 @@ namespace QLUSER
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GiaoDien_FormClosing);
             this.Load += new System.EventHandler(this.GiaoDien_Load);
             this.P_Group_Friend.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).EndInit();
             this.P_Kenh_DanhMuc_User.ResumeLayout(false);
             this.P_TTinUser.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
             this.TC_ServerOrFriend.ResumeLayout(false);
             this.TP_FriendsTab.ResumeLayout(false);
             this.TP_ServerTab.ResumeLayout(false);
@@ -732,14 +752,12 @@ namespace QLUSER
             this.P_Message.ResumeLayout(false);
             this.P_Message.PerformLayout();
             this.P_TenKenh.ResumeLayout(false);
+            this.P_TenKenh.PerformLayout();
             this.P_Thoat.ResumeLayout(false);
             this.TC_Chat.ResumeLayout(false);
             this.TP_ChattingView.ResumeLayout(false);
-            this.TP_ChattingView.PerformLayout();
             this.TP_FriendRequestView.ResumeLayout(false);
             this.P_Friend.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cp_ProfilePic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -795,5 +813,6 @@ namespace QLUSER
         private FlowLayoutPanel flp_Friends;
         private FlowLayoutPanel flp_Members;
         private Panel P_Emoji;
+        private Button button1;
     }
 }
