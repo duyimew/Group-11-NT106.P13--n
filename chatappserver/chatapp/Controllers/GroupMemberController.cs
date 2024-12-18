@@ -24,7 +24,7 @@ namespace chatapp.Controllers
         }
 
         [HttpGet("ListUser")]
-        public async Task<IActionResult> GetAvatarUrl(int groupId)
+        public async Task<IActionResult> GetGroupUsers(int groupId)
         {
             var users = _context.GroupMembers.Where(user => user.GroupId == groupId);
 
