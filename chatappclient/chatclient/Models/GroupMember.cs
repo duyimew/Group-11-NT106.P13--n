@@ -13,20 +13,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using chatclient.DTOs.Danhmuc;
+using Newtonsoft.Json.Linq;
 
 namespace QLUSER.Models
 {
     internal class GroupMember
     {
-        
-        public async Task<bool> AddMembersToGroup(string userid, string groupid,string displayname,string role)
+
+        public async Task<bool> AddMembersToGroup(string userid, string groupid, string displayname, string role)
         {
             var AddUser = new AddUserDTO
             {
-                UserID= userid,
+                UserID = userid,
                 GroupID = groupid,
                 displayname = displayname,
-                role=role
+                role = role
             };
             var json = JsonConvert.SerializeObject(AddUser);
             var content = new StringContent(json, Encoding.Unicode, "application/json");
@@ -36,7 +37,7 @@ namespace QLUSER.Models
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                string message = responseData.message; 
+                string message = responseData.message;
                 MessageBox.Show(message);
                 return true;
             }
@@ -95,7 +96,7 @@ namespace QLUSER.Models
                 return null;
             }
         }
-        public async Task<string> FindOneUserRole(string groupid,string userid)
+        public async Task<string> FindOneUserRole(string groupid, string userid)
         {
             try
             {
@@ -103,8 +104,8 @@ namespace QLUSER.Models
                 {
                     var payload = new OneUserRoleDTO
                     {
-                        groupid=groupid,
-                        UserId=userid
+                        groupid = groupid,
+                        UserId = userid
                     };
 
                     string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}GroupMember/OneUserRole";
@@ -136,7 +137,7 @@ namespace QLUSER.Models
                 return null;
             }
         }
-        public async Task<string> FindGroupDisplayname(string userid,string groupid)
+        public async Task<string> FindGroupDisplayname(string userid, string groupid)
         {
             try
             {
@@ -175,6 +176,41 @@ namespace QLUSER.Models
                 return null;
             }
         }
+
+        public async Task<JArray> FindGroupMembers(string groupId)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    string query = $"groupId={Uri.EscapeDataString(groupId)}";
+
+                    string url = $"{ConfigurationManager.AppSettings["ServerUrl"]}GroupMember/ListUser?{query}";
+
+                    var response = await client.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                        var members = responseData.users;
+                        return members;
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show("Failed to get group members: " + errorResponse);
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error renaming group: " + ex.Message);
+                return null;
+            }
+        }
+
         public async Task<string> FindGroupDisplayID(string groupid,string gdpname)
         {
             try

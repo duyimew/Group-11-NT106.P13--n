@@ -780,6 +780,7 @@ namespace QLUSER
                         }
                         await CloseLabel();
                         tv_Kenh_DanhMuc.Nodes.Clear();
+                        flp_Members.Controls.Clear();
                         flp_Message.Controls.Clear();
                         flp_Message.AutoScrollPosition = new Point(0, 0);
                         flp_Message.PerformLayout();
@@ -794,6 +795,7 @@ namespace QLUSER
                         lb_TenGroup1.Text = selectedGroupName;
                         lb_TenGroup1.Name = group1[0];
                         lb_TenGroup.Name = group1[0];
+                        AddGroupMembersList();
                         CreateMenu();
                         UserSession.ActionUpdateRole += async () =>
                         {
@@ -833,14 +835,6 @@ namespace QLUSER
                         }
                     };
                     flp_Group.Controls.Add(circulargroup);
-                    UserSession.ActionUpdateChannel += () =>
-                    {
-                        kenh();
-                    };
-                    UserSession.ActionUpdateDanhMuc += () =>
-                    {
-                        kenh();
-                    };
                 }
             }
             
@@ -1602,6 +1596,77 @@ namespace QLUSER
         private async void hamupdatemessage()
         {
             message();
+        }
+
+        private async void AddGroupMembersList()
+        {
+            try
+            {
+
+                var users = await _groupMember.FindGroupMembers(_groupid);
+                foreach (var elem in users) {
+                    var user = elem.ToObject<dynamic>();
+
+                    Panel panelUser = new Panel
+                    {
+                        Width = flp_Members.Width,
+                        BackColor = Color.FromArgb(54, 57, 62),
+                        Padding = new Padding(5),
+                        AutoSize = true,
+                        Margin = new Padding(10, 0, 0, 0),
+                        Name = user.groupDisplayname
+                    };
+
+                    CircularPicture pictureBoxAvatar = new CircularPicture
+                    {
+                        SizeMode = PictureBoxSizeMode.Zoom,
+                        Width = 30,
+                        Height = 30,
+                        Image = await _avatar.LoadAvatarAsync(user.userId.ToString()),
+                        Margin = new Padding(0, 0, 10, 0)
+                    };
+
+                    pictureBoxAvatar.MouseUp += (s, e) =>
+                    {
+                        if (e.Button == MouseButtons.Right)
+                        {
+                            CaiDatMayChu caiDatMayChu = new CaiDatMayChu(_groupname, _groupid, _userid, this, DN);
+                            caiDatMayChu.formusergroup(user.groupDisplayname.ToString(), false);
+                        }
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            USERINFOR(user.groupDisplayname.ToString());
+                        }
+                    };
+                    UserSession.ActionAvatarUpdated += async () =>
+                    {
+                        pictureBoxAvatar.Image = await _avatar.LoadAvatarAsync(user.userId.ToString());
+                    };
+                    panelUser.Controls.Add(pictureBoxAvatar);
+
+                    Label lblUsername = new Label
+                    {
+                        Text = user.groupDisplayname.ToString(),
+                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                        ForeColor = Color.FromArgb(88, 101, 242),
+                        AutoSize = true,
+                        Top = 5,
+                        Left = pictureBoxAvatar.Right + 10
+                    };
+                    UserSession.ActionUpdategdpname += async () =>
+                    {
+                        lblUsername.Text = await _groupMember.FindGroupDisplayname(user.userId.ToString(), _groupid);
+                    };
+
+                    panelUser.Controls.Add(lblUsername);
+
+                    flp_Members.Controls.Add(panelUser);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã xảy ra lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
             private async void CreateMenu()
         {
@@ -3599,6 +3664,9 @@ namespace QLUSER
             TC_Chat.SelectedIndex = 1;
         }
 
-
+        private void GiaoDien_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            btn_Thoat.PerformClick();
+        }
     }
 }
