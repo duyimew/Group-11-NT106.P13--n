@@ -232,17 +232,20 @@ namespace QLUSER
 
         private async void button3_Click(object sender, EventArgs e)
         {
-            string tokenFile = find.find("token.txt");
-            if (tokenFile != null && File.Exists(tokenFile))
-            {
-                File.Delete(tokenFile);
-            }
-            MessageBox.Show("Đăng xuất thành công!");
-            if (GD.connection != null)
-                await GD.StopSignalR();
-            DN.Show(); 
-            this.Close(); 
-            GD.Close();
+
+                string tokenFile = find.find("token.txt");
+                if (tokenFile != null && File.Exists(tokenFile))
+                {
+                    File.Delete(tokenFile);
+                }
+                MessageBox.Show("Đăng xuất thành công!");
+                if (GD.connection != null)
+                    await GD.StopSignalR();
+                DN.Show();
+                this.Close();
+                GD.Close();
+            
+
         }
 
         private async void CaiDatNguoiDung_Load(object sender, EventArgs e)

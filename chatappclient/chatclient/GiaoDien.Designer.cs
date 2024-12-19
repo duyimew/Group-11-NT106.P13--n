@@ -239,7 +239,7 @@ namespace QLUSER
             this.flp_TinNhanTT.Location = new System.Drawing.Point(9, 113);
             this.flp_TinNhanTT.Name = "flp_TinNhanTT";
             this.flp_TinNhanTT.Padding = new System.Windows.Forms.Padding(10, 0, 0, 10);
-            this.flp_TinNhanTT.Size = new System.Drawing.Size(174, 285);
+            this.flp_TinNhanTT.Size = new System.Drawing.Size(174, 354);
             this.flp_TinNhanTT.TabIndex = 2;
             this.flp_TinNhanTT.WrapContents = false;
             // 
@@ -294,7 +294,7 @@ namespace QLUSER
             this.P_Kenh_DanhMuc.Location = new System.Drawing.Point(8, 53);
             this.P_Kenh_DanhMuc.Margin = new System.Windows.Forms.Padding(2);
             this.P_Kenh_DanhMuc.Name = "P_Kenh_DanhMuc";
-            this.P_Kenh_DanhMuc.Size = new System.Drawing.Size(179, 355);
+            this.P_Kenh_DanhMuc.Size = new System.Drawing.Size(184, 413);
             this.P_Kenh_DanhMuc.TabIndex = 11;
             // 
             // tv_Kenh_DanhMuc
@@ -305,7 +305,6 @@ namespace QLUSER
             this.tv_Kenh_DanhMuc.Name = "tv_Kenh_DanhMuc";
             this.tv_Kenh_DanhMuc.Size = new System.Drawing.Size(168, 324);
             this.tv_Kenh_DanhMuc.TabIndex = 0;
-            this.tv_Kenh_DanhMuc.NodeMouseClick += treeView1_NodeMouseClick;
             // 
             // P_TenGroup
             // 
@@ -357,7 +356,7 @@ namespace QLUSER
             this.P_Kenh_DanhMuc1.Location = new System.Drawing.Point(6, 51);
             this.P_Kenh_DanhMuc1.Margin = new System.Windows.Forms.Padding(2);
             this.P_Kenh_DanhMuc1.Name = "P_Kenh_DanhMuc1";
-            this.P_Kenh_DanhMuc1.Size = new System.Drawing.Size(184, 357);
+            this.P_Kenh_DanhMuc1.Size = new System.Drawing.Size(184, 413);
             this.P_Kenh_DanhMuc1.TabIndex = 12;
             // 
             // P_TenGroup1
@@ -673,7 +672,7 @@ namespace QLUSER
             this.P_Friend.Location = new System.Drawing.Point(6, 62);
             this.P_Friend.Margin = new System.Windows.Forms.Padding(2);
             this.P_Friend.Name = "P_Friend";
-            this.P_Friend.Size = new System.Drawing.Size(610, 393);
+            this.P_Friend.Size = new System.Drawing.Size(815, 472);
             this.P_Friend.TabIndex = 3;
             // 
             // flp_Friends
@@ -684,7 +683,7 @@ namespace QLUSER
             this.flp_Friends.Location = new System.Drawing.Point(0, 0);
             this.flp_Friends.Margin = new System.Windows.Forms.Padding(2);
             this.flp_Friends.Name = "flp_Friends";
-            this.flp_Friends.Size = new System.Drawing.Size(610, 393);
+            this.flp_Friends.Size = new System.Drawing.Size(815, 472);
             this.flp_Friends.TabIndex = 0;
             // 
             // btn_XemLoiMoi
@@ -732,7 +731,6 @@ namespace QLUSER
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "GiaoDien";
             this.Text = "GiaoDien";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GiaoDien_FormClosing);
             this.Load += new System.EventHandler(this.GiaoDien_Load);
             this.P_Group_Friend.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).EndInit();

@@ -36,6 +36,7 @@ namespace QLUSER
         UserAvatar _avatar = new UserAvatar();
         Group _group = new Group();
         GroupMember _groupMember = new GroupMember();
+        bool _grouppublicorprivate = true;
         string chonvaitro = "";
         public CaiDatMayChu(string groupname, string groupid, string userid,GiaoDien gd,Dangnhap dn)
         {
@@ -241,15 +242,16 @@ namespace QLUSER
                     if (iconBounds.Contains(e.Location))
                     {
                         string gdpname = item.SubItems[0].Text;
-                        formusergroup(gdpname,true);
+                        formusergroup(gdpname,true,true);
                         break;
                     }
                 }
             }
         }
-        public async void formusergroup(string groupdisplayname,bool isformcaidatmaychu)
+        public async void formusergroup(string groupdisplayname,bool isformcaidatmaychu,bool grouppublicorprivate)
         {
-            try { 
+            try {
+                _grouppublicorprivate = grouppublicorprivate;
             string userid = await _groupMember.FindGroupDisplayID(_groupid, groupdisplayname);
             UserSession.ActionUpdategdpname += async () =>
             {
@@ -323,20 +325,20 @@ namespace QLUSER
             if(groupdisplayname == _gdpname)
             {
                 buttons.Add(new Button { Text = "Hồ Sơ" });
-                buttons.Add(new Button { Text = "Chỉnh sửa hồ sơ máy chủ" });
-                buttons.Add(new Button { Text = "Vai trò" });
+                if(grouppublicorprivate)buttons.Add(new Button { Text = "Chỉnh sửa hồ sơ máy chủ" });
+                if(grouppublicorprivate)buttons.Add(new Button { Text = "Vai trò" });
             }
             else
             {
                 buttons.Add(new Button { Text = "Hồ Sơ" });
-                if (_userrole == "Admin" || _userrole == "Owner") buttons.Add(new Button { Text = "Đổi biệt danh" });
+                if ((_userrole == "Admin" || _userrole == "Owner")&&grouppublicorprivate) buttons.Add(new Button { Text = "Đổi biệt danh" });
 
                 buttons.Add(new Button { Text = "Mời vào máy chủ" });
 
                 buttons.Add(new Button { Text = "Thêm bạn" });
                 if (_userrole == "Admin" || _userrole == "Owner") buttons.Add(new Button { Text = "Đuổi user" });
-                buttons.Add(new Button { Text = "Vai trò" });
-                if (isformcaidatmaychu &&_userrole == "Owner") buttons.Add(new Button { Text = "Chuyển quyền sở hữu" });
+                if(grouppublicorprivate) buttons.Add(new Button { Text = "Vai trò" });
+                if ((!grouppublicorprivate||isformcaidatmaychu) &&_userrole == "Owner") buttons.Add(new Button { Text = "Chuyển quyền sở hữu" });
 
             }
             foreach (var btn in buttons)
@@ -394,7 +396,7 @@ namespace QLUSER
                                 MessageBox.Show("Không có đủ quyền hạn để đuổi người dùng này");
                                 break;
                             }
-                            await _gd.roinhom(_groupid,true,userid,0);
+                            await _gd.roinhom(_groupid,_grouppublicorprivate,userid,0);
                             break;
                         case "Vai trò":
                             await showuserrole(userid);

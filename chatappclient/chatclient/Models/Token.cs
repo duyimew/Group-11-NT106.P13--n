@@ -69,7 +69,7 @@ namespace QLUSER.Models
                         Application.Run(giaoDien);
                         if (dangnhap.IsDisposed) dangnhap = new Dangnhap();
                         Application.Run(dangnhap);
-                        Environment.Exit(0);
+                        //Environment.Exit(0);
 
                     }
                     else
