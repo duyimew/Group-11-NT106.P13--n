@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dangky));
             this.lb_username = new System.Windows.Forms.Label();
             this.lb_pwd = new System.Windows.Forms.Label();
             this.lb_cfpwd = new System.Windows.Forms.Label();
@@ -94,7 +95,7 @@
             // 
             this.tb_username.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.tb_username.Location = new System.Drawing.Point(277, 110);
-            this.tb_username.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_username.Margin = new System.Windows.Forms.Padding(4);
             this.tb_username.Name = "tb_username";
             this.tb_username.Size = new System.Drawing.Size(211, 26);
             this.tb_username.TabIndex = 4;
@@ -103,7 +104,7 @@
             // 
             this.tb_pwd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.tb_pwd.Location = new System.Drawing.Point(277, 161);
-            this.tb_pwd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_pwd.Margin = new System.Windows.Forms.Padding(4);
             this.tb_pwd.Name = "tb_pwd";
             this.tb_pwd.PasswordChar = '*';
             this.tb_pwd.Size = new System.Drawing.Size(211, 26);
@@ -113,7 +114,7 @@
             // 
             this.tb_cfpwd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.tb_cfpwd.Location = new System.Drawing.Point(277, 210);
-            this.tb_cfpwd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_cfpwd.Margin = new System.Windows.Forms.Padding(4);
             this.tb_cfpwd.Name = "tb_cfpwd";
             this.tb_cfpwd.PasswordChar = '*';
             this.tb_cfpwd.Size = new System.Drawing.Size(211, 26);
@@ -123,7 +124,7 @@
             // 
             this.tb_email.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.tb_email.Location = new System.Drawing.Point(277, 258);
-            this.tb_email.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_email.Margin = new System.Windows.Forms.Padding(4);
             this.tb_email.Name = "tb_email";
             this.tb_email.Size = new System.Drawing.Size(211, 26);
             this.tb_email.TabIndex = 7;
@@ -132,7 +133,7 @@
             // 
             this.bt_Dk.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.bt_Dk.Location = new System.Drawing.Point(153, 478);
-            this.bt_Dk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.bt_Dk.Margin = new System.Windows.Forms.Padding(4);
             this.bt_Dk.Name = "bt_Dk";
             this.bt_Dk.Size = new System.Drawing.Size(115, 57);
             this.bt_Dk.TabIndex = 8;
@@ -155,7 +156,7 @@
             // 
             this.bt_thoat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.bt_thoat.Location = new System.Drawing.Point(332, 478);
-            this.bt_thoat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.bt_thoat.Margin = new System.Windows.Forms.Padding(4);
             this.bt_thoat.Name = "bt_thoat";
             this.bt_thoat.Size = new System.Drawing.Size(127, 57);
             this.bt_thoat.TabIndex = 10;
@@ -167,7 +168,7 @@
             // 
             this.tb_hoten.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.tb_hoten.Location = new System.Drawing.Point(277, 310);
-            this.tb_hoten.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_hoten.Margin = new System.Windows.Forms.Padding(4);
             this.tb_hoten.Name = "tb_hoten";
             this.tb_hoten.Size = new System.Drawing.Size(211, 26);
             this.tb_hoten.TabIndex = 6;
@@ -176,7 +177,7 @@
             // 
             this.tb_ngsinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.tb_ngsinh.Location = new System.Drawing.Point(277, 358);
-            this.tb_ngsinh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tb_ngsinh.Margin = new System.Windows.Forms.Padding(4);
             this.tb_ngsinh.Name = "tb_ngsinh";
             this.tb_ngsinh.Size = new System.Drawing.Size(211, 26);
             this.tb_ngsinh.TabIndex = 7;
@@ -235,7 +236,8 @@
             this.Controls.Add(this.lb_cfpwd);
             this.Controls.Add(this.lb_pwd);
             this.Controls.Add(this.lb_username);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Dangky";
             this.Text = "Dangky";
             this.ResumeLayout(false);

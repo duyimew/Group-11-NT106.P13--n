@@ -386,6 +386,12 @@
     <Compile Include="CaiDatNguoiDung.Designer.cs">
       <DependentUpon>CaiDatNguoiDung.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChangePass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangePass.Designer.cs">
+      <DependentUpon>ChangePass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dangky.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -453,6 +459,12 @@
     <Compile Include="DTOs\User\TDDangNhapDTO.cs" />
     <Compile Include="DTOs\User\TokenDTO.cs" />
     <Compile Include="DTOs\User\UploadAvataDTO.cs" />
+    <Compile Include="ForgotPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ForgotPass.Designer.cs">
+      <DependentUpon>ForgotPass.cs</DependentUpon>
+    </Compile>
     <Compile Include="GiaoDien.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -517,11 +529,17 @@
     <EmbeddedResource Include="CaiDatNguoiDung.resx">
       <DependentUpon>CaiDatNguoiDung.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ChangePass.resx">
+      <DependentUpon>ChangePass.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dangky.resx">
       <DependentUpon>Dangky.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dangnhap.resx">
       <DependentUpon>Dangnhap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ForgotPass.resx">
+      <DependentUpon>ForgotPass.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GiaoDien.resx">
       <DependentUpon>GiaoDien.cs</DependentUpon>

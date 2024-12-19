@@ -104,5 +104,11 @@ namespace QLUSER
         {
             this.Hide();
         }
+
+        private void btn_ForgotPass_Click(object sender, EventArgs e)
+        {
+            ForgotPass forgor = new ForgotPass();
+            forgor.Show();
+        }
     }
 }

@@ -794,5 +794,11 @@ namespace QLUSER
             }
 
         }
+
+        private void btn_ChangePass_Click(object sender, EventArgs e)
+        {
+            ChangePass cp = new ChangePass(_userid);
+            cp.Show();
+        }
     }
 }
