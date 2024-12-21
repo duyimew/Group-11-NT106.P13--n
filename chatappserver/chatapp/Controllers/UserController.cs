@@ -318,7 +318,7 @@ namespace chatapp.Controllers
             {
                 UserId = user.UserId,
                 Code = otpCode,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(1) 
+                ExpiresAt = DateTime.UtcNow.AddMinutes(5) 
             };
 
             _context.Otps.Add(otp);

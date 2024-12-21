@@ -81,6 +81,8 @@ namespace QLUSER
             this.btn_XemLoiMoi = new System.Windows.Forms.Button();
             this.btn_Ketban = new System.Windows.Forms.Button();
             this.flp_Members = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             this.P_Group_Friend.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cp_MenuFriend)).BeginInit();
             this.P_Kenh_DanhMuc_User.SuspendLayout();
@@ -103,6 +105,7 @@ namespace QLUSER
             this.TP_ChattingView.SuspendLayout();
             this.TP_FriendRequestView.SuspendLayout();
             this.P_Friend.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // P_Group_Friend
@@ -643,6 +646,7 @@ namespace QLUSER
             // TP_FriendRequestView
             // 
             this.TP_FriendRequestView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
+            this.TP_FriendRequestView.Controls.Add(this.panel1);
             this.TP_FriendRequestView.Controls.Add(this.btn_XemListFriend);
             this.TP_FriendRequestView.Controls.Add(this.P_Friend);
             this.TP_FriendRequestView.Controls.Add(this.btn_XemLoiMoi);
@@ -720,6 +724,27 @@ namespace QLUSER
             this.flp_Members.Size = new System.Drawing.Size(183, 415);
             this.flp_Members.TabIndex = 9;
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Location = new System.Drawing.Point(708, 17);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(107, 30);
+            this.panel1.TabIndex = 12;
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.Gray;
+            this.button2.Location = new System.Drawing.Point(3, 0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(97, 30);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "Thoát";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.bt_thoat_Click);
+            // 
             // GiaoDien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -756,6 +781,7 @@ namespace QLUSER
             this.TP_ChattingView.ResumeLayout(false);
             this.TP_FriendRequestView.ResumeLayout(false);
             this.P_Friend.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -812,5 +838,7 @@ namespace QLUSER
         private FlowLayoutPanel flp_Members;
         private Panel P_Emoji;
         private Button button1;
+        private Panel panel1;
+        private Button button2;
     }
 }

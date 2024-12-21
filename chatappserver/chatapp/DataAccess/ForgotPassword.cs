@@ -91,7 +91,7 @@ namespace chatserver.DataAccess
 
             message.Body = new TextPart("plain")
             {
-                Text = $"Mã OTP của bạn là: {otpCode}. Nó sẽ hết hạn sau 1 phút."
+                Text = $"Mã OTP của bạn là: {otpCode}. Nó sẽ hết hạn sau 5 phút."
             };
 
             using (var client = new SmtpClient())
