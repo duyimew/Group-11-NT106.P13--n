@@ -121,6 +121,7 @@ namespace QLUSER
                 UpdateGroupPrivateDislay();
                 UpdateGroupDislay();
                 UpdateAvatarDisplay();
+                label1.Text = _username.ToString();
             }
             catch (Exception ex)
             {

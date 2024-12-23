@@ -54,6 +54,8 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(21, 86);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(145, 16);
@@ -63,6 +65,8 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(131, 150);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 16);
@@ -71,28 +75,37 @@
             // 
             // btn_SendEmail
             // 
+            this.btn_SendEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.btn_SendEmail.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btn_SendEmail.Font = new System.Drawing.Font("MS Reference Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_SendEmail.ForeColor = System.Drawing.Color.White;
             this.btn_SendEmail.Location = new System.Drawing.Point(462, 82);
             this.btn_SendEmail.Name = "btn_SendEmail";
             this.btn_SendEmail.Size = new System.Drawing.Size(101, 23);
             this.btn_SendEmail.TabIndex = 4;
             this.btn_SendEmail.Text = "Gửi mã";
-            this.btn_SendEmail.UseVisualStyleBackColor = true;
+            this.btn_SendEmail.UseVisualStyleBackColor = false;
             this.btn_SendEmail.Click += new System.EventHandler(this.btn_SendEmail_Click);
             // 
             // btn_Verify
             // 
+            this.btn_Verify.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.btn_Verify.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btn_Verify.Font = new System.Drawing.Font("MS Reference Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Verify.ForeColor = System.Drawing.Color.White;
             this.btn_Verify.Location = new System.Drawing.Point(462, 150);
             this.btn_Verify.Name = "btn_Verify";
             this.btn_Verify.Size = new System.Drawing.Size(101, 23);
             this.btn_Verify.TabIndex = 5;
             this.btn_Verify.Text = "Xác nhận";
-            this.btn_Verify.UseVisualStyleBackColor = true;
+            this.btn_Verify.UseVisualStyleBackColor = false;
             this.btn_Verify.Click += new System.EventHandler(this.btn_Verify_Click);
             // 
             // ForgotPass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
             this.ClientSize = new System.Drawing.Size(620, 232);
             this.Controls.Add(this.btn_Verify);
             this.Controls.Add(this.btn_SendEmail);

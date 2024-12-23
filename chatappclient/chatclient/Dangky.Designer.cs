@@ -51,6 +51,7 @@
             // 
             this.lb_username.AutoSize = true;
             this.lb_username.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lb_username.ForeColor = System.Drawing.Color.White;
             this.lb_username.Location = new System.Drawing.Point(81, 117);
             this.lb_username.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_username.Name = "lb_username";
@@ -62,6 +63,7 @@
             // 
             this.lb_pwd.AutoSize = true;
             this.lb_pwd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lb_pwd.ForeColor = System.Drawing.Color.White;
             this.lb_pwd.Location = new System.Drawing.Point(81, 169);
             this.lb_pwd.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_pwd.Name = "lb_pwd";
@@ -73,6 +75,7 @@
             // 
             this.lb_cfpwd.AutoSize = true;
             this.lb_cfpwd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lb_cfpwd.ForeColor = System.Drawing.Color.White;
             this.lb_cfpwd.Location = new System.Drawing.Point(81, 218);
             this.lb_cfpwd.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_cfpwd.Name = "lb_cfpwd";
@@ -84,6 +87,7 @@
             // 
             this.lb_email.AutoSize = true;
             this.lb_email.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lb_email.ForeColor = System.Drawing.Color.White;
             this.lb_email.Location = new System.Drawing.Point(81, 266);
             this.lb_email.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_email.Name = "lb_email";
@@ -131,20 +135,24 @@
             // 
             // bt_Dk
             // 
-            this.bt_Dk.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_Dk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.bt_Dk.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.bt_Dk.Font = new System.Drawing.Font("MS Reference Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_Dk.ForeColor = System.Drawing.Color.White;
             this.bt_Dk.Location = new System.Drawing.Point(153, 478);
             this.bt_Dk.Margin = new System.Windows.Forms.Padding(4);
             this.bt_Dk.Name = "bt_Dk";
             this.bt_Dk.Size = new System.Drawing.Size(115, 57);
             this.bt_Dk.TabIndex = 8;
             this.bt_Dk.Text = "Đăng ký";
-            this.bt_Dk.UseVisualStyleBackColor = true;
+            this.bt_Dk.UseVisualStyleBackColor = false;
             this.bt_Dk.Click += new System.EventHandler(this.bt_DK_Click);
             // 
             // lb_DK
             // 
             this.lb_DK.AutoSize = true;
             this.lb_DK.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+            this.lb_DK.ForeColor = System.Drawing.Color.White;
             this.lb_DK.Location = new System.Drawing.Point(208, 26);
             this.lb_DK.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_DK.Name = "lb_DK";
@@ -154,14 +162,17 @@
             // 
             // bt_thoat
             // 
-            this.bt_thoat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_thoat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.bt_thoat.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.bt_thoat.Font = new System.Drawing.Font("MS Reference Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bt_thoat.ForeColor = System.Drawing.Color.White;
             this.bt_thoat.Location = new System.Drawing.Point(332, 478);
             this.bt_thoat.Margin = new System.Windows.Forms.Padding(4);
             this.bt_thoat.Name = "bt_thoat";
             this.bt_thoat.Size = new System.Drawing.Size(127, 57);
             this.bt_thoat.TabIndex = 10;
             this.bt_thoat.Text = "Thoát";
-            this.bt_thoat.UseVisualStyleBackColor = true;
+            this.bt_thoat.UseVisualStyleBackColor = false;
             this.bt_thoat.Click += new System.EventHandler(this.bt_thoat_Click);
             // 
             // tb_hoten
@@ -186,6 +197,7 @@
             // 
             this.lb_ten.AutoSize = true;
             this.lb_ten.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lb_ten.ForeColor = System.Drawing.Color.White;
             this.lb_ten.Location = new System.Drawing.Point(81, 318);
             this.lb_ten.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_ten.Name = "lb_ten";
@@ -197,6 +209,7 @@
             // 
             this.lb_ngaysinh.AutoSize = true;
             this.lb_ngaysinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lb_ngaysinh.ForeColor = System.Drawing.Color.White;
             this.lb_ngaysinh.Location = new System.Drawing.Point(81, 366);
             this.lb_ngaysinh.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_ngaysinh.Name = "lb_ngaysinh";
@@ -208,6 +221,7 @@
             // 
             this.lb_chuthich.AutoSize = true;
             this.lb_chuthich.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_chuthich.ForeColor = System.Drawing.Color.White;
             this.lb_chuthich.Location = new System.Drawing.Point(81, 418);
             this.lb_chuthich.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_chuthich.Name = "lb_chuthich";
@@ -219,6 +233,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(57)))), ((int)(((byte)(62)))));
             this.ClientSize = new System.Drawing.Size(616, 591);
             this.Controls.Add(this.lb_chuthich);
             this.Controls.Add(this.bt_thoat);

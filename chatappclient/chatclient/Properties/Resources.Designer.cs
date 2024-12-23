@@ -83,6 +83,16 @@ namespace QLUSER.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _3_removebg_preview {
+            get {
+                object obj = ResourceManager.GetObject("3-removebg-preview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _379512_chat_icon {
             get {
                 object obj = ResourceManager.GetObject("_379512_chat_icon", resourceCulture);
@@ -126,6 +136,16 @@ namespace QLUSER.Properties {
         internal static System.Drawing.Bitmap Icon_kinh_lup_don_gian_PNG {
             get {
                 object obj = ResourceManager.GetObject("Icon-kinh-lup-don-gian-PNG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap output_24dp_EA3323_FILL0_wght400_GRAD0_opsz24 {
+            get {
+                object obj = ResourceManager.GetObject("output_24dp_EA3323_FILL0_wght400_GRAD0_opsz24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

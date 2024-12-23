@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChangePass));
             this.txtCurrentPassword = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,6 +82,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(53, 72);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(106, 16);
@@ -90,6 +92,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(70, 130);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 16);
@@ -99,6 +102,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(37, 183);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(119, 16);
@@ -107,18 +111,23 @@
             // 
             // btn_ChangePass
             // 
+            this.btn_ChangePass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(114)))), ((int)(((byte)(137)))), ((int)(((byte)(218)))));
+            this.btn_ChangePass.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btn_ChangePass.Font = new System.Drawing.Font("MS Reference Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_ChangePass.ForeColor = System.Drawing.Color.White;
             this.btn_ChangePass.Location = new System.Drawing.Point(100, 226);
             this.btn_ChangePass.Name = "btn_ChangePass";
             this.btn_ChangePass.Size = new System.Drawing.Size(296, 33);
             this.btn_ChangePass.TabIndex = 6;
             this.btn_ChangePass.Text = "Đổi Mật Khẩu";
-            this.btn_ChangePass.UseVisualStyleBackColor = true;
+            this.btn_ChangePass.UseVisualStyleBackColor = false;
             this.btn_ChangePass.Click += new System.EventHandler(this.btn_ChangePass_Click);
             // 
             // ChangePass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(66)))), ((int)(((byte)(69)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(480, 280);
             this.Controls.Add(this.btn_ChangePass);
             this.Controls.Add(this.label3);
@@ -127,6 +136,7 @@
             this.Controls.Add(this.txtConfirmPassword);
             this.Controls.Add(this.txtNewPassword);
             this.Controls.Add(this.txtCurrentPassword);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ChangePass";
             this.Text = "ChangePass";
             this.Load += new System.EventHandler(this.ChangePass_Load);

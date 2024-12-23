@@ -599,6 +599,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
+    <None Include="Resources\3-removebg-preview.png" />
+    <None Include="Resources\output_24dp_EA3323_FILL0_wght400_GRAD0_opsz24.png" />
     <None Include="Resources\Icon-kinh-lup-don-gian-PNG.png" />
     <None Include="Resources\1F60A_color.png" />
     <None Include="Resources\271ceac1b418978b9096830a695e79e9.jpg" />
