@@ -121,7 +121,7 @@ namespace QLUSER
                 UpdateGroupPrivateDislay();
                 UpdateGroupDislay();
                 UpdateAvatarDisplay();
-                label1.Text = _username.ToString();
+                label1.Text = _dpname.ToString();
             }
             catch (Exception ex)
             {
@@ -165,6 +165,7 @@ namespace QLUSER
             try
             {
                 _dpname = await _user.FindDisplayname(_userid);
+                label1.Text = _dpname;
             }
             catch (Exception ex)
             {
@@ -2493,7 +2494,7 @@ namespace QLUSER
                             {
                                 UserSession.UpdateGroup = (true, true);
                                 SendUpdate("GroupDislay");
-                                MessageBox.Show("Avatar group uploaded successfully!");
+                                //MessageBox.Show("Avatar group uploaded successfully!");
                             }
                             else
                             {

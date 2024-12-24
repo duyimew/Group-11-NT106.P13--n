@@ -35,7 +35,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
                 string channelID = responseData.channelID;
-                MessageBox.Show(message);
+                //MessageBox.Show(message);
                 return (true,channelID);
             }
             else

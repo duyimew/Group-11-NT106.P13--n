@@ -38,7 +38,7 @@ namespace QLUSER.Models
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
-                MessageBox.Show(message);
+                //MessageBox.Show(message);
                 return true;
             }
             else
@@ -46,7 +46,7 @@ namespace QLUSER.Models
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
-                MessageBox.Show(message);
+                //MessageBox.Show(message);
                 return false;
             }
         }

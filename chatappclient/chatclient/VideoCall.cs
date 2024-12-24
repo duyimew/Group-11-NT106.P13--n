@@ -248,7 +248,7 @@ namespace QLUSER
             }
             else
             {
-                MessageBox.Show("No video sources found.");
+                //MessageBox.Show("No video sources found.");
             }
             }
             catch (Exception ex)

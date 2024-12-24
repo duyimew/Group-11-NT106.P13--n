@@ -33,7 +33,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
                 string groupid = responseData.groupid;
-                MessageBox.Show(message);
+                //MessageBox.Show(message);
                 return (true,groupid);
             }
             else
@@ -41,7 +41,7 @@ namespace QLUSER.Models
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
-                MessageBox.Show(message);
+                //MessageBox.Show(message);
                 return (false,null);
             }
         }
@@ -74,7 +74,7 @@ namespace QLUSER.Models
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 var responseData = JsonConvert.DeserializeObject<dynamic>(errorMessage);
                 string message = responseData.message;
-                MessageBox.Show(message);
+                //MessageBox.Show(message);
                 return (false,null);
             }
         }
@@ -101,7 +101,7 @@ namespace QLUSER.Models
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                         string message = responseData.message;
-                        MessageBox.Show(message);
+                        //MessageBox.Show(message);
                         return true;
                     }
                     else

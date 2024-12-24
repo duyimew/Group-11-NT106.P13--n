@@ -32,7 +32,7 @@ namespace QLUSER.Models
                 var responseData = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string message = responseData.message;
                 string danhmucID = responseData.danhmucID;
-                MessageBox.Show(message);
+                //MessageBox.Show(message);
                 return (true,danhmucID);
             }
             else
